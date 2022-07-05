@@ -1,7 +1,12 @@
+import CategoryAside from './CategoryAside';
 import './ProductDetails.css';
 
 function ProductDetails() {
-  return <div>Hello</div>;
+  return (
+    <>
+      <CategoryAside></CategoryAside>
+    </>
+  );
 }
 
 export default ProductDetails;
