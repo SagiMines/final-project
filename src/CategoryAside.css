@@ -27,7 +27,7 @@
 }
 
 .category-aside {
-  max-width: 300px;
+  min-width: 250px;
 }
 
 .col-md-12 {
