@@ -28,7 +28,6 @@ function Navbar() {
               type="text"
               placeholder="Search a tool"
             ></input>
-
             <i className="fa fa-solid fa-heart"></i>
             <i className="fa fa-shopping-cart"></i>
             <i className="fa fa-user" aria-hidden="true"></i>
