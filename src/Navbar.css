@@ -1,0 +1,52 @@
+header {
+  margin-bottom: 61px;
+}
+
+.navbar {
+  background-color: #8dbfc8;
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
+}
+.search-bar {
+  width: 55%;
+  margin-top: 2px;
+  height: 50%;
+  text-indent: 10px;
+  border-radius: 15px;
+  background: url('https://img.icons8.com/material/15/undefined/search--v1.png')
+    no-repeat scroll 7px white;
+  padding-left: 22px;
+  border: 1.5px solid black;
+  margin-right: 15px;
+}
+
+.fa {
+  font-size: 28px;
+  margin-left: 10px;
+}
+
+.fa-heart {
+  color: rgb(224, 83, 83);
+}
+
+.navbar-toggler {
+  color: black;
+}
+
+.navbar-brand {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar-brand > img {
+  width: 55px;
+}
+
+.navbar-collapse {
+  flex-grow: 0 !important;
+}
