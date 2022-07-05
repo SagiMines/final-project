@@ -1,0 +1,22 @@
+.main-content {
+  display: flex;
+}
+
+.carousel-inner {
+  width: 100%;
+}
+
+.carousel {
+  width: 30%;
+  max-width: 450px;
+  min-width: 200px;
+}
+
+.d-block {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
