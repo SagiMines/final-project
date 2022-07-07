@@ -1,3 +1,5 @@
+/* carusel */
+
 .main-content {
   display: flex;
 }
@@ -8,15 +10,80 @@
 
 .carousel {
   width: 30%;
-  max-width: 450px;
+  max-width: 700px !important;
   min-width: 200px;
+  padding: 1rem;
 }
 
 .d-block {
-  position: absolute;
+  /* position: absolute; */
   margin: auto;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
+
+/* product information */
+
+.card {
+  border-radius: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-align: justify;
+}
+
+.card-body {
+  padding: 3rem 2.5rem !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-select {
+  width: auto !important;
+}
+
+.quantity {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  text-transform: none;
+  background-color: #8dbfc8 !important;
+  color: black !important;
+  border: 0 !important;
+  margin: 0;
+}
+
+.buttons {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.product {
+  display: flex;
+}
+
+@media only screen and (max-width: 768px) {
+  .buttons,
+  .product > .row {
+    flex-direction: column;
+  }
+  .buttons > * {
+    margin: 5px 0;
+  }
+  .fa-heart {
+    text-align: center;
+  }
+}
+
+/* @media only screen and (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+  }
+  .buttons > * {
+    margin: 5px 0;
+  }
+  .fa-heart {
+    text-align: center;
+  }
+} */
