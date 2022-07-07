@@ -27,7 +27,7 @@
 }
 
 .category-aside {
-  min-width: 250px;
+  min-width: 200px;
 }
 
 .col-md-12 {
@@ -50,4 +50,10 @@
 
 .nav-link > img {
   margin-right: 8px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .category-aside {
+    display: none;
+  }
 }
