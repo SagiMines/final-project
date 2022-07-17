@@ -1,0 +1,11 @@
+.top-products-text {
+  font-weight: bold;
+  font-size: 25px;
+  padding: 1rem 0;
+}
+
+.top-products {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
