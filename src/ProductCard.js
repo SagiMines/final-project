@@ -1,4 +1,4 @@
-import { Card, Button } from 'react-bootstrap';
+import { Form, Card, Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import './ProductCard.css';
 
@@ -6,6 +6,15 @@ function StudentCard(props) {
   return (
     <>
       <Card>
+        {props.page === 'cart' && (
+          <Form.Check
+            className="choose-button"
+            type="checkbox"
+            id="default-checkbox"
+            checked
+          />
+        )}
+
         <Card.Img src="https://d3m9l0v76dty0.cloudfront.net/system/photos/7649724/large/2f4ab58b69e32e69c9ea56a346cf1271.jpg" />
         <Card.Body>
           <Card.Title>Dewalt DCD999 Hammer Drill</Card.Title>
@@ -17,7 +26,12 @@ function StudentCard(props) {
               type and scrambled it to make a type specimen book.{' '}
             </Card.Text>
           )}
-          {props.page === 'cart' && <Card.Text>10$</Card.Text>}
+          {props.page === 'cart' && (
+            <section className="cart-text">
+              <Card.Text>Price: 10$</Card.Text>
+              <Card.Text className="stock">On Stock!</Card.Text>
+            </section>
+          )}
           {props.page === 'wishlist' && (
             <section className="card-buttons row">
               <Button className="card-button col-md">Add to cart</Button>
