@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePage from './HomePage';
+import WishList from './WishList';
 import './App.css';
 
 function App() {
@@ -11,8 +12,9 @@ function App() {
       <header>
         <Navbar></Navbar>
       </header>
-      <HomePage />
+      {/* <HomePage /> */}
       {/* <ProductDetails></ProductDetails> */}
+      <WishList />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
