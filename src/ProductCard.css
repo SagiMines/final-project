@@ -37,3 +37,11 @@
 .card-button {
   margin: 0 15px 5px 0;
 }
+
+.react-numeric-input > input {
+  width: 100%;
+}
+
+/* .card-number {
+  width: 5px;
+} */

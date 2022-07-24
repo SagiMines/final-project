@@ -1,0 +1,23 @@
+.shopping-cart-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.shopping-cart-title {
+  padding: 15px 0;
+}
+
+.checkout-button {
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .shopping-cart-data {
+    flex-direction: column-reverse;
+  }
+  .checkout-card {
+    margin-bottom: 30px;
+  }
+}

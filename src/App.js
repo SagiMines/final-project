@@ -4,17 +4,19 @@ import Footer from './Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePage from './HomePage';
 import WishList from './WishList';
+import ShoppingCart from './ShoppingCart';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <header>
         <Navbar></Navbar>
       </header>
       {/* <HomePage /> */}
       {/* <ProductDetails></ProductDetails> */}
-      <WishList />
+      {/* <WishList /> */}
+      <ShoppingCart />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
