@@ -1,0 +1,19 @@
+.review-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.review-title {
+  padding: 15px 0;
+}
+
+@media screen and (max-width: 768px) {
+  .review-data {
+    flex-direction: column-reverse;
+  }
+  .checkout-card {
+    margin-bottom: 30px;
+  }
+}

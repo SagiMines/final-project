@@ -32,6 +32,7 @@ function StudentCard(props) {
               <Card.Text className="stock">On Stock!</Card.Text>
             </section>
           )}
+          {props.page === 'review' && <Card.Text>Price: 10$</Card.Text>}
           {props.page === 'wishlist' && (
             <section className="card-buttons row">
               <Button className="card-button col-md">Add to cart</Button>
@@ -39,7 +40,7 @@ function StudentCard(props) {
               <Button className="card-button col-md">Delete</Button>
             </section>
           )}
-          {props.page === 'cart' && (
+          {(props.page === 'cart' || props.page === 'review') && (
             <section className="card-buttons row">
               <div className="card-button col-lg-3">
                 <NumericInput min={1} max={100} value={1} />
