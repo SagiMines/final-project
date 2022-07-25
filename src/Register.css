@@ -1,0 +1,14 @@
+.register-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.register-title {
+  padding: 15px 0;
+}
+
+.register-btn {
+  width: 100%;
+}
