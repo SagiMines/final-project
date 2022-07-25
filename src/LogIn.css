@@ -1,0 +1,37 @@
+.login-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.login-title {
+  padding: 15px 0;
+}
+
+.login-btn {
+  width: 100%;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.login-options > * {
+  color: blue !important;
+  text-decoration: underline !important;
+}
+/* .checkout-button {
+    margin-top: 10px;
+  } */
+
+/* @media screen and (max-width: 768px) {
+    .shopping-cart-data {
+      flex-direction: column-reverse;
+    }
+    .checkout-card {
+      margin-bottom: 30px;
+    }
+  } */
