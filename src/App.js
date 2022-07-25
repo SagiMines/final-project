@@ -6,6 +6,7 @@ import HomePage from './HomePage';
 import WishList from './WishList';
 import ShoppingCart from './ShoppingCart';
 import ReviewOrder from './ReviewOrder';
+import OrderConfirmation from './OrderConfirmation';
 import './App.css';
 
 function App() {
@@ -18,7 +19,8 @@ function App() {
       {/* <ProductDetails></ProductDetails> */}
       {/* <WishList /> */}
       {/* <ShoppingCart /> */}
-      <ReviewOrder />
+      {/* <ReviewOrder /> */}
+      <OrderConfirmation />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
