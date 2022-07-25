@@ -1,13 +1,15 @@
 import { Card } from 'react-bootstrap';
 import './ShippingDetailsCard.css';
 
-function ShippingDetailsCard() {
+function ShippingDetailsCard(props) {
   return (
     <Card className="shipping-details-card">
       <Card.Body>
         <Card.Title>
           Shipping Details{' '}
-          <Card.Link className="change-address">Change</Card.Link>
+          {props.page === 'review' && (
+            <Card.Link className="change-address">Change</Card.Link>
+          )}
         </Card.Title>
         <Card.Text>Sagi Mines</Card.Text>
         <Card.Text>0528850658</Card.Text>

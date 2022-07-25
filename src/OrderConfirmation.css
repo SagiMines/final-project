@@ -1,0 +1,20 @@
+.order-confirmation-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.order-confirmation-title {
+  padding: 15px 0;
+}
+
+.thank-you-logo {
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .review-data {
+    flex-direction: column-reverse;
+  }
+}

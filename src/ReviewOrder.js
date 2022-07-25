@@ -8,7 +8,7 @@ function ReviewOrder() {
   return (
     <div className="container review-container">
       <h1 className="review-title">Review Your Order</h1>
-      <ShippingDetailsCard />
+      <ShippingDetailsCard page="review" />
       <Row className="review-data">
         <Col md>
           <ProductCard page="review" />
