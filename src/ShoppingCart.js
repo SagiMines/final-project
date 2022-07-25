@@ -1,4 +1,5 @@
 import ProductCard from './ProductCard';
+import CheckoutCard from './CheckoutCard';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import './ShoppingCart.css';
 
@@ -12,12 +13,7 @@ function ShoppingCart() {
           <ProductCard page="cart" />
         </Col>
         <Col md>
-          <Card className="checkout-card">
-            <Card.Body>
-              <Card.Title>Total Amount (2 Items): 30$</Card.Title>
-              <Button className="checkout-button">Proceed to checkout</Button>
-            </Card.Body>
-          </Card>
+          <CheckoutCard page="cart" />
         </Col>
       </Row>
     </div>
