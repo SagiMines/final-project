@@ -6,7 +6,7 @@ function ShippingDetailsCard() {
     <Card className="shipping-details-card">
       <Card.Body>
         <Card.Title>
-          Shipping Address{' '}
+          Shipping Details{' '}
           <Card.Link className="change-address">Change</Card.Link>
         </Card.Title>
         <Card.Text>Sagi Mines</Card.Text>
