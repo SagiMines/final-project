@@ -15,6 +15,7 @@ import ForgotPW2 from './ForgotPW2';
 import ChangePassword from './ChangePassword';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import MyAccount from './MyAccount';
+import MyOrders from './MyOrders';
 import './App.css';
 
 function App() {
@@ -37,7 +38,8 @@ function App() {
       {/* <ChangePassword /> */}
       {/* <PasswordChangeSuccess /> */}
       {/* <MyAccount /> */}
-      <ChangePassword page="update" />
+      {/* <ChangePassword page="update" /> */}
+      <MyOrders />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>

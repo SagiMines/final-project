@@ -1,0 +1,22 @@
+.my-orders-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.my-orders-title {
+  padding: 15px 0;
+}
+
+.main-card > .card-body > .card > .card-img {
+  height: auto;
+}
+
+.main-card > .card-body > .card-title:nth-child(1) {
+  margin-bottom: 2rem;
+}
+
+.total-text {
+  margin: 2rem 0;
+}
