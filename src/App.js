@@ -12,6 +12,7 @@ import Register from './Register';
 import RegisterSuccess from './RegisterSuccess';
 import ForgotPW1 from './ForgotPW1';
 import ForgotPW2 from './ForgotPW2';
+import ForgotPW3 from './ForgotPW3';
 import './App.css';
 
 function App() {
@@ -30,7 +31,8 @@ function App() {
       {/* <Register /> */}
       {/* <RegisterSuccess /> */}
       {/* <ForgotPW1 /> */}
-      <ForgotPW2 />
+      {/* <ForgotPW2 /> */}
+      <ForgotPW3 />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
