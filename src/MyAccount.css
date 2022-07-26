@@ -1,0 +1,19 @@
+.my-account-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.my-account-title {
+  padding: 15px 0;
+}
+
+.my-account-btn {
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.my-account-row > * {
+  margin-bottom: 1rem;
+}

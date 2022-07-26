@@ -11,12 +11,6 @@ function PasswordChangeSuccess() {
           <Button className="pw-changed-btn">Go to the main page</Button>
         </Card.Body>
       </Card>
-      {/* <Form>
-        <Form.Label></Form.Label>
-        <Button className="forgotpw3-btn" type="submit">
-          Apply changes
-        </Button>
-      </Form> */}
     </div>
   );
 }

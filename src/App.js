@@ -14,6 +14,7 @@ import ForgotPW1 from './ForgotPW1';
 import ForgotPW2 from './ForgotPW2';
 import ForgotPW3 from './ForgotPW3';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
+import MyAccount from './MyAccount';
 import './App.css';
 
 function App() {
@@ -34,7 +35,8 @@ function App() {
       {/* <ForgotPW1 /> */}
       {/* <ForgotPW2 /> */}
       {/* <ForgotPW3 /> */}
-      <PasswordChangeSuccess />
+      {/* <PasswordChangeSuccess /> */}
+      <MyAccount />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
