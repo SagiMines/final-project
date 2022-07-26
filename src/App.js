@@ -10,6 +10,7 @@ import OrderConfirmation from './OrderConfirmation';
 import LogIn from './LogIn';
 import Register from './Register';
 import RegisterSuccess from './RegisterSuccess';
+import ForgotPW1 from './ForgotPW1';
 import './App.css';
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
       {/* <OrderConfirmation /> */}
       {/* <LogIn /> */}
       {/* <Register /> */}
-      <RegisterSuccess />
+      {/* <RegisterSuccess /> */}
+      <ForgotPW1 />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
