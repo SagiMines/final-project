@@ -10,10 +10,14 @@
 }
 
 .my-account-btn {
-  margin: 1rem 0;
+  margin-top: 1rem;
   width: 100%;
 }
 
 .my-account-row > * {
   margin-bottom: 1rem;
+}
+.my-account-row > * > .card-link {
+  color: blue !important;
+  text-decoration: underline !important;
 }

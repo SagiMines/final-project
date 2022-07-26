@@ -12,14 +12,17 @@ function MyAccount() {
             <Col sm={6} md={6} lg={4}>
               <Card.Title>First name:</Card.Title>
               <Card.Text>Sagi</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
             <Col sm={6} md={6} lg={4}>
               <Card.Title>Last name:</Card.Title>
               <Card.Text>Mines</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
             <Col sm={6} md={6} lg={4}>
               <Card.Title>Phone number:</Card.Title>
               <Card.Text>0528850658</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
             <Col sm={6} md={6} lg={4}>
               <Card.Title>Email:</Card.Title>
@@ -28,21 +31,24 @@ function MyAccount() {
             <Col sm={6} md={6} lg={4}>
               <Card.Title>City:</Card.Title>
               <Card.Text>Ashkelon</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
             <Col sm={6} md={6} lg={4}>
               <Card.Title>Country:</Card.Title>
               <Card.Text>Israel</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
             <Col sm={6} md={6} lg={4}>
               <Card.Title>Postal code:</Card.Title>
               <Card.Text>784565</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
             <Col sm={6} md={6} lg={4}>
               <Card.Title>Address:</Card.Title>
               <Card.Text>Ha'Onot 6</Card.Text>
+              <Card.Link>update</Card.Link>
             </Col>
           </Row>
-          <Button className="my-account-btn">Update details</Button>
           <Button className="my-account-btn">Change password</Button>
         </Card.Body>
       </Card>
