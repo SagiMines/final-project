@@ -1,4 +1,4 @@
-import { Card, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
 import './ForgotPW3.css';
 
