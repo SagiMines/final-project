@@ -9,6 +9,7 @@ import ReviewOrder from './ReviewOrder';
 import OrderConfirmation from './OrderConfirmation';
 import LogIn from './LogIn';
 import Register from './Register';
+import RegisterSuccess from './RegisterSuccess';
 import './App.css';
 
 function App() {
@@ -24,7 +25,8 @@ function App() {
       {/* <ReviewOrder /> */}
       {/* <OrderConfirmation /> */}
       {/* <LogIn /> */}
-      <Register />
+      {/* <Register /> */}
+      <RegisterSuccess />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>
