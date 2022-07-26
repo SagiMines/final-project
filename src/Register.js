@@ -1,4 +1,5 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import FormInput from './FormInput';
 import './Register.css';
 
 function Register() {
@@ -8,67 +9,73 @@ function Register() {
         <h1 className="register-title">Register</h1>
         <Row>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>First name</Form.Label>
-              <Form.Control type="text" placeholder="Enter first name" />
-            </Form.Group>
+            <FormInput
+              label="First name"
+              type="text"
+              placeholder="Enter first name"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Last name</Form.Label>
-              <Form.Control type="text" placeholder="Enter last name" />
-            </Form.Group>
+            <FormInput
+              label="Last name"
+              type="text"
+              placeholder="Enter last name"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Phone number</Form.Label>
-              <Form.Control type="tel" placeholder="Enter phone number" />
-            </Form.Group>
+            <FormInput
+              label="Phone number"
+              type="tel"
+              placeholder="Enter phone number"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-            </Form.Group>
+            <FormInput
+              label="Email address"
+              type="email"
+              placeholder="Enter email"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Address</Form.Label>
-              <Form.Control type="text" placeholder="Enter address" />
-            </Form.Group>
+            <FormInput
+              label="Address"
+              type="text"
+              placeholder="Enter address"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>City</Form.Label>
-              <Form.Control type="text" placeholder="Enter city" />
-            </Form.Group>
+            <FormInput label="City" type="text" placeholder="Enter city" />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Country</Form.Label>
-              <Form.Control type="text" placeholder="Enter country" />
-            </Form.Group>
+            <FormInput
+              label="Country"
+              type="text"
+              placeholder="Enter country"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Postal code</Form.Label>
-              <Form.Control type="number" placeholder="Enter postal code" />
-            </Form.Group>
+            <FormInput
+              label="Postal code"
+              type="number"
+              placeholder="Enter postal code"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter password" />
-            </Form.Group>
+            <FormInput
+              label="Password"
+              type="password"
+              placeholder="Enter password"
+            />
           </Col>
           <Col md={6}>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Verify password</Form.Label>
-              <Form.Control type="password" placeholder="Re-enter password" />
-            </Form.Group>
+            <FormInput
+              label="Verify password"
+              type="password"
+              placeholder="Re-enter password"
+            />
           </Col>
         </Row>
-        <Button className="register-btn" variant="primary" type="submit">
+        <Button className="register-btn" type="submit">
           Register
         </Button>
       </Form>
