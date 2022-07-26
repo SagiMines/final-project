@@ -49,7 +49,7 @@ function MyAccount() {
               <Card.Link>update</Card.Link>
             </Col>
           </Row>
-          <Button className="my-account-btn">Change password</Button>
+          <Button className="my-account-btn">Update password</Button>
         </Card.Body>
       </Card>
     </div>
