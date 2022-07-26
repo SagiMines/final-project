@@ -14,7 +14,7 @@ function ForgotPW2() {
           <Form>
             <FormInput type="text" placeholder="Enter the code" />
             <Button className="forgotpw2-btn" type="submit">
-              Change password
+              Continue
             </Button>
           </Form>
           <Card.Text className="resend-text">
