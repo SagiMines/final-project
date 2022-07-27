@@ -3,6 +3,11 @@
 
   margin-bottom: 7px;
 }
+
+.product-card {
+  cursor: pointer;
+}
+
 .card-img {
   width: 25%;
   height: 25%;
@@ -32,6 +37,14 @@
 .card-buttons {
   display: flex;
   flex-direction: row;
+}
+
+.card-buttons > * {
+  margin-bottom: 1rem;
+}
+
+.card-buttons > a {
+  text-align: center;
 }
 
 .card-button {

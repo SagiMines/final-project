@@ -16,7 +16,9 @@ import ChangePassword from './ChangePassword';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
+
 import './App.css';
+import CategoryPage from './CategoryPage';
 
 function App() {
   return (
@@ -39,7 +41,8 @@ function App() {
       {/* <PasswordChangeSuccess /> */}
       {/* <MyAccount /> */}
       {/* <ChangePassword page="update" /> */}
-      <MyOrders />
+      {/* <MyOrders /> */}
+      <CategoryPage />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>

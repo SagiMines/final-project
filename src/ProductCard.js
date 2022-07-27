@@ -5,7 +5,7 @@ import './ProductCard.css';
 function StudentCard(props) {
   return (
     <>
-      <Card>
+      <Card className="product-card">
         {props.page === 'cart' && (
           <Form.Check
             className="choose-button"
@@ -26,7 +26,7 @@ function StudentCard(props) {
               type and scrambled it to make a type specimen book.{' '}
             </Card.Text>
           )}
-          {props.page === 'cart' && (
+          {(props.page === 'cart' || props.page === 'category') && (
             <section className="cart-text">
               <Card.Text>Price: 10$</Card.Text>
               <Card.Text className="stock">On Stock!</Card.Text>
@@ -40,6 +40,15 @@ function StudentCard(props) {
               <Button className="card-button col-md">Add to cart</Button>
               <Button className="card-button col-md">Buy now</Button>
               <Button className="card-button col-md">Delete</Button>
+            </section>
+          )}
+          {props.page === 'category' && (
+            <section className="card-buttons row">
+              <Button>Buy now</Button>
+              <Button>Add to cart</Button>
+              <a className="card-button col-md">
+                <i className="fa fa-solid fa-heart"></i>
+              </a>
             </section>
           )}
           {(props.page === 'cart' || props.page === 'review') && (
