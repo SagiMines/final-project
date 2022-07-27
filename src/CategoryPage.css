@@ -1,0 +1,36 @@
+.categories-container {
+  background-color: #f3f3f3;
+  padding: 0 2rem;
+  padding-bottom: 15px;
+}
+
+.categories-title {
+  padding: 15px 0;
+}
+
+.categories-container .product-card {
+  flex-direction: column;
+}
+
+.categories-container .product-card > .card-img {
+  width: 30%;
+  margin-top: 1rem;
+}
+
+.category-name-and-sort {
+  display: flex;
+  justify-content: space-between;
+}
+
+.category-name-and-sort > select {
+  height: 2.5rem;
+  align-self: center;
+}
+
+@media screen and (max-width: 600px) {
+  .category-name-and-sort {
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+}
