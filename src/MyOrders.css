@@ -17,6 +17,21 @@
   margin-bottom: 2rem;
 }
 
-.total-text {
+.order-summary {
   margin: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-card .shipping-details-card > .card-body {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 800px) {
+  .order-summary {
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+  }
 }
