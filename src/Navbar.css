@@ -21,8 +21,13 @@ header {
 }
 
 .fa {
-  font-size: 28px;
+  cursor: pointer;
+  font-size: 28px !important;
   margin-left: 10px;
+}
+
+.navbar-toggler {
+  margin-top: 4px;
 }
 
 .fa-heart {
@@ -49,4 +54,97 @@ header {
 
 .navbar-collapse {
   flex-grow: 0 !important;
+}
+
+label {
+  width: 100%;
+}
+
+.hamburger-container,
+.user-container,
+.collapse-hamburger-container {
+  display: inline-block;
+  position: relative;
+}
+
+.hamburger-slider-pointer,
+.user-slider-pointer {
+  transform: translateX(13px);
+  border: solid 10px transparent;
+  border-bottom-color: #f3f3f3;
+  position: absolute;
+  bottom: -11px;
+  z-index: 998;
+}
+
+.hamburger-slider,
+.user-slider {
+  position: absolute;
+  bottom: -10px;
+  transform: translateY(100%) translateX(-100px);
+  width: 150px;
+  height: 130px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  border-radius: 3px;
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
+}
+
+.hamburger-slider > *,
+.user-slider > *,
+.categories-slider > *,
+.hamburger-collapse-slider > *,
+.categories-collapse-slider > * {
+  cursor: pointer;
+  display: block;
+  padding-left: 5px;
+  margin-bottom: 0;
+  padding-bottom: 0.5rem;
+}
+
+.categories-slider {
+  position: absolute;
+  bottom: -10px;
+  transform: translateY(100%) translateX(-250px);
+  width: 150px;
+  height: 230px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  border-radius: 3px;
+}
+
+.navbar-toggler {
+  border: 0 !important;
+}
+
+.hamburger-collapse-slider {
+  position: absolute;
+  bottom: -10px;
+  transform: translateY(93%) translateX(-86px);
+  width: 150px;
+  height: 130px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  border-radius: 3px;
+  box-shadow: 0 0 0 10000px rgb(0 0 0 / 50%);
+}
+
+.hamburger-collapse-slider-pointer {
+  transform: translateX(24px);
+  border: solid 10px transparent;
+  border-bottom-color: #f3f3f3;
+  position: absolute;
+  bottom: -2px;
+  z-index: 998;
+}
+
+.categories-collapse-slider {
+  position: absolute;
+  bottom: -10px;
+  transform: translateY(96%) translateX(-236px);
+  width: 150px;
+  height: 230px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  border-radius: 3px;
 }
