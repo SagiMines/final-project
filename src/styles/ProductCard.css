@@ -4,7 +4,7 @@
   margin-bottom: 7px;
 }
 
-.product-card {
+.product-card > .card-img {
   cursor: pointer;
 }
 
@@ -71,6 +71,14 @@
   justify-content: space-between;
 }
 
-.stock {
+.on-stock {
   color: green !important;
+}
+
+.out-of-stock {
+  color: red !important;
+}
+
+.old-price {
+  text-decoration: line-through;
 }
