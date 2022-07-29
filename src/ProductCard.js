@@ -1,6 +1,6 @@
 import { Form, Card, Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
-import './ProductCard.css';
+import './styles/ProductCard.css';
 
 function StudentCard(props) {
   return (

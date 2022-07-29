@@ -1,6 +1,6 @@
 import ProductCarousel from './ProductCarousel';
 import { Row, Col } from 'react-bootstrap';
-import './TopProducts.css';
+import './styles/TopProducts.css';
 
 function TopProducts() {
   return (

@@ -1,6 +1,6 @@
 import CategoryAside from './CategoryAside';
 import ProductPage from './ProductPage';
-import './ProductDetails.css';
+import './styles/ProductDetails.css';
 
 function ProductDetails(props) {
   const getProductsById = () => {
@@ -16,9 +16,6 @@ function ProductDetails(props) {
     }
     return tempArr;
   };
-
-  // console.log(getProductsById());
-  // console.log(getProductImages());
 
   return (
     <div className="main-content">

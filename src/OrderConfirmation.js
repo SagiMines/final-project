@@ -1,7 +1,7 @@
 import ShippingDetailsCard from './ShippingDetailsCard';
 import ProductCard from './ProductCard';
 import { Card, Col, Row } from 'react-bootstrap';
-import './OrderConfirmation.css';
+import './styles/OrderConfirmation.css';
 
 function OrderConfirmation() {
   return (

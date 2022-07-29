@@ -1,5 +1,5 @@
 import { Card } from 'react-bootstrap';
-import './ShippingDetailsCard.css';
+import './styles/ShippingDetailsCard.css';
 
 function ShippingDetailsCard(props) {
   return (

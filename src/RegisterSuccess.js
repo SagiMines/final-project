@@ -1,5 +1,5 @@
 import { Card, Button } from 'react-bootstrap';
-import './RegisterSuccess.css';
+import './styles/RegisterSuccess.css';
 
 function RegisterSuccess() {
   return (

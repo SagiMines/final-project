@@ -1,7 +1,7 @@
 import ProductCard from './ProductCard';
 import CheckoutCard from './CheckoutCard';
 import { Row, Col, Card, Button } from 'react-bootstrap';
-import './ShoppingCart.css';
+import './styles/ShoppingCart.css';
 
 function ShoppingCart() {
   return (

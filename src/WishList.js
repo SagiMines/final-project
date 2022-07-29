@@ -1,5 +1,5 @@
 import ProductCard from './ProductCard';
-import './WishList.css';
+import './styles/WishList.css';
 
 function WishList() {
   return (

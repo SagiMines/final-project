@@ -1,5 +1,5 @@
 import { Nav } from 'react-bootstrap';
-import './CategoryAside.css';
+import './styles/CategoryAside.css';
 
 function CategoryAside() {
   return (

@@ -1,6 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
-import './ChangePassword.css';
+import './styles/ChangePassword.css';
 
 function ChangePassword(props) {
   return (

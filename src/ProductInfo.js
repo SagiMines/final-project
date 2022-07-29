@@ -1,6 +1,6 @@
 import NumericInput from 'react-numeric-input';
 import { Card, Button } from 'react-bootstrap';
-import './ProductInfo.css';
+import './styles/ProductInfo.css';
 
 function ProductInfo(props) {
   return (

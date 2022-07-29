@@ -1,6 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
-import './LogIn.css';
+import './styles/LogIn.css';
 
 function LogIn() {
   return (

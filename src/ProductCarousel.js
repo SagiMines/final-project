@@ -1,5 +1,5 @@
 import { Carousel } from 'react-bootstrap';
-import './ProductCarousel.css';
+import './styles/ProductCarousel.css';
 
 function ProductCarousel(props) {
   return (
