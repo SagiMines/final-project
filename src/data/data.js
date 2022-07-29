@@ -29,3 +29,7 @@ export const navSlidersData = () => {
     },
   };
 };
+
+export const sortByOptions = () => {
+  return ['Price - high to low', 'Price - low to high', 'Newest products'];
+};

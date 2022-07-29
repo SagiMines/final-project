@@ -9,3 +9,11 @@
 .price > span {
   text-decoration: line-through;
 }
+
+.on-stock {
+  color: green;
+}
+
+.out-of-stock {
+  color: red;
+}

@@ -2,61 +2,27 @@ import CategoryAside from './CategoryAside';
 import ProductCard from './ProductCard';
 import { Row, Col } from 'react-bootstrap';
 import SortBy from './SortBy';
+import { sortByOptions } from './data/data';
 import './styles/CategoryPage.css';
 
-function CategoryPage() {
+function CategoryPage(props) {
   return (
     <div className="main-content">
       <CategoryAside />
 
       <Row className="categories-container">
         <section className="category-name-and-sort">
-          <h1 className="categories-title">Category Name</h1>
-          <SortBy
-            options={[
-              'Price - high to low',
-              'Price - low to high',
-              'Newest products',
-            ]}
-          />
+          <h1 className="categories-title">
+            {props.categoryData.category.category_name}
+          </h1>
+          <SortBy options={sortByOptions()} />
         </section>
 
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
-        <Col lg={4} md={6} sm={6}>
-          <ProductCard page="category" />
-        </Col>
+        {props.categoryData.products.map(product => (
+          <Col className="card-container" xxl={3} lg={4} md={6} sm={6}>
+            <ProductCard product={product} page="category" />
+          </Col>
+        ))}
       </Row>
     </div>
   );

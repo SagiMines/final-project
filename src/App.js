@@ -18,14 +18,30 @@ import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
 import CategoryPage from './CategoryPage';
 import { useState } from 'react';
-import { getProducts, getProductImages } from './DAL/database';
+import { getProducts, getProductImages, getCategories } from './DAL/database';
 import './styles/App.css';
 
 function App() {
   const [data, setData] = useState({
+    categories: getCategories(),
     products: getProducts(),
     productImages: getProductImages(),
   });
+
+  const chosenCategoryData = () => {
+    const category = data.categories.find(category => category.id === 1);
+    const products = [];
+    for (const product of data.products) {
+      if (product.category_id === 1) {
+        const image = data.productImages.find(
+          image => image.product_id === product.id
+        );
+        product['image'] = image.image_src;
+        products.push(product);
+      }
+    }
+    return { category, products };
+  };
 
   return (
     <div>
@@ -33,7 +49,7 @@ function App() {
         <Navbar></Navbar>
       </header>
       {/* <HomePage /> */}
-      {/* <ProductDetails data={data} id={2}></ProductDetails> */}
+      {/* <ProductDetails data={data} id={6}></ProductDetails> */}
       {/* <WishList /> */}
       {/* <ShoppingCart /> */}
       {/* <ReviewOrder /> */}
@@ -48,7 +64,7 @@ function App() {
       {/* <MyAccount /> */}
       {/* <ChangePassword page="update" /> */}
       {/* <MyOrders /> */}
-      <CategoryPage />
+      <CategoryPage categoryData={chosenCategoryData()} />
       <footer className="bg-light text-center text-lg-start position-sticky">
         <Footer></Footer>
       </footer>

@@ -6,8 +6,10 @@ function SortBy(props) {
       <option disabled selected hidden>
         Sort by
       </option>
-      {props.options.map(option => (
-        <option value={option}>{option}</option>
+      {props.options.map((option, idx) => (
+        <option key={idx.toString()} value={option}>
+          {option}
+        </option>
       ))}
     </Form.Select>
   );

@@ -34,3 +34,11 @@
     margin-bottom: 1rem;
   }
 }
+
+.card-container {
+  display: flex;
+}
+
+.card-container > * {
+  flex: auto;
+}

@@ -2,7 +2,7 @@ import { Form, Card, Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import './styles/ProductCard.css';
 
-function StudentCard(props) {
+function ProductCard(props) {
   return (
     <>
       <Card className="product-card">
@@ -15,9 +15,17 @@ function StudentCard(props) {
           />
         )}
 
-        <Card.Img src="https://d3m9l0v76dty0.cloudfront.net/system/photos/7649724/large/2f4ab58b69e32e69c9ea56a346cf1271.jpg" />
+        <Card.Img
+          src={
+            (props.product && props.product.image) ||
+            'https://d3m9l0v76dty0.cloudfront.net/system/photos/7649724/large/2f4ab58b69e32e69c9ea56a346cf1271.jpg'
+          }
+        />
         <Card.Body>
-          <Card.Title>Dewalt DCD999 Hammer Drill</Card.Title>
+          <Card.Title>
+            {(props.product && props.product.product_name) ||
+              'Dewalt DCD999 Hammer Drill'}
+          </Card.Title>
           {props.page === 'wishlist' && (
             <Card.Text>
               Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -28,8 +36,38 @@ function StudentCard(props) {
           )}
           {(props.page === 'cart' || props.page === 'category') && (
             <section className="cart-text">
-              <Card.Text>Price: 10$</Card.Text>
-              <Card.Text className="stock">On Stock!</Card.Text>
+              <Card.Text>
+                {props.product && props.product.discount ? (
+                  <>
+                    Price:{' '}
+                    <span className="old-price">
+                      {props.product.unit_price}$
+                    </span>
+                    {` ${
+                      props.product.unit_price -
+                      props.product.unit_price * props.product.discount * 0.01
+                    }`}
+                    $
+                  </>
+                ) : (
+                  `Price: ${props.product ? props.product.unit_price : '20$'}`
+                )}
+              </Card.Text>
+              <Card.Text
+                className={
+                  props.product
+                    ? props.product.units_in_stock
+                      ? 'on-stock'
+                      : 'out-of-stock'
+                    : 'on-stock'
+                }
+              >
+                {props.product
+                  ? props.product.units_in_stock
+                    ? 'On Stock!'
+                    : 'Out of Stock'
+                  : 'On Stock!'}
+              </Card.Text>
             </section>
           )}
           {(props.page === 'review' || props.page === 'order-confirmation') && (
@@ -44,8 +82,12 @@ function StudentCard(props) {
           )}
           {props.page === 'category' && (
             <section className="card-buttons row">
-              <Button>Buy now</Button>
-              <Button>Add to cart</Button>
+              <Button disabled={props.product.units_in_stock ? false : true}>
+                Buy now
+              </Button>
+              <Button disabled={props.product.units_in_stock ? false : true}>
+                Add to cart
+              </Button>
               <a className="card-button col-md">
                 <i className="fa fa-solid fa-heart"></i>
               </a>
@@ -68,9 +110,10 @@ function StudentCard(props) {
           {props.page === 'order-confirmation' && (
             <Card.Text>Total Price: 10$</Card.Text>
           )}
+          <div></div>
         </Card.Body>
       </Card>
     </>
   );
 }
-export default StudentCard;
+export default ProductCard;
