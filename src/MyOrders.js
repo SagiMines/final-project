@@ -1,7 +1,7 @@
 import { Button, Card } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 import ShippingDetailsCard from './ShippingDetailsCard';
-import './MyOrders.css';
+import './styles/MyOrders.css';
 
 function MyOrders() {
   return (

@@ -1,6 +1,6 @@
 import ProductCarousel from './ProductCarousel';
 import ProductInfo from './ProductInfo';
-import './ProductPage.css';
+import './styles/ProductPage.css';
 
 function ProductPage(props) {
   return (

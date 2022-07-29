@@ -1,5 +1,5 @@
 import { Card, Button } from 'react-bootstrap';
-import './CheckoutCard.css';
+import './styles/CheckoutCard.css';
 
 function CheckoutCard(props) {
   return (

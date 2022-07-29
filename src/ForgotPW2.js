@@ -1,6 +1,6 @@
 import { Card, Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
-import './ForgotPW2.css';
+import './styles/ForgotPW2.css';
 
 function ForgotPW2() {
   return (

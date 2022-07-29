@@ -1,6 +1,6 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormInput from './FormInput';
-import './Register.css';
+import './styles/Register.css';
 
 function Register() {
   return (

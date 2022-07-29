@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import NavSlider from './NavSlider';
 import { navSlidersData } from './data/data';
-import './Navbar.css';
+import './styles/Navbar.css';
 
 function Navbar() {
   const [sliders, setSliders] = useState(navSlidersData());

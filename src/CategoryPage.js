@@ -2,7 +2,7 @@ import CategoryAside from './CategoryAside';
 import ProductCard from './ProductCard';
 import { Row, Col } from 'react-bootstrap';
 import SortBy from './SortBy';
-import './CategoryPage.css';
+import './styles/CategoryPage.css';
 
 function CategoryPage() {
   return (

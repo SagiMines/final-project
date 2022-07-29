@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 import CheckoutCard from './CheckoutCard';
 import ShippingDetailsCard from './ShippingDetailsCard';
-import './ReviewOrder.css';
+import './styles/ReviewOrder.css';
 
 function ReviewOrder() {
   return (

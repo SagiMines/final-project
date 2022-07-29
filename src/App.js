@@ -19,7 +19,7 @@ import MyOrders from './MyOrders';
 import CategoryPage from './CategoryPage';
 import { useState } from 'react';
 import { getProducts, getProductImages } from './DAL/database';
-import './App.css';
+import './styles/App.css';
 
 function App() {
   const [data, setData] = useState({

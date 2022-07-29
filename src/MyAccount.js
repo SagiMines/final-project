@@ -1,6 +1,6 @@
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import FormInput from './FormInput';
-import './MyAccount.css';
+import './styles/MyAccount.css';
 
 function MyAccount() {
   return (

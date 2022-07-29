@@ -1,5 +1,5 @@
 import { Button, Card } from 'react-bootstrap';
-import './PasswordChangeSuccess.css';
+import './styles/PasswordChangeSuccess.css';
 
 function PasswordChangeSuccess() {
   return (
