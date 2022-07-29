@@ -16,18 +16,24 @@ import ChangePassword from './ChangePassword';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
-
-import './App.css';
 import CategoryPage from './CategoryPage';
+import { useState } from 'react';
+import { getProducts, getProductImages } from './DAL/database';
+import './App.css';
 
 function App() {
+  const [data, setData] = useState({
+    products: getProducts(),
+    productImages: getProductImages(),
+  });
+
   return (
     <div>
       <header>
         <Navbar></Navbar>
       </header>
       {/* <HomePage /> */}
-      {/* <ProductDetails></ProductDetails> */}
+      {/* <ProductDetails data={data} id={2}></ProductDetails> */}
       {/* <WishList /> */}
       {/* <ShoppingCart /> */}
       {/* <ReviewOrder /> */}

@@ -1,30 +1,34 @@
-import { Card, Form, Button } from 'react-bootstrap';
+import NumericInput from 'react-numeric-input';
+import { Card, Button } from 'react-bootstrap';
+import './ProductInfo.css';
 
-function ProductInfo() {
+function ProductInfo(props) {
   return (
     <Card className="col-sm">
       <Card.Body>
-        <Card.Title>DeWalt DCD999 Hammer Drill With 20V 5Ah Battery</Card.Title>
-        <Card.Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </Card.Text>
+        <Card.Title>{props.data.product_name}</Card.Title>
+        <Card.Text>{props.data.description}</Card.Text>
         <section className="quantity">
-          <Form.Select aria-label="Default select example">
-            <option hidden>Quantity</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </Form.Select>
-          <span>On Stock!</span>
+          <NumericInput min={1} max={99} value={1} />
+
+          <span>
+            {props.data.units_in_stock > 0 ? 'On Stock!' : 'Out of Stock'}
+          </span>
         </section>
+        <Card.Title className="price">
+          {props.data.discount ? (
+            <>
+              Price: <span>{props.data.unit_price}$</span>
+              {` ${
+                props.data.unit_price -
+                props.data.unit_price / props.data.discount
+              }`}
+              $ ({props.data.discount}% discount)
+            </>
+          ) : (
+            `Price: ${props.data.unit_price}$`
+          )}
+        </Card.Title>
         <section className="buttons">
           <Button>Buy now!</Button>
           <Button>Add to cart</Button>

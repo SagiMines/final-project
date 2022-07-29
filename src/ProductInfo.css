@@ -1,0 +1,11 @@
+.react-numeric-input {
+  width: 3rem;
+}
+
+.price {
+  margin-top: 1.5rem !important;
+}
+
+.price > span {
+  text-decoration: line-through;
+}
