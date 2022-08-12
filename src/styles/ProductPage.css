@@ -2,7 +2,7 @@
   border-radius: 0 !important;
   border: 0 !important;
   box-shadow: none !important;
-  text-align: justify;
+  /* text-align: justify; */
 }
 
 .card-body {
@@ -37,6 +37,10 @@
 
 .product {
   display: flex;
+}
+
+.product > .row > .carousel {
+  width: 100%;
 }
 
 @media only screen and (max-width: 768px) {

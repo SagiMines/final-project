@@ -7,6 +7,10 @@ header {
   padding-top: 0rem !important;
   padding-bottom: 0rem !important;
 }
+
+.navbar > .container-fluid {
+  padding: 5px;
+}
 .search-bar {
   width: 55%;
   margin-top: 2px;

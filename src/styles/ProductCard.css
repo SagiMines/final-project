@@ -34,11 +34,14 @@
   color: #000000bd;
 }
 
-.card-buttons {
+/* .card-buttons {
   display: flex;
   flex-direction: row;
-}
+} */
 
+.card-buttons {
+  justify-content: space-between;
+}
 .card-buttons > * {
   margin-bottom: 1rem;
 }

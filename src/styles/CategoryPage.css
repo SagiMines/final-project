@@ -8,6 +8,10 @@
   padding: 15px 0;
 }
 
+.product-card > .card-body > .card-buttons > * {
+  margin-bottom: 10px;
+}
+
 .categories-container .product-card {
   flex-direction: column;
 }
