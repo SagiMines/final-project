@@ -9,11 +9,29 @@
   padding: 15px 0;
 }
 
+.card-buttons > .row > .amount {
+  display: contents;
+}
+
+.card-buttons > .buttons-section > div > button {
+  width: 100%;
+}
+
+.card-buttons > .buttons-section > * {
+  margin: 0.5rem 0;
+}
+
 @media screen and (max-width: 768px) {
   .review-data {
     flex-direction: column-reverse;
   }
   .checkout-card {
     margin-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 1399px) {
+  .card-buttons > .buttons-section > div > button {
+    height: 100%;
   }
 }

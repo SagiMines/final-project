@@ -1,4 +1,4 @@
-import { Form, Card, Button } from 'react-bootstrap';
+import { Form, Card, Button, Row, Col } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import './styles/ProductCard.css';
 
@@ -50,7 +50,9 @@ function ProductCard(props) {
                     $
                   </>
                 ) : (
-                  `Price: ${props.product ? props.product.unit_price : '20$'}`
+                  `Price: ${
+                    props.product ? `${props.product.unit_price}$` : '20$'
+                  }`
                 )}
               </Card.Text>
               <Card.Text
@@ -70,7 +72,7 @@ function ProductCard(props) {
               </Card.Text>
             </section>
           )}
-          {(props.page === 'review' || props.page === 'order-confirmation') && (
+          {props.page === 'order-confirmation' && (
             <Card.Text>Price: 10$</Card.Text>
           )}
           {props.page === 'wishlist' && (
@@ -95,12 +97,23 @@ function ProductCard(props) {
           )}
           {(props.page === 'cart' || props.page === 'review') && (
             <section className="card-buttons row">
-              <div className="card-button col-lg-3">
-                <NumericInput min={1} max={100} value={1} />
-              </div>
+              <Row>
+                <Col>
+                  <Card.Text>Price: 10$</Card.Text>
+                </Col>
 
-              <Button className="card-button col-lg">Delete</Button>
-              <Button className="card-button col-lg">Move to Wishlist</Button>
+                <Col className="amount">
+                  <NumericInput min={1} max={100} value={1} />
+                </Col>
+              </Row>
+              <Row className="buttons-section">
+                <Col lg={6}>
+                  <Button>Delete</Button>
+                </Col>
+                <Col lg={6}>
+                  <Button>Move to Wishlist</Button>
+                </Col>
+              </Row>
             </section>
           )}
 
