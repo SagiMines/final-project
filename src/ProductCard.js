@@ -1,8 +1,10 @@
 import { Form, Card, Button, Row, Col } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
+import { useState } from 'react';
 import './styles/ProductCard.css';
 
 function ProductCard(props) {
+  const [checkClick, setCheckClick] = useState(true);
   return (
     <>
       <Card className="product-card">
@@ -11,7 +13,8 @@ function ProductCard(props) {
             className="choose-button"
             type="checkbox"
             id="default-checkbox"
-            checked
+            checked={checkClick}
+            onClick={() => setCheckClick(!checkClick)}
           />
         )}
 
@@ -34,7 +37,7 @@ function ProductCard(props) {
               type and scrambled it to make a type specimen book.{' '}
             </Card.Text>
           )}
-          {(props.page === 'cart' || props.page === 'category') && (
+          {props.page === 'category' && (
             <section className="cart-text">
               <Card.Text>
                 {props.product && props.product.discount ? (
@@ -76,11 +79,17 @@ function ProductCard(props) {
             <Card.Text>Price: 10$</Card.Text>
           )}
           {props.page === 'wishlist' && (
-            <section className="card-buttons row">
-              <Button className="card-button col-md">Add to cart</Button>
-              <Button className="card-button col-md">Buy now</Button>
-              <Button className="card-button col-md">Delete</Button>
-            </section>
+            <Row className="card-buttons">
+              <Col lg={3}>
+                <Button className="card-button col-md">Add to cart</Button>
+              </Col>
+              <Col lg={3}>
+                <Button className="card-button col-md">Buy now</Button>
+              </Col>
+              <Col lg={3}>
+                <Button className="card-button col-md">Delete</Button>
+              </Col>
+            </Row>
           )}
           {props.page === 'category' && (
             <section className="card-buttons row">
@@ -106,6 +115,7 @@ function ProductCard(props) {
                   <NumericInput min={1} max={100} value={1} />
                 </Col>
               </Row>
+
               <Row className="buttons-section">
                 <Col lg={6}>
                   <Button>Delete</Button>
@@ -113,6 +123,23 @@ function ProductCard(props) {
                 <Col lg={6}>
                   <Button>Move to Wishlist</Button>
                 </Col>
+              </Row>
+              <Row className="stock-container">
+                <Card.Text
+                  className={
+                    props.product
+                      ? props.product.units_in_stock
+                        ? 'on-stock'
+                        : 'out-of-stock'
+                      : 'on-stock'
+                  }
+                >
+                  {props.product
+                    ? props.product.units_in_stock
+                      ? 'On Stock!'
+                      : 'Out of Stock'
+                    : 'On Stock!'}
+                </Card.Text>
               </Row>
             </section>
           )}

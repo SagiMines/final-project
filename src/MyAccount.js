@@ -1,5 +1,5 @@
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
-import FormInput from './FormInput';
+import { Link } from 'react-router-dom';
 import './styles/MyAccount.css';
 
 function MyAccount() {
@@ -49,7 +49,9 @@ function MyAccount() {
               <Card.Link>update</Card.Link>
             </Col>
           </Row>
-          <Button className="my-account-btn">Update password</Button>
+          <Link to="/change-password">
+            <Button className="my-account-btn">Update password</Button>
+          </Link>
         </Card.Body>
       </Card>
     </div>

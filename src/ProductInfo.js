@@ -1,4 +1,5 @@
 import NumericInput from 'react-numeric-input';
+import { Row, Col } from 'react-bootstrap';
 import { Card, Button } from 'react-bootstrap';
 import './styles/ProductInfo.css';
 
@@ -33,15 +34,27 @@ function ProductInfo(props) {
             `Price: ${props.data.unit_price}$`
           )}
         </Card.Title>
-        <section className="buttons">
-          <Button disabled={props.data.units_in_stock ? false : true}>
-            Buy now!
-          </Button>
-          <Button disabled={props.data.units_in_stock ? false : true}>
-            Add to cart
-          </Button>
-          <i className="fa fa-solid fa-heart"></i>
-        </section>
+        <Row className="buttons">
+          <Col xl={3}>
+            <Button
+              className="product-button"
+              disabled={props.data.units_in_stock ? false : true}
+            >
+              Buy now!
+            </Button>
+          </Col>
+          <Col xl={3}>
+            <Button
+              className="product-button"
+              disabled={props.data.units_in_stock ? false : true}
+            >
+              Add to cart
+            </Button>
+          </Col>
+          <Col xl={3} className="product-wishlist">
+            <i className="fa fa-solid fa-heart"></i>
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   );

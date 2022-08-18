@@ -1,5 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
+import { Link } from 'react-router-dom';
 import './styles/LogIn.css';
 
 function LogIn() {
@@ -21,8 +22,8 @@ function LogIn() {
           Log In
         </Button>
         <section className="login-options">
-          <a>Forgot Password</a>
-          <a>Register</a>
+          <Link to="/forgot-password">Forgot password</Link>
+          <Link to="/register">Register</Link>
         </section>
       </Form>
     </div>

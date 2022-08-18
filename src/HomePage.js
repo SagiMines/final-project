@@ -2,13 +2,13 @@ import CategoryAside from './CategoryAside';
 import Banner from './Banner';
 import TopProducts from './TopProducts';
 
-function HomePage() {
+function HomePage(props) {
   return (
     <>
       <Banner />
       <div className="main-content">
         <CategoryAside />
-        <TopProducts />
+        <TopProducts data={props.data} />
       </div>
     </>
   );

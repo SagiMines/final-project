@@ -1,4 +1,5 @@
 import { Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './styles/RegisterSuccess.css';
 
 function RegisterSuccess() {
@@ -10,9 +11,11 @@ function RegisterSuccess() {
           <Card.Title>Dear User,</Card.Title>
           <Card.Text>You have successfully registered to our site.</Card.Text>
           <Card.Text>Welcome, and have fun!</Card.Text>
-          <Button className="register-success-button">
-            Go to the main page
-          </Button>
+          <Link to="/">
+            <Button className="register-success-button">
+              Go to the main page
+            </Button>
+          </Link>
         </Card.Body>
       </Card>
     </div>

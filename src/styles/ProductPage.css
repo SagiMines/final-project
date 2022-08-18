@@ -29,8 +29,8 @@
 }
 
 .buttons {
-  margin-top: 3rem;
-  display: flex;
+  margin-top: auto;
+
   justify-content: space-between;
   flex-wrap: wrap;
 }
@@ -43,15 +43,18 @@
   width: 100%;
 }
 
+@media only screen and (max-width: 1199px) {
+  .buttons > * {
+    margin: 5px 0;
+  }
+  .buttons {
+    margin-top: 1rem;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .buttons,
   .product > .row {
     flex-direction: column;
-  }
-  .buttons > * {
-    margin: 5px 0;
-  }
-  .fa-heart {
-    text-align: center;
   }
 }

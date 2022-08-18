@@ -1,4 +1,5 @@
 import { Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './styles/PasswordChangeSuccess.css';
 
 function PasswordChangeSuccess() {
@@ -8,7 +9,9 @@ function PasswordChangeSuccess() {
       <Card>
         <Card.Body>
           <Card.Text>You have successfully changed your password.</Card.Text>
-          <Button className="pw-changed-btn">Go to the main page</Button>
+          <Link to="/">
+            <Button className="pw-changed-btn">Go to the main page</Button>
+          </Link>
         </Card.Body>
       </Card>
     </div>
