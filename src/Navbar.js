@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavSlider from './NavSlider';
 import { navSlidersData } from './data/data';
+import { Link } from 'react-router-dom';
 import './styles/Navbar.css';
 
 function Navbar() {
@@ -10,9 +11,10 @@ function Navbar() {
     <header>
       <nav className="navbar fixed-top navbar-expand-lg">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            <img src="icons/workshop-logo.png" alt=""></img>
-          </a>
+          <Link to="/" className="navbar-brand">
+            <img src="./icons/workshop-logo.png" alt="Site Logo" />
+          </Link>
+
           <div className="collapse-hamburger-container">
             <i
               onMouseEnter={() => {
@@ -59,8 +61,13 @@ function Navbar() {
                 type="text"
                 placeholder="Search a tool"
               ></input>
-              <i className="fa fa-solid fa-heart"></i>
-              <i className="fa fa-shopping-cart"></i>
+              <Link to="/wishlist">
+                <i className="fa fa-solid fa-heart"></i>
+              </Link>
+              <Link to="/shopping-cart">
+                <i className="fa fa-shopping-cart"></i>
+              </Link>
+
               <div className="user-container">
                 <i
                   onMouseEnter={() => {

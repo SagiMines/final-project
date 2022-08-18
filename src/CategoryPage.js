@@ -18,8 +18,15 @@ function CategoryPage(props) {
           <SortBy options={sortByOptions()} />
         </section>
 
-        {props.categoryData.products.map(product => (
-          <Col className="card-container" xxl={3} lg={4} md={6} sm={6}>
+        {props.categoryData.products.map((product, ind) => (
+          <Col
+            key={ind.toString()}
+            className="card-container"
+            xxl={3}
+            lg={4}
+            md={6}
+            sm={6}
+          >
             <ProductCard product={product} page="category" />
           </Col>
         ))}

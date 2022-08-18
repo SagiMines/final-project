@@ -5,6 +5,10 @@
   margin-bottom: 20px;
 }
 
+.register-success-button {
+  width: 100%;
+}
+
 .register-success-title {
   padding: 15px 0;
   font-size: 4rem;

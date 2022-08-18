@@ -4,6 +4,10 @@
   margin-bottom: 7px;
 }
 
+.card-title {
+  margin-bottom: 1rem;
+}
+
 .product-card > .card-img {
   cursor: pointer;
 }
@@ -41,6 +45,7 @@
 
 .card-buttons {
   justify-content: space-between;
+  margin-top: auto;
 }
 .card-buttons > * {
   margin-bottom: 1rem;
@@ -60,6 +65,7 @@
 
 .choose-button {
   display: flex;
+  padding-right: 0.3rem;
   align-content: center;
   flex-wrap: wrap;
 }
@@ -84,4 +90,11 @@
 
 .old-price {
   text-decoration: line-through;
+}
+
+.stock-container {
+  justify-content: flex-end;
+}
+.stock-container > * {
+  width: auto;
 }

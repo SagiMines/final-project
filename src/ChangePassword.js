@@ -1,5 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
+import { Link } from 'react-router-dom';
 import './styles/ChangePassword.css';
 
 function ChangePassword(props) {
@@ -26,9 +27,11 @@ function ChangePassword(props) {
           type="password"
           placeholder="Re-enter the password"
         />
-        <Button className="update-password-btn" type="submit">
-          Apply changes
-        </Button>
+        <Link to="/change-password-success">
+          <Button className="update-password-btn" type="submit">
+            Apply changes
+          </Button>
+        </Link>
       </Form>
     </div>
   );

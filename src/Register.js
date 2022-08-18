@@ -1,5 +1,6 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormInput from './FormInput';
+import { Link } from 'react-router-dom';
 import './styles/Register.css';
 
 function Register() {
@@ -22,13 +23,13 @@ function Register() {
               placeholder="Enter last name"
             />
           </Col>
-          <Col md={6}>
+          {/* <Col md={6}>
             <FormInput
               label="Phone number"
               type="tel"
               placeholder="Enter phone number"
             />
-          </Col>
+          </Col> */}
           <Col md={6}>
             <FormInput
               label="Email address"
@@ -36,16 +37,16 @@ function Register() {
               placeholder="Enter email"
             />
           </Col>
-          <Col md={6}>
+          {/* <Col md={6}>
             <FormInput
               label="Address"
               type="text"
               placeholder="Enter address"
             />
-          </Col>
-          <Col md={6}>
+          </Col> */}
+          {/* <Col md={6}>
             <FormInput label="City" type="text" placeholder="Enter city" />
-          </Col>
+          </Col> */}
           <Col md={6}>
             <FormInput
               label="Country"
@@ -53,13 +54,13 @@ function Register() {
               placeholder="Enter country"
             />
           </Col>
-          <Col md={6}>
+          {/* <Col md={6}>
             <FormInput
               label="Postal code"
               type="number"
               placeholder="Enter postal code"
             />
-          </Col>
+          </Col> */}
           <Col md={6}>
             <FormInput
               label="Password"
@@ -75,9 +76,11 @@ function Register() {
             />
           </Col>
         </Row>
-        <Button className="register-btn" type="submit">
-          Register
-        </Button>
+        <Link to="/register-success">
+          <Button className="register-btn" type="submit">
+            Register
+          </Button>
+        </Link>
       </Form>
     </div>
   );
