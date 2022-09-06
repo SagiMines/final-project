@@ -4,7 +4,12 @@ function FormInput(props) {
   return (
     <Form.Group className="mb-3">
       {props.label && <Form.Label>{props.label}</Form.Label>}
-      <Form.Control type={props.type} placeholder={props.placeholder} />
+      <Form.Control
+        onChange={props.onChange}
+        name={props.name}
+        type={props.type}
+        placeholder={props.placeholder}
+      />
     </Form.Group>
   );
 }
