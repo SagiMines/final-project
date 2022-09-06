@@ -1,24 +1,60 @@
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container } from 'react-bootstrap';
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import './styles/LogIn.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { postReq } from './DAL/serverData';
 
 function LogIn() {
+  const navigate = useNavigate();
+  const [state, setState] = useState({
+    user: { email: '', password: '' },
+    passed: true,
+  });
+
+  const handleClick = async e => {
+    e.preventDefault();
+    const isOkay = await postReq('http://localhost:8000/api/login', state.user);
+    if (isOkay) {
+      navigate('/');
+    } else {
+      state.passed = false;
+      setState({ ...state });
+    }
+  };
+
+  const handleChange = e => {
+    state.user[e.target.name] = e.target.value;
+    setState({ ...state });
+  };
+
   return (
     <div className="container login-container">
       <Form>
         <h1 className="login-title">Log In</h1>
         <FormInput
+          onChange={handleChange}
           label="Email address"
           type="email"
+          name="email"
           placeholder="Enter email"
         />
         <FormInput
+          onChange={handleChange}
           label="Password"
           type="password"
+          name="password"
           placeholder="Enter password"
         />
-        <Button className="login-btn" variant="primary" type="submit">
+
+        {!state.passed && <p className="login-error">Wrong Email/Password</p>}
+        <Button
+          onClick={handleClick}
+          className="login-btn"
+          variant="primary"
+          type="submit"
+        >
           Log In
         </Button>
         <section className="login-options">
