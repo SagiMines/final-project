@@ -9,6 +9,11 @@
   padding: 15px 0;
 }
 
+.alerts {
+  color: red;
+  font-size: 14px;
+}
+
 .register-btn {
   margin-top: 1rem;
   width: 100%;
