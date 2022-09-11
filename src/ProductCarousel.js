@@ -8,11 +8,11 @@ function ProductCarousel(props) {
     const topProductsImagesArr = [];
     for (const topProduct of data.topProducts) {
       topProductsArr.push(
-        data.products.find(product => product.id === topProduct.product_id)
+        data.products.find(product => product.id === topProduct.productId)
       );
       topProductsImagesArr.push(
-        data.productImages.find(image => image.id === topProduct.product_id)
-          .image_src
+        data.productImages.find(image => image.id === topProduct.productId)
+          .imageSrc
       );
     }
     return topProductsImagesArr;
@@ -25,7 +25,7 @@ function ProductCarousel(props) {
             <Carousel.Item key={idx.toString()}>
               <img
                 className="d-block w-100"
-                src={image.image_src}
+                src={image.imageSrc}
                 title={props.name}
                 alt={`#${idx + 1} slide`}
               />
@@ -36,7 +36,7 @@ function ProductCarousel(props) {
               <img
                 className="d-block w-100 "
                 src={image}
-                title={'bla'}
+                title={`Top Product #${idx + 1}`}
                 alt={`#${idx + 1} slide`}
               />
             </Carousel.Item>

@@ -6,6 +6,7 @@ function SelectForm(props) {
     <Form.Group className="mb-3">
       {props.label && <Form.Label>{props.label}</Form.Label>}
       <Form.Select
+        className="register-select"
         onBlur={props.onBlur}
         name={props.name}
         aria-label="Default select example"

@@ -5,12 +5,18 @@ export const navSlidersData = () => {
       collapseState: false,
       name: 'hamburger',
       collapseName: 'hamburger-collapse',
-      sections: ['Categories', 'Account', 'Cart', 'Wishlist'],
+      sections: {
+        disconnected: ['Categories', 'Cart', 'Wishlist'],
+        connected: ['Account', 'Categories', 'Cart', 'Wishlist'],
+      },
     },
     user: {
       state: false,
       name: 'user',
-      sections: ['Register', 'Log in'],
+      sections: {
+        disconnected: ['Register', 'Log in'],
+        connected: ['My Account', 'My Orders', 'Log Out'],
+      },
     },
     categories: {
       state: false,

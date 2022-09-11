@@ -2,12 +2,19 @@ import { Form, Button, Container } from 'react-bootstrap';
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import './styles/LogIn.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postReq } from './DAL/serverData';
+import { postReq, isConnected } from './DAL/serverData';
 
 function LogIn() {
   const navigate = useNavigate();
+
+  const checkIfConnected = () => {
+    if (isConnected()) {
+      navigate('/');
+    }
+  };
+
   const [state, setState] = useState({
     user: { email: '', password: '' },
     passed: true,
@@ -28,6 +35,10 @@ function LogIn() {
     state.user[e.target.name] = e.target.value;
     setState({ ...state });
   };
+
+  useEffect(() => {
+    checkIfConnected();
+  }, []);
 
   return (
     <div className="container login-container">

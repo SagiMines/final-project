@@ -2,11 +2,11 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import './styles/Register.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import countryList from 'country-list';
 import SelectForm from './SelectForm';
 import { useNavigate } from 'react-router-dom';
-import { postReq } from './DAL/serverData';
+import { getReq, postReq, isConnected } from './DAL/serverData';
 
 function Register() {
   const navigate = useNavigate();
@@ -29,11 +29,16 @@ function Register() {
     },
   });
 
+  const checkIfConnected = () => {
+    if (isConnected()) {
+      navigate('/');
+    }
+  };
+
   const handleClick = async e => {
     e.preventDefault();
 
     let checkEmail;
-    let checkEmailAnswer;
 
     // filter all the inputs with alerts
     const check = Object.entries(state.alerts).filter(
@@ -43,19 +48,14 @@ function Register() {
     // if the email is valid (to check if it is already in use)
     if (state.values.email && !state.alerts.email) {
       try {
-        checkEmail = await fetch(
-          `http://localhost:8000/api/users?email=${state.values.email}`
-        );
-        checkEmailAnswer = await checkEmail.json();
-        console.log(checkEmailAnswer);
-        console.log('dfsdfsdfsdfsdf');
+        checkEmail = await getReq(`users?email=${state.values.email}`);
       } catch (err) {
-        checkEmailAnswer = null;
+        checkEmail = null;
       }
     }
 
     // if all the inputs are filled and the email is not in use
-    if (!check.length && !checkEmailAnswer) {
+    if (!check.length && !checkEmail) {
       //Removing the repassword key
       delete state.values.repassword;
       //Changing the 'firstname' and 'lastname' keys to match the DTO on the server
@@ -65,8 +65,7 @@ function Register() {
       delete Object.assign(state.values, {
         ['lastName']: state.values['lastname'],
       })['lastname'];
-      console.log(state.values);
-      await postReq('http://localhost:8000/api/register', state.values);
+      await postReq('register', state.values);
       navigate('/register-success');
     } else {
       // if some of the inputs are not filled
@@ -86,8 +85,8 @@ function Register() {
       }
 
       //If the email is already in use
-      if (checkEmailAnswer) {
-        console.log(checkEmailAnswer);
+      if (checkEmail) {
+        console.log(checkEmail);
         state.alerts.email = `* Email is already in use`;
       }
 
@@ -138,6 +137,10 @@ function Register() {
     }
     setState({ ...state });
   };
+
+  useEffect(() => {
+    checkIfConnected();
+  }, []);
 
   return (
     <div className="container register-container">

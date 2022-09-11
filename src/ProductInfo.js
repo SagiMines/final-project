@@ -7,38 +7,38 @@ function ProductInfo(props) {
   return (
     <Card className="col-sm">
       <Card.Body>
-        <Card.Title>{props.data.product_name}</Card.Title>
+        <Card.Title>{props.data.productName}</Card.Title>
         <Card.Text>{props.data.description}</Card.Text>
         <section className="quantity">
-          {props.data.units_in_stock !== 0 && (
+          {props.data.unitsInStock !== 0 && (
             <NumericInput min={1} max={99} value={1} />
           )}
 
           <span
-            className={props.data.units_in_stock ? 'on-stock' : 'out-of-stock'}
+            className={props.data.unitsInStock ? 'on-stock' : 'out-of-stock'}
           >
-            {props.data.units_in_stock > 0 ? 'On Stock!' : 'Out of Stock'}
+            {props.data.unitsInStock > 0 ? 'On Stock!' : 'Out of Stock'}
           </span>
         </section>
         <Card.Title className="price">
           {props.data.discount ? (
             <>
-              Price: <span>{props.data.unit_price}$</span>
+              Price: <span>{props.data.unitPrice}$</span>
               {` ${
-                props.data.unit_price -
-                props.data.unit_price * props.data.discount * 0.01
+                props.data.unitPrice -
+                props.data.unitPrice * props.data.discount * 0.01
               }`}
               $ ({props.data.discount}% discount)
             </>
           ) : (
-            `Price: ${props.data.unit_price}$`
+            `Price: ${props.data.unitPrice}$`
           )}
         </Card.Title>
         <Row className="buttons">
           <Col xl={3}>
             <Button
               className="product-button"
-              disabled={props.data.units_in_stock ? false : true}
+              disabled={props.data.unitsInStock ? false : true}
             >
               Buy now!
             </Button>
@@ -46,7 +46,7 @@ function ProductInfo(props) {
           <Col xl={3}>
             <Button
               className="product-button"
-              disabled={props.data.units_in_stock ? false : true}
+              disabled={props.data.unitsInStock ? false : true}
             >
               Add to cart
             </Button>

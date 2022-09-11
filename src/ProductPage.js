@@ -8,7 +8,7 @@ function ProductPage(props) {
       <div className="row">
         <ProductCarousel
           images={props.images}
-          name={props.data.product_name}
+          name={props.data.productName}
         ></ProductCarousel>
         <ProductInfo data={props.data}></ProductInfo>
       </div>
