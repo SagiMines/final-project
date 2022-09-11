@@ -3,6 +3,7 @@ import NavSlider from './NavSlider';
 import { navSlidersData } from './data/data';
 import { Link } from 'react-router-dom';
 import './styles/Navbar.css';
+import Cookies from 'js-cookie';
 
 function Navbar() {
   const [sliders, setSliders] = useState(navSlidersData());
@@ -49,7 +50,11 @@ function Navbar() {
                 name={sliders.hamburger.collapseName}
                 categoryName={sliders.categories.collapseName}
                 categoriesSections={sliders.categories.sections}
-                sections={sliders.hamburger.sections}
+                sections={
+                  Cookies.get('connect.sid')
+                    ? sliders.hamburger.sections.connected
+                    : sliders.hamburger.sections.disconnected
+                }
               />
             )}
           </div>
@@ -92,7 +97,11 @@ function Navbar() {
                       setSliders({ ...sliders });
                     }}
                     name={sliders.user.name}
-                    sections={sliders.user.sections}
+                    sections={
+                      Cookies.get('connect.sid')
+                        ? sliders.user.sections.connected
+                        : sliders.user.sections.disconnected
+                    }
                   />
                 )}
               </div>
@@ -131,7 +140,11 @@ function Navbar() {
                     name={sliders.hamburger.name}
                     categoryName={sliders.categories.name}
                     categoriesSections={sliders.categories.sections}
-                    sections={sliders.hamburger.sections}
+                    sections={
+                      Cookies.get('connect.sid')
+                        ? sliders.hamburger.sections.connected
+                        : sliders.hamburger.sections.disconnected
+                    }
                   />
                 )}
               </div>

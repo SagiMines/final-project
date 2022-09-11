@@ -1,28 +1,29 @@
 import { Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './styles/CategoryAside.css';
 
 function CategoryAside() {
   return (
     <aside className="category-aside">
-      <Nav
-        className="col-md-12 d-none d-md-block bg-light sidebar"
-        activeKey="/home"
-        onSelect={selectedKey => alert(`selected ${selectedKey}`)}
-      >
+      <Nav className="col-md-12 d-none d-md-block bg-light sidebar">
         <div className="sidebar-sticky"></div>
         <Nav.Item className="heading">
           <Nav.Link disabled>Categories</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-1">
+          <Nav.Link>
             <img src="https://img.icons8.com/external-nawicon-glyph-nawicon/20/undefined/external-drill-construction-nawicon-glyph-nawicon.png" />
-            Drills
+            <Link className="category-link" to="/categories/1">
+              Drills
+            </Link>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-2">
+          <Nav.Link>
             <img src="https://img.icons8.com/ios-filled/20/undefined/drill.png" />
-            Impact Drivers
+            <Link className="category-link" to="/categories/2">
+              Impact Drivers
+            </Link>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>

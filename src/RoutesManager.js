@@ -14,9 +14,11 @@ import ChangePassword from './ChangePassword';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useSearchParams, useParams } from 'react-router-dom';
 
 function RoutesManager(props) {
+  // const [searchParams] = useSearchParams()
+  const { id } = useParams();
   return (
     <Routes>
       <Route path="/" exact element={<HomePage data={props.data} />} />
@@ -83,11 +85,7 @@ function RoutesManager(props) {
         path="/my-orders"
         element={<MyOrders />}
       />
-      <Route
-        //needs to change to match each category's ID
-        path="/categories"
-        element={<CategoryPage categoryData={props.categoryData} />}
-      />
+      <Route path="/categories/:id" element={<CategoryPage />} />
     </Routes>
   );
 }

@@ -10,7 +10,7 @@ function ProductDetails(props) {
     const tempArr = [];
     const check = props.data.productImages;
     for (const image of check) {
-      if (image.product_id === props.id) {
+      if (image.productId === props.id) {
         tempArr.push(image);
       }
     }

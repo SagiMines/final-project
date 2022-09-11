@@ -26,7 +26,7 @@ function ProductCard(props) {
         />
         <Card.Body>
           <Card.Title>
-            {(props.product && props.product.product_name) ||
+            {(props.product && props.product.productName) ||
               'Dewalt DCD999 Hammer Drill'}
           </Card.Title>
           {props.page === 'wishlist' && (
@@ -44,31 +44,31 @@ function ProductCard(props) {
                   <>
                     Price:{' '}
                     <span className="old-price">
-                      {props.product.unit_price}$
+                      {props.product.unitPrice}$
                     </span>
                     {` ${
-                      props.product.unit_price -
-                      props.product.unit_price * props.product.discount * 0.01
+                      props.product.unitPrice -
+                      props.product.unitPrice * props.product.discount * 0.01
                     }`}
                     $
                   </>
                 ) : (
                   `Price: ${
-                    props.product ? `${props.product.unit_price}$` : '20$'
+                    props.product ? `${props.product.unitPrice}$` : '20$'
                   }`
                 )}
               </Card.Text>
               <Card.Text
                 className={
                   props.product
-                    ? props.product.units_in_stock
+                    ? props.product.unitsInStock
                       ? 'on-stock'
                       : 'out-of-stock'
                     : 'on-stock'
                 }
               >
                 {props.product
-                  ? props.product.units_in_stock
+                  ? props.product.unitsInStock
                     ? 'On Stock!'
                     : 'Out of Stock'
                   : 'On Stock!'}
@@ -93,10 +93,10 @@ function ProductCard(props) {
           )}
           {props.page === 'category' && (
             <section className="card-buttons row">
-              <Button disabled={props.product.units_in_stock ? false : true}>
+              <Button disabled={props.product.unitsInStock ? false : true}>
                 Buy now
               </Button>
-              <Button disabled={props.product.units_in_stock ? false : true}>
+              <Button disabled={props.product.unitsInStock ? false : true}>
                 Add to cart
               </Button>
               <a className="card-button col-md">
@@ -128,14 +128,14 @@ function ProductCard(props) {
                 <Card.Text
                   className={
                     props.product
-                      ? props.product.units_in_stock
+                      ? props.product.unitsInStock
                         ? 'on-stock'
                         : 'out-of-stock'
                       : 'on-stock'
                   }
                 >
                   {props.product
-                    ? props.product.units_in_stock
+                    ? props.product.unitsInStock
                       ? 'On Stock!'
                       : 'Out of Stock'
                     : 'On Stock!'}

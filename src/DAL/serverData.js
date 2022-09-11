@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 export const postReq = async (route, data) => {
   let val;
   const requestOptions = {
@@ -7,11 +9,21 @@ export const postReq = async (route, data) => {
     credentials: 'include',
   };
 
-  const req = await fetch(route, requestOptions);
+  const req = await fetch(`http://localhost:8000/api/${route}`, requestOptions);
   const ans = await req.json();
   const status = ans.statusCode;
   if (status === 200) val = true;
   else val = false;
 
   return val;
+};
+
+export const getReq = async route => {
+  const req = await fetch(`http://localhost:8000/api/${route}`);
+  const ans = await req.json();
+  return ans;
+};
+
+export const isConnected = () => {
+  return Cookies.get('connect.sid');
 };
