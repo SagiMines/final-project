@@ -1,10 +1,56 @@
 import { Form, Card, Button, Row, Col } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import './styles/ProductCard.css';
+import { UserContext } from './UserContext';
+import { faGreaterThanEqual } from '@fortawesome/free-solid-svg-icons';
+import { getReq, postReq } from './DAL/serverData';
 
 function ProductCard(props) {
+  const { user, setUser } = useContext(UserContext);
   const [checkClick, setCheckClick] = useState(true);
+  const [productsAmount, setProductsAmount] = useState({});
+
+  const handleAmountChange = (valueAsNumber, valueAsString, input) => {
+    productsAmount[input.name] = valueAsNumber;
+    setProductsAmount({ ...productsAmount });
+  };
+
+  const handleBuyNow = e => {
+    // local storage to a specific item and redirect to order-review
+  };
+
+  const handleAddToWishlist = async e => {
+    if (user) {
+      const productId = Number(e.target.slot);
+      const reqBody = { userId: user, productId };
+      try {
+        await postReq('wishlist', reqBody);
+      } catch {
+        console.log('Could not fetch data from the server');
+      }
+    } else {
+      // local storage to guest users
+    }
+  };
+
+  const handleAddToCart = async e => {
+    if (user) {
+      const productId = Number(e.target.value);
+      const amount = productsAmount[productId]
+        ? productsAmount[e.target.value]
+        : 1;
+      const reqBody = { userId: user, productId, amount };
+      try {
+        await postReq('cart', reqBody);
+      } catch {
+        console.log('Could not fetch data from the server');
+      }
+    } else {
+      // local storage to guest users
+    }
+  };
+
   return (
     <>
       <Card className="product-card">
@@ -38,42 +84,54 @@ function ProductCard(props) {
             </Card.Text>
           )}
           {props.page === 'category' && (
-            <section className="cart-text">
-              <Card.Text>
-                {props.product && props.product.discount ? (
-                  <>
-                    Price:{' '}
-                    <span className="old-price">
-                      {props.product.unitPrice}$
-                    </span>
-                    {` ${
-                      props.product.unitPrice -
-                      props.product.unitPrice * props.product.discount * 0.01
-                    }`}
-                    $
-                  </>
-                ) : (
-                  `Price: ${
-                    props.product ? `${props.product.unitPrice}$` : '20$'
-                  }`
-                )}
-              </Card.Text>
-              <Card.Text
-                className={
-                  props.product
-                    ? props.product.unitsInStock
-                      ? 'on-stock'
-                      : 'out-of-stock'
-                    : 'on-stock'
-                }
-              >
-                {props.product
-                  ? props.product.unitsInStock
-                    ? 'On Stock!'
-                    : 'Out of Stock'
-                  : 'On Stock!'}
-              </Card.Text>
-            </section>
+            <>
+              <Row>
+                <Card.Text className="price-section-category">
+                  {props.product && props.product.discount ? (
+                    <>
+                      <span className="old-price">
+                        {props.product.unitPrice}$
+                      </span>
+                      {` ${
+                        props.product.unitPrice -
+                        props.product.unitPrice * props.product.discount * 0.01
+                      }`}
+                      $
+                    </>
+                  ) : (
+                    `${props.product ? `${props.product.unitPrice}$` : '20$'}`
+                  )}
+                </Card.Text>
+              </Row>
+              <Row className="amount-section">
+                <Col className="amount">
+                  <NumericInput
+                    name={props.product.id}
+                    onChange={handleAmountChange}
+                    min={1}
+                    max={100}
+                    defaultValue={1}
+                  />
+                </Col>
+                <Col>
+                  <Card.Text
+                    className={
+                      props.product
+                        ? props.product.unitsInStock
+                          ? 'on-stock'
+                          : 'out-of-stock'
+                        : 'on-stock'
+                    }
+                  >
+                    {props.product
+                      ? props.product.unitsInStock
+                        ? 'On Stock!'
+                        : 'Out of Stock'
+                      : 'On Stock!'}
+                  </Card.Text>
+                </Col>
+              </Row>
+            </>
           )}
           {props.page === 'order-confirmation' && (
             <Card.Text>Price: 10$</Card.Text>
@@ -93,14 +151,25 @@ function ProductCard(props) {
           )}
           {props.page === 'category' && (
             <section className="card-buttons row">
-              <Button disabled={props.product.unitsInStock ? false : true}>
+              <Button
+                value={props.product.id}
+                disabled={props.product.unitsInStock ? false : true}
+              >
                 Buy now
               </Button>
-              <Button disabled={props.product.unitsInStock ? false : true}>
+              <Button
+                onClick={handleAddToCart}
+                value={props.product.id}
+                disabled={props.product.unitsInStock ? false : true}
+              >
                 Add to cart
               </Button>
               <a className="card-button col-md">
-                <i className="fa fa-solid fa-heart"></i>
+                <i
+                  onClick={handleAddToWishlist}
+                  slot={props.product.id}
+                  className="fa fa-solid fa-heart"
+                ></i>
               </a>
             </section>
           )}
