@@ -2,15 +2,17 @@ import { Form, Button, Container } from 'react-bootstrap';
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import './styles/LogIn.css';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postReq, isConnected } from './DAL/serverData';
+import { postReq, isConnected, getUserIdFromCookie } from './DAL/serverData';
+import { UserContext } from './UserContext';
 
 function LogIn() {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
-  const checkIfConnected = () => {
-    if (isConnected()) {
+  const checkIfConnected = async () => {
+    if (await isConnected()) {
       navigate('/');
     }
   };
@@ -22,8 +24,9 @@ function LogIn() {
 
   const handleClick = async e => {
     e.preventDefault();
-    const isOkay = await postReq('http://localhost:8000/api/login', state.user);
+    const isOkay = await postReq('login', state.user);
     if (isOkay) {
+      setUser(getUserIdFromCookie());
       navigate('/');
     } else {
       state.passed = false;

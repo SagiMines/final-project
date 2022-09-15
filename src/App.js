@@ -5,10 +5,12 @@ import RoutesManager from './RoutesManager';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './styles/App.css';
-import { getReq } from './DAL/serverData';
+import { getReq, getUserIdFromCookie } from './DAL/serverData';
+import { UserContext } from './UserContext';
 
 function App() {
   const [data, setData] = useState();
+  const [user, setUser] = useState(null);
 
   const fetchData = async () => {
     const products = await getReq('products');
@@ -25,17 +27,24 @@ function App() {
 
   useEffect(() => {
     fetchData();
+    //get the user ID (if exists)
+    (async () => {
+      const userId = await getUserIdFromCookie();
+      setUser(userId ? userId : null);
+    })();
   }, []);
 
   return (
     <Router>
       <Navbar />
       {data && (
-        <RoutesManager
-          /*for ProductDetails: */ data={data}
-          id={2}
-          /*for ChangePassword: */ page="update"
-        />
+        <UserContext.Provider value={{ user, setUser }}>
+          <RoutesManager
+            /*for ProductDetails: */ data={data}
+            id={2}
+            /*for ChangePassword: */ page="update"
+          />
+        </UserContext.Provider>
       )}
       <Footer />
     </Router>

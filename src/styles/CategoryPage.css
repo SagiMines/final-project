@@ -16,6 +16,10 @@
   flex-direction: column;
 }
 
+.categories-container {
+  width: 100%;
+}
+
 .categories-container .product-card > .card-img {
   width: 30%;
   margin-top: 1rem;

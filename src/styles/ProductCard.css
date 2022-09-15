@@ -82,10 +82,12 @@
 
 .on-stock {
   color: green !important;
+  float: right;
 }
 
 .out-of-stock {
   color: red !important;
+  float: right;
 }
 
 .old-price {
@@ -97,4 +99,16 @@
 }
 .stock-container > * {
   width: auto;
+}
+
+.amount-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.price-section-category {
+  text-align: center;
+  color: black !important;
+  font-weight: bold !important;
+  font-size: 20px !important;
 }

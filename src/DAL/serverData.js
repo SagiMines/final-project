@@ -24,6 +24,20 @@ export const getReq = async route => {
   return ans;
 };
 
-export const isConnected = () => {
-  return Cookies.get('connect.sid');
+export const getUserIdFromCookie = async () => {
+  try {
+    const userId = await getReq(`login/${Cookies.get('user_id')}`);
+    return userId;
+  } catch {
+    return false;
+  }
+};
+
+export const isConnected = async () => {
+  if (Cookies.get('user_id')) {
+    const userId = await getUserIdFromCookie();
+    console.log(userId);
+    return userId ? true : false;
+  }
+  return false;
 };

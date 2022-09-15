@@ -13,7 +13,7 @@ function Navbar() {
       <nav className="navbar fixed-top navbar-expand-lg">
         <div className="container-fluid">
           <Link to="/" className="navbar-brand">
-            <img src="./icons/workshop-logo.png" alt="Site Logo" />
+            <img src="/icons/workshop-logo.png" alt="Site Logo" />
           </Link>
 
           <div className="collapse-hamburger-container">

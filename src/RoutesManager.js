@@ -9,16 +9,13 @@ import OrderConfirmation from './OrderConfirmation';
 import Register from './Register';
 import RegisterSuccess from './RegisterSuccess';
 import ForgotPW1 from './ForgotPW1';
-import ForgotPW2 from './ForgotPW2';
 import ChangePassword from './ChangePassword';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
-import { Routes, Route, useSearchParams, useParams } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 function RoutesManager(props) {
-  // const [searchParams] = useSearchParams()
-  const { id } = useParams();
   return (
     <Routes>
       <Route path="/" exact element={<HomePage data={props.data} />} />
