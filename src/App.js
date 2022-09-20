@@ -30,7 +30,7 @@ function App() {
     //get the user ID (if exists)
     (async () => {
       const userId = await getUserIdFromCookie();
-      setUser(userId ? userId : null);
+      setUser(userId ? { userId } : null);
     })();
   }, []);
 

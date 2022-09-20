@@ -1,21 +1,115 @@
 import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './styles/CheckoutCard.css';
+import { UserContext } from './UserContext';
+import { useContext, useEffect } from 'react';
+import {
+  convertJsDatePatternToMysqlPattern,
+  deleteReq,
+  getReq,
+  postReq,
+} from './DAL/serverData';
+import { useNavigate } from 'react-router-dom';
 
 function CheckoutCard(props) {
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleOrder = async () => {
+    if (props.page === 'cart') {
+      navigate('/review-order');
+    } else {
+      const userDetails = await getTheUser();
+      const isNewOrderUpdated = await addOrderToDb(userDetails);
+      await getReq('orders');
+      if (isNewOrderUpdated) {
+        const userLastOrderId = await getUserLastOrderId();
+        const isOrderDetailsUpdated = await addOrderDetailsToDb(
+          userLastOrderId
+        );
+        if (isOrderDetailsUpdated) {
+          const areOrderedCartItemsDeleted = await deleteOrderedCartItems();
+          if (areOrderedCartItemsDeleted) {
+            navigate('/order-confirmation');
+          }
+        }
+      }
+    }
+  };
+
+  const getTheUser = async () => {
+    return await getReq(`users/${user.userId}`);
+  };
+
+  const addOrderToDb = async userDetails => {
+    const reqBody = {
+      userId: userDetails.id,
+      orderDate: convertJsDatePatternToMysqlPattern(),
+      shipAddress: userDetails.address,
+      shipCountry: userDetails.country,
+      shipCity: userDetails.city,
+      shipPostalCode: userDetails.postalCode,
+    };
+    return await postReq(`orders`, reqBody);
+  };
+
+  const getUserLastOrderId = async () => {
+    const userOrders = await getReq(`orders/${user.userId}`);
+    const lastOrder = Math.max(...userOrders.map(order => order.id));
+    return lastOrder;
+  };
+
+  const addOrderDetailsToDb = async orderId => {
+    for (const cartItem of user.finalCart) {
+      if (cartItem.checked) {
+        const productId = cartItem.id;
+        const unitPrice = cartItem.unitPrice;
+        const amount = cartItem.amount;
+        const finalPrice = cartItem.discount
+          ? unitPrice * amount - unitPrice * amount * (cartItem.discount * 0.01)
+          : unitPrice * amount;
+
+        const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
+        const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
+        if (!isOrderDetailsAddedToDb) {
+          console.log(
+            'Something went wrong with the data sent to the database.'
+          );
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  const deleteOrderedCartItems = async () => {
+    for (const cartItem of user.finalCart) {
+      if (cartItem.checked) {
+        const isDeletedFromCart = await deleteReq(
+          `cart?user-id=${user.userId}&product-id=${cartItem.id}`
+        );
+        if (!isDeletedFromCart) {
+          console.log(
+            'Something went wrong with the data sent to the database.'
+          );
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   return (
     <Card className="checkout-card">
       <Card.Body>
-        <Card.Title>Total Amount (2 Items): 30$</Card.Title>
-        <Link
-          to={props.page === 'cart' ? '/review-order' : '/order-confirmation'}
-        >
-          <Button className="checkout-button">
-            {props.page === 'cart' ? 'Proceed to checkout' : 'Place your order'}
-          </Button>
-        </Link>
+        <Card.Title>{`Total Amount (${props.cartSummary.totalAmount} Items): ${props.cartSummary.totalPrice}$`}</Card.Title>
+        <Button onClick={handleOrder} className="checkout-button">
+          {props.page === 'cart' ? 'Proceed to checkout' : 'Place your order'}
+        </Button>
         {props.page === 'review' && (
-          <Button className="checkout-button">Cancle</Button>
+          <Link to="/shopping-cart">
+            <Button className="checkout-button">Cancle</Button>
+          </Link>
         )}
       </Card.Body>
     </Card>
