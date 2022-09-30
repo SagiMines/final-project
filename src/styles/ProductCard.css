@@ -131,3 +131,11 @@
   font-size: 15px;
   font-weight: lighter;
 }
+
+.order-confirmation-float-right-price {
+  float: right;
+}
+
+.order-confirmation-details-container {
+  margin-top: 1rem;
+}

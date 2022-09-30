@@ -3,9 +3,11 @@ import NumericInput from 'react-numeric-input';
 import { useContext, useEffect, useState } from 'react';
 import './styles/ProductCard.css';
 import { UserContext } from './UserContext';
-import { postReq } from './DAL/serverData';
+import { postReq, getReq, deleteReq } from './DAL/serverData';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCard(props) {
+  const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [productsAmount, setProductsAmount] = useState({});
   const [checkClick, setCheckClick] = useState(true);
@@ -49,29 +51,55 @@ function ProductCard(props) {
     if (foundUser) {
       foundUser.checked = props.currentProduct.checked;
     }
-
-    console.log(checkClick);
-    console.log(user);
     setUser({ ...user });
     setCheckClick(!checkClick);
   };
 
   const handleBuyNow = e => {
     // local storage to a specific item and redirect to order-review
+    productsAmount[e.target.value] = productsAmount[e.target.value]
+      ? productsAmount[e.target.value]
+      : 1;
+    localStorage.setItem(
+      'buy-now',
+      JSON.stringify({
+        userId: user.userId,
+        productId: e.target.value,
+        amount: productsAmount[e.target.value],
+      })
+    );
+    navigate('/review-order');
   };
 
   const handleAddToWishlist = async e => {
     if (user) {
       const productId = Number(e.target.slot);
       const reqBody = { userId: user.userId, productId };
-      try {
-        await postReq('wishlist', reqBody);
-      } catch {
+      const isAddedToWishList = await postReq('wishlist', reqBody);
+      if (isAddedToWishList) {
+        console.log(
+          'The item was added successfully to the wishlist database.'
+        );
+      } else {
         console.log('Could not fetch data from the server');
       }
     } else {
       // local storage to guest users
     }
+  };
+
+  const handleDeleteFromWishList = async () => {
+    delete user.wishListProducts[props.wishListItem.id];
+    const products = Object.values(user.wishListProducts);
+    props.wishListRender.setWishList([...products]);
+    await deleteReq(
+      `wishlist?user-id=${user.userId}&product-id=${props.wishListItem.id}`
+    );
+  };
+
+  const updateCartDetails = async () => {
+    await getReq(`cart/${user.userId}`);
+    return (await getReq(`cart/${user.userId}`)).length;
   };
 
   const handleAddToCart = async e => {
@@ -81,9 +109,16 @@ function ProductCard(props) {
         ? productsAmount[e.target.value]
         : 1;
       const reqBody = { userId: user.userId, productId, amount };
-      try {
-        await postReq('cart', reqBody);
-      } catch {
+      const isCartUpdated = await postReq('cart', reqBody);
+      console.log(isCartUpdated);
+      if (isCartUpdated) {
+        user.totalCartItems = await updateCartDetails();
+
+        if (props.page === 'wishlist') {
+          await handleDeleteFromWishList();
+        }
+        setUser({ ...user });
+      } else {
         console.log('Could not fetch data from the server');
       }
     } else {
@@ -97,7 +132,7 @@ function ProductCard(props) {
       setCheckClick(props.currentProduct.checked);
     }
 
-    // remove this if when done with the purchase process
+    // remove this when done with the purchase process
     if (props.currentProduct) {
       if (!user.finalCart) {
         user.finalCart = [];
@@ -110,8 +145,15 @@ function ProductCard(props) {
           user.finalCart.push(props.currentProduct);
         } else {
           found.checked = props.currentProduct.checked;
-          console.log(user);
         }
+      }
+    }
+
+    if (props.page === 'wishlist' && props.wishListItem) {
+      if (user.wishListProducts) {
+        user.wishListProducts[props.wishListItem.id] = props.wishListItem;
+      } else {
+        user.wishListProducts = {};
       }
     }
     setUser({ ...user });
@@ -143,16 +185,52 @@ function ProductCard(props) {
             {(props.product && props.product.productName) ||
               'Dewalt DCD999 Hammer Drill'}
           </Card.Title> */}
-          {props.page === 'wishlist' && (
-            <Card.Text>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.{' '}
-            </Card.Text>
+          {props.page === 'wishlist' && props.wishListItem && (
+            <>
+              <Card.Img src={props.wishListItem.image} />
+              <Card.Title>{props.wishListItem.productName}</Card.Title>
+              <Row className="card-buttons">
+                <Col lg={3}>
+                  <Button
+                    onClick={handleAddToCart}
+                    value={props.wishListItem.id}
+                    disabled={props.wishListItem.unitsInStock ? false : true}
+                    className="card-button col-md"
+                  >
+                    Add to cart
+                  </Button>
+                </Col>
+                <Col lg={3}>
+                  <Button
+                    onClick={handleBuyNow}
+                    value={props.wishListItem.id}
+                    disabled={props.wishListItem.unitsInStock ? false : true}
+                    className="card-button col-md"
+                  >
+                    Buy now
+                  </Button>
+                </Col>
+                <Col lg={3}>
+                  <Button
+                    onClick={handleDeleteFromWishList}
+                    value={props.wishListItem.id}
+                    className="card-button col-md"
+                  >
+                    Delete
+                  </Button>
+                </Col>
+              </Row>
+            </>
+          )}
+          {props.page === 'wishlist' && props.wishListMessage && (
+            <Card.Title>{props.wishListMessage}</Card.Title>
           )}
           {props.page === 'category' && (
             <>
+              <Card.Img src={props.product.image} />
+              <Row>
+                <Card.Title>{props.product.productName}</Card.Title>
+              </Row>
               <Row>
                 <Card.Text className="price-section-category">
                   {props.product && props.product.discount ? (
@@ -199,48 +277,32 @@ function ProductCard(props) {
                   </Card.Text>
                 </Col>
               </Row>
+              <Row className="card-buttons">
+                <Button
+                  onClick={handleBuyNow}
+                  value={props.product.id}
+                  disabled={props.product.unitsInStock ? false : true}
+                >
+                  Buy now
+                </Button>
+                <Button
+                  onClick={handleAddToCart}
+                  value={props.product.id}
+                  disabled={props.product.unitsInStock ? false : true}
+                >
+                  Add to cart
+                </Button>
+                <a className="card-button col-md">
+                  <i
+                    onClick={handleAddToWishlist}
+                    slot={props.product.id}
+                    className="fa fa-solid fa-heart"
+                  ></i>
+                </a>
+              </Row>
             </>
           )}
-          {props.page === 'order-confirmation' && (
-            <Card.Text>Price: 10$</Card.Text>
-          )}
-          {props.page === 'wishlist' && (
-            <Row className="card-buttons">
-              <Col lg={3}>
-                <Button className="card-button col-md">Add to cart</Button>
-              </Col>
-              <Col lg={3}>
-                <Button className="card-button col-md">Buy now</Button>
-              </Col>
-              <Col lg={3}>
-                <Button className="card-button col-md">Delete</Button>
-              </Col>
-            </Row>
-          )}
-          {props.page === 'category' && (
-            <section className="card-buttons row">
-              <Button
-                value={props.product.id}
-                disabled={props.product.unitsInStock ? false : true}
-              >
-                Buy now
-              </Button>
-              <Button
-                onClick={handleAddToCart}
-                value={props.product.id}
-                disabled={props.product.unitsInStock ? false : true}
-              >
-                Add to cart
-              </Button>
-              <a className="card-button col-md">
-                <i
-                  onClick={handleAddToWishlist}
-                  slot={props.product.id}
-                  className="fa fa-solid fa-heart"
-                ></i>
-              </a>
-            </section>
-          )}
+
           {(props.page === 'cart' || props.page === 'review') && (
             <>
               <Card.Img src={props.currentProduct.image} />
@@ -373,10 +435,21 @@ function ProductCard(props) {
           )}
 
           {props.page === 'order-confirmation' && (
-            <Card.Text>Quantity: 1</Card.Text>
-          )}
-          {props.page === 'order-confirmation' && (
-            <Card.Text>Total Price: 10$</Card.Text>
+            <>
+              <Card.Img src={props.purchasedProduct.image} />
+              <Row className="order-confirmation-details-container">
+                <Col>
+                  <Card.Text>
+                    Quantity: {props.purchasedProduct.amount}
+                  </Card.Text>
+                </Col>
+                <Col>
+                  <Card.Text className="order-confirmation-float-right-price">
+                    Total Price: {props.purchasedProduct.finalPrice}$
+                  </Card.Text>
+                </Col>
+              </Row>
+            </>
           )}
           <div></div>
         </Card.Body>

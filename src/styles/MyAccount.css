@@ -21,3 +21,12 @@
   color: blue !important;
   text-decoration: underline !important;
 }
+
+.no-details-provided {
+  color: red !important;
+}
+
+.input-error-user-details {
+  color: red;
+  font-size: 13px;
+}

@@ -7,6 +7,7 @@ import {
   convertJsDatePatternToMysqlPattern,
   deleteReq,
   getReq,
+  patchReq,
   postReq,
 } from './DAL/serverData';
 import { useNavigate } from 'react-router-dom';
@@ -14,8 +15,10 @@ import { useNavigate } from 'react-router-dom';
 function CheckoutCard(props) {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
+  console.log(user);
 
   const handleOrder = async () => {
+    console.log(props.page);
     if (props.page === 'cart') {
       navigate('/review-order');
     } else {
@@ -28,7 +31,18 @@ function CheckoutCard(props) {
           userLastOrderId
         );
         if (isOrderDetailsUpdated) {
-          const areOrderedCartItemsDeleted = await deleteOrderedCartItems();
+          const areOrderedCartItemsDeleted = props.buyNowProduct
+            ? true
+            : await deleteOrderedCartItems();
+          user.totalCartItems = props.buyNowProduct ? user.totalCartItems : 0;
+          console.log(user);
+          if (user.wishListProducts) {
+            console.log(user.buyNowProduct);
+            delete user.wishListProducts[user.buyNowProduct.id];
+            deleteProductFromWishList(user.buyNowProduct.id);
+            delete user.buyNowProduct;
+          }
+          setUser({ ...user });
           if (areOrderedCartItemsDeleted) {
             navigate('/order-confirmation');
           }
@@ -37,6 +51,9 @@ function CheckoutCard(props) {
     }
   };
 
+  const deleteProductFromWishList = async productId => {
+    await deleteReq(`wishlist?user-id=${user.userId}&product-id=${productId}`);
+  };
   const getTheUser = async () => {
     return await getReq(`users/${user.userId}`);
   };
@@ -60,25 +77,59 @@ function CheckoutCard(props) {
   };
 
   const addOrderDetailsToDb = async orderId => {
-    for (const cartItem of user.finalCart) {
-      if (cartItem.checked) {
-        const productId = cartItem.id;
-        const unitPrice = cartItem.unitPrice;
-        const amount = cartItem.amount;
-        const finalPrice = cartItem.discount
-          ? unitPrice * amount - unitPrice * amount * (cartItem.discount * 0.01)
-          : unitPrice * amount;
+    console.log(props.buyNowProduct);
+    if (!props.buyNowProduct) {
+      for (const cartItem of user.finalCart) {
+        if (cartItem.checked) {
+          const productId = cartItem.id;
+          const unitPrice = cartItem.unitPrice;
+          const amount = cartItem.amount;
+          const finalPrice = cartItem.discount
+            ? unitPrice * amount -
+              unitPrice * amount * (cartItem.discount * 0.01)
+            : unitPrice * amount;
 
-        const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
-        const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
-        if (!isOrderDetailsAddedToDb) {
-          console.log(
-            'Something went wrong with the data sent to the database.'
+          const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
+          const isOrderDetailsAddedToDb = await postReq(
+            'order-details',
+            reqBody
           );
-          return false;
+          const isProductUnitsInStockUpdated = await patchReq(
+            `products?product-id=${cartItem.id}&amount=${
+              cartItem.unitsInStock - cartItem.amount
+            }`
+          );
+          if (!isOrderDetailsAddedToDb || !isProductUnitsInStockUpdated) {
+            console.log(
+              'Something went wrong with the data sent to the database.'
+            );
+            return false;
+          }
         }
       }
+    } else {
+      const productId = props.buyNowProduct.id;
+      const unitPrice = props.buyNowProduct.unitPrice;
+      const amount = props.buyNowProduct.amount;
+      const finalPrice = props.buyNowProduct.discount
+        ? unitPrice * amount -
+          unitPrice * amount * (props.buyNowProduct.discount * 0.01)
+        : unitPrice * amount;
+
+      const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
+      const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
+      const isProductUnitsInStockUpdated = await patchReq(
+        `products?product-id=${props.buyNowProduct.id}&amount=${
+          props.buyNowProduct.unitsInStock - props.buyNowProduct.amount
+        }`
+      );
+      if (!isOrderDetailsAddedToDb || !isProductUnitsInStockUpdated) {
+        console.log('Something went wrong with the data sent to the database.');
+        return false;
+      }
+      // delete user.buyNowProduct;
     }
+
     return true;
   };
 
@@ -103,7 +154,16 @@ function CheckoutCard(props) {
     <Card className="checkout-card">
       <Card.Body>
         <Card.Title>{`Total Amount (${props.cartSummary.totalAmount} Items): ${props.cartSummary.totalPrice}$`}</Card.Title>
-        <Button onClick={handleOrder} className="checkout-button">
+        <Button
+          disabled={
+            (user.needToFillDetails && props.page === 'review') ||
+            !props.cartSummary.totalPrice
+              ? true
+              : false
+          }
+          onClick={handleOrder}
+          className="checkout-button"
+        >
           {props.page === 'cart' ? 'Proceed to checkout' : 'Place your order'}
         </Button>
         {props.page === 'review' && (
