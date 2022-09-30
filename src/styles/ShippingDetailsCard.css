@@ -6,3 +6,9 @@
 .shipping-details-card {
   margin-bottom: 4rem;
 }
+
+.missing-shipping-details {
+  color: red !important;
+  font-weight: bold !important;
+  font-size: 20px !important;
+}

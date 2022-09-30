@@ -156,3 +156,22 @@ label {
 .fa-shopping-cart {
   color: #212529;
 }
+
+.cart-amount-popon {
+  display: -webkit-inline-box;
+  position: absolute;
+  right: 87px;
+  top: 5px;
+}
+
+.cart-amount-popon > * {
+  width: 1.3rem;
+  height: 1.3rem;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 15px;
+  align-content: center;
+  font-weight: 500;
+  justify-content: center;
+}

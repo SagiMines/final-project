@@ -36,17 +36,17 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
       {data && (
         <UserContext.Provider value={{ user, setUser }}>
+          <Navbar />
           <RoutesManager
             /*for ProductDetails: */ data={data}
             id={2}
             /*for ChangePassword: */ page="update"
           />
+          <Footer />
         </UserContext.Provider>
       )}
-      <Footer />
     </Router>
   );
 }

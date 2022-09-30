@@ -6,16 +6,16 @@ function SelectForm(props) {
     <Form.Group className="mb-3">
       {props.label && <Form.Label>{props.label}</Form.Label>}
       <Form.Select
+        defaultValue={props.defaultValue ? props.defaultValue : false}
         className="register-select"
         onBlur={props.onBlur}
         name={props.name}
-        aria-label="Default select example"
       >
-        <option value="title" disabled selected hidden>
-          {props.title}
+        <option value="title" disabled hidden>
+          {props.title ? props.title : props.defaultValue}
         </option>
         {props.options.map((option, idx) => (
-          <option key={idx.toString()} value={option}>
+          <option key={idx.toString()} defaultValue={option}>
             {option}
           </option>
         ))}

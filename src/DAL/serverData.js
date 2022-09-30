@@ -1,10 +1,11 @@
 import Cookies from 'js-cookie';
 
-export const patchReq = async route => {
+export const patchReq = async (route, data) => {
   let val;
   const requestOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
+    body: data ? JSON.stringify(data) : undefined,
     credentials: 'include',
   };
 
@@ -60,7 +61,8 @@ export const getReq = async route => {
 
 export const getUserIdFromCookie = async () => {
   try {
-    const userId = await getReq(`login/${Cookies.get('user_id')}`);
+    const cookieValue = encodeURIComponent(Cookies.get('user_id'));
+    const userId = await getReq(`login/${cookieValue}`);
     return userId;
   } catch {
     return false;

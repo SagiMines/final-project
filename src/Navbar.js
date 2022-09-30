@@ -1,13 +1,62 @@
-import { useState } from 'react';
 import NavSlider from './NavSlider';
 import { navSlidersData } from './data/data';
 import { Link } from 'react-router-dom';
+import { Row } from 'react-bootstrap';
 import './styles/Navbar.css';
 import Cookies from 'js-cookie';
+import { UserContext } from './UserContext';
+import { useContext, useEffect, useState } from 'react';
+import { getReq, deleteReq, patchReq } from './DAL/serverData';
 
 function Navbar() {
   const [sliders, setSliders] = useState(navSlidersData());
+  const { user, setUser } = useContext(UserContext);
+  let [cartData, setCartData] = useState(null);
 
+  const setTheCart = async () => {
+    cartData = {};
+    cartData.cart = await getReq(`cart/${user.userId}`);
+    cartData.cartProducts = [];
+
+    for (const cart of cartData.cart) {
+      cartData.cartProducts.push(await getReq(`products/${cart.productId}`));
+    }
+
+    for (const product of cartData.cartProducts) {
+      const productImg = (await getReq(`product-images/${product.id}`))[0]
+        .imageSrc;
+      product.image = productImg;
+      const foundCart = cartData.cart.find(
+        cart => cart.productId === product.id
+      );
+      product.amount = foundCart.amount;
+    }
+
+    cartData.totalAmount = cartData.cartProducts
+      .map(product => product.amount)
+      .reduce((a, b) => a + b, 0);
+
+    cartData.totalPrice = cartData.cartProducts
+      .map(product =>
+        product.discount
+          ? product.unitPrice * product.amount -
+            product.unitPrice * product.amount * (0.01 * product.discount)
+          : product.unitPrice * product.amount
+      )
+      .reduce((a, b) => a + b, 0);
+
+    setCartData({ ...cartData });
+    user.finalCart = cartData.cartProducts;
+    user.totalCartItems = cartData.totalAmount;
+    user.totalCartPrice = cartData.totalPrice;
+
+    setUser({ ...user });
+  };
+
+  useEffect(() => {
+    setTheCart();
+    console.log(user);
+  }, []);
   return (
     <header>
       <nav className="navbar fixed-top navbar-expand-lg">
@@ -71,6 +120,11 @@ function Navbar() {
               </Link>
               <Link to="/shopping-cart">
                 <i className="fa fa-shopping-cart"></i>
+                {user.totalCartItems !== 0 && (
+                  <div className="cart-amount-popon">
+                    <Row>{user.totalCartItems}</Row>
+                  </div>
+                )}
               </Link>
 
               <div className="user-container">
