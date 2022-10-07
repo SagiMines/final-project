@@ -6,14 +6,25 @@ import './styles/Navbar.css';
 import Cookies from 'js-cookie';
 import { UserContext } from './UserContext';
 import { useContext, useEffect, useState } from 'react';
-import { getReq, deleteReq, patchReq } from './DAL/serverData';
+import { getReq } from './DAL/serverData';
 
 function Navbar() {
-  const [sliders, setSliders] = useState(navSlidersData());
+  const [sliders, setSliders] = useState(null);
   const { user, setUser } = useContext(UserContext);
   let [cartData, setCartData] = useState(null);
 
+  const getCategories = async () => {
+    return await getReq('categories');
+  };
+
+  const setCategoriesSlider = async () => {
+    const navSliders = navSlidersData();
+    navSliders.categories.sections = await getCategories();
+    setSliders({ ...navSliders });
+  };
+
   const setTheCart = async () => {
+    setCategoriesSlider();
     cartData = {};
     cartData.cart = await getReq(`cart/${user.userId}`);
     cartData.cartProducts = [];
@@ -55,93 +66,86 @@ function Navbar() {
 
   useEffect(() => {
     setTheCart();
-    console.log(user);
   }, []);
+
   return (
     <header>
-      <nav className="navbar fixed-top navbar-expand-lg">
-        <div className="container-fluid">
-          <Link to="/" className="navbar-brand">
-            <img src="/icons/workshop-logo.png" alt="Site Logo" />
-          </Link>
+      {sliders && (
+        <nav className="navbar fixed-top navbar-expand-lg">
+          <div className="container-fluid">
+            <Link to="/" className="navbar-brand">
+              <img src="/icons/workshop-logo.png" alt="Site Logo" />
+            </Link>
 
-          <div className="collapse-hamburger-container">
-            <i
-              onMouseEnter={() => {
-                sliders.hamburger.collapseState = true;
-                setSliders({ ...sliders });
-              }}
-              onMouseLeave={() => {
-                sliders.hamburger.collapseState = false;
-                setSliders({ ...sliders });
-              }}
-              className="navbar-toggler navbar-toggler-icon fa fa-solid fa-bars"
-            ></i>
-            {sliders.hamburger.collapseState && (
-              <NavSlider
-                isCategories={sliders.categories.collapseState}
+            <div className="collapse-hamburger-container">
+              <i
                 onMouseEnter={() => {
                   sliders.hamburger.collapseState = true;
-                  setSliders({ ...sliders });
-                }}
-                showCategories={() => {
-                  sliders.categories.collapseState = true;
                   setSliders({ ...sliders });
                 }}
                 onMouseLeave={() => {
                   sliders.hamburger.collapseState = false;
                   setSliders({ ...sliders });
                 }}
-                removeCategories={() => {
-                  sliders.categories.collapseState = false;
-                  setSliders({ ...sliders });
-                }}
-                name={sliders.hamburger.collapseName}
-                categoryName={sliders.categories.collapseName}
-                categoriesSections={sliders.categories.sections}
-                sections={
-                  Cookies.get('connect.sid')
-                    ? sliders.hamburger.sections.connected
-                    : sliders.hamburger.sections.disconnected
-                }
-              />
-            )}
-          </div>
-
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <section className="icons-search">
-              <input
-                className="search-bar"
-                type="text"
-                placeholder="Search a tool"
-              ></input>
-              <Link to="/wishlist">
-                <i className="fa fa-solid fa-heart"></i>
-              </Link>
-              <Link to="/shopping-cart">
-                <i className="fa fa-shopping-cart"></i>
-                {user.totalCartItems !== 0 && (
-                  <div className="cart-amount-popon">
-                    <Row>{user.totalCartItems}</Row>
-                  </div>
-                )}
-              </Link>
-
-              <div className="user-container">
-                <i
+                className="navbar-toggler navbar-toggler-icon fa fa-solid fa-bars"
+              ></i>
+              {sliders.hamburger.collapseState && (
+                <NavSlider
+                  isCategories={sliders.categories.collapseState}
                   onMouseEnter={() => {
-                    sliders.user.state = true;
+                    sliders.hamburger.collapseState = true;
+                    setSliders({ ...sliders });
+                  }}
+                  showCategories={() => {
+                    sliders.categories.collapseState = true;
                     setSliders({ ...sliders });
                   }}
                   onMouseLeave={() => {
-                    sliders.user.state = false;
+                    sliders.hamburger.collapseState = false;
                     setSliders({ ...sliders });
                   }}
-                  className="fa fa-user"
-                ></i>
+                  removeCategories={() => {
+                    sliders.categories.collapseState = false;
+                    setSliders({ ...sliders });
+                  }}
+                  name={sliders.hamburger.collapseName}
+                  categoryName={sliders.categories.collapseName}
+                  categoriesSections={sliders.categories.sections}
+                  sections={
+                    Cookies.get('connect.sid')
+                      ? sliders.hamburger.sections.connected
+                      : sliders.hamburger.sections.disconnected
+                  }
+                />
+              )}
+            </div>
 
-                {sliders.user.state && (
-                  <NavSlider
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
+              <section className="icons-search">
+                <input
+                  className="search-bar"
+                  type="text"
+                  placeholder="Search a tool"
+                ></input>
+                <Link to="/wishlist">
+                  <i className="fa fa-solid fa-heart"></i>
+                </Link>
+                <Link to="/shopping-cart">
+                  <i className="fa fa-shopping-cart"></i>
+                  {user &&
+                    user.totalCartItems !== 0 &&
+                    user.totalCartItems !== undefined && (
+                      <div className="cart-amount-popon">
+                        <Row>{user.totalCartItems}</Row>
+                      </div>
+                    )}
+                </Link>
+
+                <div className="user-container">
+                  <i
                     onMouseEnter={() => {
                       sliders.user.state = true;
                       setSliders({ ...sliders });
@@ -150,62 +154,76 @@ function Navbar() {
                       sliders.user.state = false;
                       setSliders({ ...sliders });
                     }}
-                    name={sliders.user.name}
-                    sections={
-                      Cookies.get('connect.sid')
-                        ? sliders.user.sections.connected
-                        : sliders.user.sections.disconnected
-                    }
-                  />
-                )}
-              </div>
+                    className="fa fa-user"
+                  ></i>
 
-              <div className="hamburger-container">
-                <i
-                  onMouseEnter={() => {
-                    sliders.hamburger.state = true;
-                    setSliders({ ...sliders });
-                  }}
-                  onMouseLeave={() => {
-                    sliders.hamburger.state = false;
-                    setSliders({ ...sliders });
-                  }}
-                  className="fa fa-solid fa-bars"
-                ></i>
-                {sliders.hamburger.state && (
-                  <NavSlider
-                    isCategories={sliders.categories.state}
+                  {sliders.user.state && (
+                    <NavSlider
+                      onMouseEnter={() => {
+                        sliders.user.state = true;
+                        setSliders({ ...sliders });
+                      }}
+                      onMouseLeave={() => {
+                        sliders.user.state = false;
+                        setSliders({ ...sliders });
+                      }}
+                      name={sliders.user.name}
+                      sections={
+                        Cookies.get('connect.sid')
+                          ? sliders.user.sections.connected
+                          : sliders.user.sections.disconnected
+                      }
+                    />
+                  )}
+                </div>
+
+                <div className="hamburger-container">
+                  <i
                     onMouseEnter={() => {
                       sliders.hamburger.state = true;
-                      setSliders({ ...sliders });
-                    }}
-                    showCategories={() => {
-                      sliders.categories.state = true;
                       setSliders({ ...sliders });
                     }}
                     onMouseLeave={() => {
                       sliders.hamburger.state = false;
                       setSliders({ ...sliders });
                     }}
-                    removeCategories={() => {
-                      sliders.categories.state = false;
-                      setSliders({ ...sliders });
-                    }}
-                    name={sliders.hamburger.name}
-                    categoryName={sliders.categories.name}
-                    categoriesSections={sliders.categories.sections}
-                    sections={
-                      Cookies.get('connect.sid')
-                        ? sliders.hamburger.sections.connected
-                        : sliders.hamburger.sections.disconnected
-                    }
-                  />
-                )}
-              </div>
-            </section>
+                    className="fa fa-solid fa-bars"
+                  ></i>
+                  {sliders.hamburger.state && (
+                    <NavSlider
+                      isCategories={sliders.categories.state}
+                      onMouseEnter={() => {
+                        sliders.hamburger.state = true;
+                        setSliders({ ...sliders });
+                      }}
+                      showCategories={() => {
+                        sliders.categories.state = true;
+                        setSliders({ ...sliders });
+                      }}
+                      onMouseLeave={() => {
+                        sliders.hamburger.state = false;
+                        setSliders({ ...sliders });
+                      }}
+                      removeCategories={() => {
+                        sliders.categories.state = false;
+                        setSliders({ ...sliders });
+                      }}
+                      name={sliders.hamburger.name}
+                      categoryName={sliders.categories.name}
+                      categoriesSections={sliders.categories.sections}
+                      sections={
+                        Cookies.get('connect.sid')
+                          ? sliders.hamburger.sections.connected
+                          : sliders.hamburger.sections.disconnected
+                      }
+                    />
+                  )}
+                </div>
+              </section>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      )}
     </header>
   );
 }

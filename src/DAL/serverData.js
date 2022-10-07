@@ -45,6 +45,7 @@ export const postReq = async (route, data) => {
 
   const req = await fetch(`http://localhost:8000/api/${route}`, requestOptions);
   const ans = await req.json();
+  console.log(ans);
   const status = ans.statusCode;
   if (status === 200) val = true;
   else val = false;
@@ -72,7 +73,6 @@ export const getUserIdFromCookie = async () => {
 export const isConnected = async () => {
   if (Cookies.get('user_id')) {
     const userId = await getUserIdFromCookie();
-    console.log(userId);
     return userId ? true : false;
   }
   return false;
