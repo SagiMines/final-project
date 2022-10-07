@@ -1,3 +1,9 @@
+import { getReq } from '../DAL/serverData';
+
+// const getCategories = async () => {
+//   return await getReq('categories');
+// };
+
 export const navSlidersData = () => {
   return {
     hamburger: {
@@ -6,16 +12,32 @@ export const navSlidersData = () => {
       name: 'hamburger',
       collapseName: 'hamburger-collapse',
       sections: {
-        disconnected: ['Categories', 'Cart', 'Wishlist'],
-        connected: ['Account', 'Categories', 'Cart', 'Wishlist'],
+        disconnected: [
+          'Categories',
+          { name: 'Cart', route: 'shopping-cart' },
+          { name: 'Wishlist', route: 'wishlist' },
+        ],
+        connected: [
+          { name: 'Account', route: 'my-account' },
+          'Categories',
+          { name: 'Cart', route: 'shopping-cart' },
+          { name: 'Wishlist', route: 'wishlist' },
+        ],
       },
     },
     user: {
       state: false,
       name: 'user',
       sections: {
-        disconnected: ['Register', 'Log in'],
-        connected: ['My Account', 'My Orders', 'Log Out'],
+        disconnected: [
+          { name: 'Register', route: 'register' },
+          { name: 'log In', route: 'login' },
+        ],
+        connected: [
+          { name: 'My Account', route: 'my-account' },
+          { name: 'My Orders', route: 'my-orders' },
+          'Log Out',
+        ],
       },
     },
     categories: {
@@ -23,15 +45,6 @@ export const navSlidersData = () => {
       collapseState: false,
       name: 'categories',
       collapseName: 'categories-collapse',
-      sections: [
-        'Drills',
-        'Impact Drivers',
-        'Heat Guns',
-        'Saws',
-        'Good-To-Have-Kits',
-        'Batteries',
-        'Screws & Anchors',
-      ],
     },
   };
 };

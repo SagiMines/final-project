@@ -436,16 +436,22 @@ function ProductCard(props) {
 
           {props.page === 'order-confirmation' && (
             <>
-              <Card.Img src={props.purchasedProduct.image} />
+              <Card.Img
+                src={props.purchasedProduct && props.purchasedProduct.image}
+              />
               <Row className="order-confirmation-details-container">
                 <Col>
                   <Card.Text>
-                    Quantity: {props.purchasedProduct.amount}
+                    Quantity:{' '}
+                    {props.purchasedProduct && props.purchasedProduct.amount}
                   </Card.Text>
                 </Col>
                 <Col>
                   <Card.Text className="order-confirmation-float-right-price">
-                    Total Price: {props.purchasedProduct.finalPrice}$
+                    Total Price:{' '}
+                    {props.purchasedProduct &&
+                      props.purchasedProduct.finalPrice}
+                    $
                   </Card.Text>
                 </Col>
               </Row>

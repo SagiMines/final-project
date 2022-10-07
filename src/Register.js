@@ -7,6 +7,7 @@ import countryList from 'country-list';
 import SelectForm from './SelectForm';
 import { useNavigate } from 'react-router-dom';
 import { getReq, postReq, isConnected } from './DAL/serverData';
+import Cookies from 'js-cookie';
 
 function Register() {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ function Register() {
     },
   });
 
-  const checkIfConnected = () => {
-    if (isConnected()) {
+  const checkIfConnected = async () => {
+    if (await isConnected()) {
       navigate('/');
     }
   };
@@ -172,14 +173,6 @@ function Register() {
               <p className="alerts">{state.alerts.lastname}</p>
             )}
           </Col>
-
-          {/* <Col md={6}>
-            <FormInput
-              label="Phone number"
-              type="tel"
-              placeholder="Enter phone number"
-            />
-          </Col> */}
           <Col md={6}>
             <FormInput
               onChange={handleChange}
@@ -192,17 +185,6 @@ function Register() {
               <p className="alerts">{state.alerts.email}</p>
             )}
           </Col>
-
-          {/* <Col md={6}>
-            <FormInput
-              label="Address"
-              type="text"
-              placeholder="Enter address"
-            />
-          </Col> */}
-          {/* <Col md={6}>
-            <FormInput label="City" type="text" placeholder="Enter city" />
-          </Col> */}
           <Col md={6}>
             <SelectForm
               label="Country"
@@ -215,14 +197,6 @@ function Register() {
               <p className="alerts">{state.alerts.country}</p>
             )}
           </Col>
-
-          {/* <Col md={6}>
-            <FormInput
-              label="Postal code"
-              type="number"
-              placeholder="Enter postal code"
-            />
-          </Col> */}
           <Col md={6}>
             <FormInput
               onChange={handleChange}

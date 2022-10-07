@@ -175,3 +175,12 @@ label {
   font-weight: 500;
   justify-content: center;
 }
+
+.nav-slider-name {
+  margin: 0;
+  color: #212529;
+}
+
+.nav-slider-name:hover {
+  color: rgb(44, 44, 232);
+}
