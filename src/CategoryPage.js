@@ -6,9 +6,11 @@ import { sortByOptions } from './data/data';
 import './styles/CategoryPage.css';
 import { useParams } from 'react-router-dom';
 import { getReq } from './DAL/serverData';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from './UserContext';
 
 function CategoryPage() {
+  const { user, setUser } = useContext(UserContext);
   const { id } = useParams();
   const [state, setState] = useState();
 
@@ -19,7 +21,8 @@ function CategoryPage() {
       const productImages = await getReq(`product-images/${product.id}`);
       product['image'] = productImages[0].imageSrc;
     }
-    setState({ products, category });
+    const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
+    setState({ products, category, userWishlist });
   };
 
   useEffect(() => {
@@ -30,7 +33,7 @@ function CategoryPage() {
     <div className="main-content">
       <CategoryAside />
 
-      {state && (
+      {state && state.userWishlist && (
         <Row className="categories-container">
           <section className="category-name-and-sort">
             <h1 className="categories-title">{state.category.categoryName}</h1>
@@ -46,7 +49,11 @@ function CategoryPage() {
               md={6}
               sm={6}
             >
-              <ProductCard product={product} page="category" />
+              <ProductCard
+                productsState={{ state, setState }}
+                product={product}
+                page="category"
+              />
             </Col>
           ))}
         </Row>

@@ -24,7 +24,8 @@ header {
   margin-right: 15px;
 }
 
-.fa {
+.fa,
+.far {
   cursor: pointer;
   font-size: 28px !important;
   margin-left: 10px;

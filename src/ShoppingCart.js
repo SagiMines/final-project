@@ -3,7 +3,7 @@ import CheckoutCard from './CheckoutCard';
 import { Row, Col } from 'react-bootstrap';
 import './styles/ShoppingCart.css';
 import { UserContext } from './UserContext';
-import { getReq, deleteReq, patchReq } from './DAL/serverData';
+import { getReq, deleteReq, patchReq, postReq } from './DAL/serverData';
 import { useContext, useEffect, useState } from 'react';
 
 function ShoppingCart() {
@@ -38,7 +38,23 @@ function ShoppingCart() {
       user.totalCartItems = cartData.totalAmount;
       user.totalCartPrice = cartData.totalPrice;
       setUser({ ...user });
-      console.log(user);
+      // console.log(user);
+    }
+  };
+
+  const handleMoveToWishlistClick = async e => {
+    await handleDeleteClick(e);
+    const productId = Number(e.target.name);
+    await addToWishlist(productId);
+  };
+
+  const addToWishlist = async productId => {
+    const reqBody = { userId: user.userId, productId };
+    const isAddedToWishlist = postReq(`wishlist`, reqBody);
+    if (isAddedToWishlist) {
+      console.log('The product was added successfully to the database.');
+    } else {
+      console.log('Server error');
     }
   };
 
@@ -136,6 +152,7 @@ function ShoppingCart() {
                   currentProduct={product}
                   onAmountChange={handleAmountChange}
                   onDeleteClick={handleDeleteClick}
+                  onMoveToWishlistClick={handleMoveToWishlistClick}
                 />
               ))}
             </Col>
