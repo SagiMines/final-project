@@ -71,12 +71,25 @@ function ProductCard(props) {
     navigate('/review-order');
   };
 
+  // Handles a user click on an unfilled heart and adds the clcked product to the wishlist
   const handleAddToWishlist = async e => {
     if (user) {
       const productId = Number(e.target.slot);
       const reqBody = { userId: user.userId, productId };
       const isAddedToWishList = await postReq('wishlist', reqBody);
       if (isAddedToWishList) {
+        do {
+          props.productsState.state.userWishlist = await getReq(
+            `wishlist?user-id=${user.userId}`
+          );
+        } while (
+          !props.productsState.state.userWishlist.find(
+            wishListItem =>
+              wishListItem.userId === user.userId &&
+              wishListItem.productId === productId
+          )
+        );
+        props.productsState.setState({ ...props.productsState.state });
         console.log(
           'The item was added successfully to the wishlist database.'
         );
@@ -88,13 +101,46 @@ function ProductCard(props) {
     }
   };
 
-  const handleDeleteFromWishList = async () => {
-    delete user.wishListProducts[props.wishListItem.id];
-    const products = Object.values(user.wishListProducts);
-    props.wishListRender.setWishList([...products]);
-    await deleteReq(
-      `wishlist?user-id=${user.userId}&product-id=${props.wishListItem.id}`
-    );
+  const handleDeleteFromWishList = async e => {
+    //Delete from the wishlist page
+    if (props.wishListItem) {
+      delete user.wishListProducts[props.wishListItem.id];
+      const products = Object.values(user.wishListProducts);
+      props.wishListRender.setWishList([...products]);
+      await deleteReq(
+        `wishlist?user-id=${user.userId}&product-id=${props.wishListItem.id}`
+      );
+      //Delete from products page
+    } else {
+      console.log(user);
+      const productId = Number(e.target.slot);
+      const isDeletedFromWishlist = await deleteReq(
+        `wishlist?user-id=${user.userId}&product-id=${productId}`
+      );
+      if (isDeletedFromWishlist) {
+        do {
+          props.productsState.state.userWishlist = await getReq(
+            `wishlist?user-id=${user.userId}`
+          );
+        } while (
+          props.productsState.state.userWishlist.find(
+            wishListItem =>
+              wishListItem.userId === user.userId &&
+              wishListItem.productId === productId
+          )
+        );
+        if (user.wishListProducts) {
+          delete user.wishListProducts[productId];
+          setUser({ ...user });
+        }
+        props.productsState.setState({ ...props.productsState.state });
+        console.log(
+          'The item was deleted successfully from the wishlist database.'
+        );
+      } else {
+        console.log('Could not fetch data from the server');
+      }
+    }
   };
 
   const updateCartDetails = async () => {
@@ -121,8 +167,6 @@ function ProductCard(props) {
       } else {
         console.log('Could not fetch data from the server');
       }
-    } else {
-      // local storage to guest users
     }
   };
 
@@ -173,18 +217,7 @@ function ProductCard(props) {
             onClick={handleCheckProductClick}
           />
         )}
-
-        {/* <Card.Img
-          src={
-            (props.product && props.product.image) ||
-            'https://d3m9l0v76dty0.cloudfront.net/system/photos/7649724/large/2f4ab58b69e32e69c9ea56a346cf1271.jpg'
-          }
-        /> */}
         <Card.Body>
-          {/* <Card.Title>
-            {(props.product && props.product.productName) ||
-              'Dewalt DCD999 Hammer Drill'}
-          </Card.Title> */}
           {props.page === 'wishlist' && props.wishListItem && (
             <>
               <Card.Img src={props.wishListItem.image} />
@@ -293,11 +326,24 @@ function ProductCard(props) {
                   Add to cart
                 </Button>
                 <a className="card-button col-md">
-                  <i
-                    onClick={handleAddToWishlist}
-                    slot={props.product.id}
-                    className="fa fa-solid fa-heart"
-                  ></i>
+                  {props.productsState.state.userWishlist.filter(
+                    product => product.productId === props.product.id
+                  ).length > 0 && (
+                    <i
+                      onClick={handleDeleteFromWishList}
+                      slot={props.product.id}
+                      className="fa fa-solid fa-heart"
+                    ></i>
+                  )}
+                  {props.productsState.state.userWishlist.filter(
+                    product => product.productId === props.product.id
+                  ).length === 0 && (
+                    <i
+                      onClick={handleAddToWishlist}
+                      slot={props.product.id}
+                      className="far fa-heart"
+                    ></i>
+                  )}
                 </a>
               </Row>
             </>
@@ -383,7 +429,12 @@ function ProductCard(props) {
                         </Button>
                       </Col>
                       <Col lg={6}>
-                        <Button>Move to Wishlist</Button>
+                        <Button
+                          name={props.currentProduct.id}
+                          onClick={props.onMoveToWishlistClick}
+                        >
+                          Move to Wishlist
+                        </Button>
                       </Col>
                     </Row>
                   </>
