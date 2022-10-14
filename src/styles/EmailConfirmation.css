@@ -1,0 +1,11 @@
+.email-confirmation-container {
+  background-color: #f3f3f3;
+  margin-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.email-confirmation-title {
+  padding: 15px 0;
+  font-size: 4rem;
+}
