@@ -13,6 +13,7 @@ import ChangePassword from './ChangePassword';
 import PasswordChangeSuccess from './PasswordChangeSuccess';
 import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
+import EmailConfirmationPage from './EmailConfirmationPage';
 import { Routes, Route } from 'react-router-dom';
 
 function RoutesManager(props) {
@@ -83,6 +84,11 @@ function RoutesManager(props) {
         element={<MyOrders />}
       />
       <Route path="/categories/:id" element={<CategoryPage />} />
+      <Route
+        //needs to change to add the user's ID/orders ID
+        path="/email-confirmation"
+        element={<EmailConfirmationPage />}
+      />
     </Routes>
   );
 }

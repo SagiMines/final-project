@@ -67,7 +67,7 @@ function Register() {
         ['lastName']: state.values['lastname'],
       })['lastname'];
       await postReq('register', state.values);
-      navigate('/register-success');
+      navigate('/email-confirmation');
     } else {
       // if some of the inputs are not filled
       for (const value of check) {

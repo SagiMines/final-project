@@ -112,7 +112,7 @@ function Navbar() {
                   categoryName={sliders.categories.collapseName}
                   categoriesSections={sliders.categories.sections}
                   sections={
-                    Cookies.get('connect.sid')
+                    Cookies.get('user_id')
                       ? sliders.hamburger.sections.connected
                       : sliders.hamburger.sections.disconnected
                   }
@@ -169,7 +169,7 @@ function Navbar() {
                       }}
                       name={sliders.user.name}
                       sections={
-                        Cookies.get('connect.sid')
+                        Cookies.get('user_id')
                           ? sliders.user.sections.connected
                           : sliders.user.sections.disconnected
                       }
@@ -212,7 +212,7 @@ function Navbar() {
                       categoryName={sliders.categories.name}
                       categoriesSections={sliders.categories.sections}
                       sections={
-                        Cookies.get('connect.sid')
+                        Cookies.get('user_id')
                           ? sliders.hamburger.sections.connected
                           : sliders.hamburger.sections.disconnected
                       }
