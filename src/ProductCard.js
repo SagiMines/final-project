@@ -201,7 +201,6 @@ function ProductCard(props) {
       }
     }
     setUser({ ...user });
-    console.log(user);
   }, []);
 
   return (

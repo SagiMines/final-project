@@ -86,8 +86,13 @@ function RoutesManager(props) {
       <Route path="/categories/:id" element={<CategoryPage />} />
       <Route
         //needs to change to add the user's ID/orders ID
-        path="/email-confirmation"
-        element={<EmailConfirmationPage />}
+        path="/email-confirmation-register"
+        element={<EmailConfirmationPage page="register" />}
+      />
+      <Route
+        //needs to change to add the user's ID/orders ID
+        path="/email-confirmation-password"
+        element={<EmailConfirmationPage page="forgot-password" />}
       />
     </Routes>
   );

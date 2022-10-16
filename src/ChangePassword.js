@@ -38,8 +38,18 @@ function ChangePassword(props) {
         newPasswordCheck(e, currentValueName);
         break;
       case 'verifyPassword':
-        verifyPasswordCheck(e, currentValueName);
+        if (values.newPassword.value && values.newPassword.value.length) {
+          verifyPasswordCheck(e, currentValueName);
+        }
+        if (
+          values.newPassword.value &&
+          (!values.verifyPassword.value || !values.verifyPassword.value.length)
+        ) {
+          values.verifyPassword.error = null;
+        }
+        break;
     }
+    setValues({ ...values });
   };
 
   const verifyPasswordCheck = (e, valueName) => {
@@ -78,8 +88,29 @@ function ChangePassword(props) {
     setValues({ ...values });
   };
 
+  const updatePassword = async () => {
+    let userDetails;
+    do {
+      // if(props.page)
+      userDetails =
+        props.page !== 'update'
+          ? await getReq(`users/forgotten-password-user`)
+          : await getReq(`users/${user.userId}`);
+    } while (!userDetails);
+
+    userDetails.password = values.newPassword.value;
+    const isUserPasswordUpdated = await patchReq(
+      `users/${userDetails.id}`,
+      userDetails
+    );
+    if (isUserPasswordUpdated) {
+      navigate('/change-password-success');
+    }
+  };
+
   const handleClick = async e => {
     e.preventDefault();
+
     const entriesArr = Object.entries(values);
     entriesArr.forEach(entry => {
       if (entry[1].value === null) {
@@ -90,23 +121,31 @@ function ChangePassword(props) {
 
     setValues({ ...values });
 
-    const errorsArr = Object.values(values).map(input => input.error);
+    let errorsArr = Object.values(values).map(input => input.error);
+    if (!props.page) {
+      errorsArr = errorsArr.slice(1, errorsArr.length);
+    }
     const AreThereErrors = errorsArr.find(error => error);
 
     if (!AreThereErrors) {
-      let userDetails;
-      do {
-        userDetails = await getReq(`users/${user.userId}`);
-      } while (!userDetails);
-      userDetails.password = values.newPassword.value;
-      const isUserPasswordUpdated = await patchReq(
-        `users/${user.userId}`,
-        userDetails
-      );
-      if (isUserPasswordUpdated) {
-        navigate('/change-password-success');
-      }
+      // if (props.page === 'update') {
+      await updatePassword();
+      //   } else {
+      //     await updatePasswordWhenForgotten();
+      //   }
+      // }
     }
+
+    // const updatePasswordWhenForgotten = async () => {
+    //   const user = await getReq(`users/forgotten-password-user`);
+    //   console.log(user);
+
+    //   user.password = values.newPassword.value;
+    //   const isPasswordUpdated = await patchReq(`users/${user.userId}`)
+    //   // const isPasswordUpdated = await postReq(`users/change-password`, reqBody);
+    //   // if (isPasswordUpdated) {
+    //   //   navigate('/change-password-success');
+    //   // }
   };
 
   return (

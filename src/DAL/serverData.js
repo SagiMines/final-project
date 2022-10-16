@@ -45,7 +45,6 @@ export const postReq = async (route, data) => {
 
   const req = await fetch(`http://localhost:8000/api/${route}`, requestOptions);
   const ans = await req.json();
-  console.log(ans);
   const status = ans.statusCode;
   if (status === 200) val = true;
   else val = false;
@@ -54,9 +53,10 @@ export const postReq = async (route, data) => {
 };
 
 export const getReq = async route => {
-  const req = await fetch(`http://localhost:8000/api/${route}`);
+  const req = await fetch(`http://localhost:8000/api/${route}`, {
+    credentials: 'include',
+  });
   const ans = await req.json();
-  // console.log(ans);
   return ans;
 };
 
