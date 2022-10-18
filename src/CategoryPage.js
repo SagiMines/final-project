@@ -13,19 +13,44 @@ function CategoryPage() {
   const { user, setUser } = useContext(UserContext);
   const { id } = useParams();
   const [state, setState] = useState();
+  // Handles the rendering of the SortBy component
+  const [sortByKey, setSortByKey] = useState(Math.random());
 
+  // Handles changes in the SortBy component
+  const onSortByChange = e => {
+    const route = e.target.value;
+    sortTheProducts(route);
+  };
+
+  // Sorts the products by the values given in the SortBy component
+  const sortTheProducts = async route => {
+    state.products = await getReq(
+      `products/${route}?category-id=${state.category.id}`
+    );
+    await attachImagesToProducts(state.products);
+    setState({ ...state });
+  };
+
+  // Sets all the data needed for the CategoryPage
   const chosenCategoryData = async id => {
     const category = await getReq(`categories/${id}`);
     const products = await getReq(`products?category-id=${id}`);
-    for (const product of products) {
-      const productImages = await getReq(`product-images/${product.id}`);
-      product['image'] = productImages[0].imageSrc;
-    }
+    await attachImagesToProducts(products);
     const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
     setState({ products, category, userWishlist });
   };
 
+  // Attaches images to the products
+  const attachImagesToProducts = async products => {
+    for (const product of products) {
+      const productImages = await getReq(`product-images/${product.id}`);
+      product['image'] = productImages[0].imageSrc;
+    }
+  };
+
   useEffect(() => {
+    // Re-renders the SortBy component
+    setSortByKey(Math.random());
     chosenCategoryData(id);
   }, [id]);
 
@@ -37,7 +62,11 @@ function CategoryPage() {
         <Row className="categories-container">
           <section className="category-name-and-sort">
             <h1 className="categories-title">{state.category.categoryName}</h1>
-            <SortBy options={sortByOptions()} />
+            <SortBy
+              key={sortByKey}
+              onChange={onSortByChange}
+              options={sortByOptions()}
+            />
           </section>
 
           {state.products.map((product, ind) => (
