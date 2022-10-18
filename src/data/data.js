@@ -50,5 +50,9 @@ export const navSlidersData = () => {
 };
 
 export const sortByOptions = () => {
-  return ['Price - high to low', 'Price - low to high', 'Newest products'];
+  return [
+    { title: 'Price - high to low', value: 'descending-prices' },
+    { title: 'Price - low to high', value: 'ascending-prices' },
+    { title: 'Newest products', value: 'newest-products' },
+  ];
 };
