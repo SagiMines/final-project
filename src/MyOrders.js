@@ -1,39 +1,40 @@
-import { Button, Card } from 'react-bootstrap';
-import ProductCard from './ProductCard';
-import ShippingDetailsCard from './ShippingDetailsCard';
 import './styles/MyOrders.css';
+import Order from './Order';
+import { UserContext } from './UserContext';
+import { useState, useEffect, useContext } from 'react';
+import { getReq } from './DAL/serverData';
 
 function MyOrders() {
+  const { user, setUser } = useContext(UserContext);
+  const [orders, setOrders] = useState();
+
+  const getUserOrders = async () => {
+    const userOrders = await getReq(`orders/${user.userId}`);
+    const ordersArr = [];
+    for (const order of userOrders) {
+      const orderData = await getReq(`orders/${order.id}?join=true`);
+      for (const details of orderData.orderDetails) {
+        details.productImage = (
+          await getReq(`product-images/${details.productId}`)
+        )[0].imageSrc;
+        details.productName = (
+          await getReq(`products/${details.productId}`)
+        ).productName;
+      }
+      ordersArr.push(orderData);
+    }
+    setOrders([...ordersArr]);
+  };
+
+  useEffect(() => {
+    getUserOrders();
+  }, []);
   return (
     <div className="container my-orders-container">
       <h1 className="my-orders-title">Your Orders</h1>
-      <Card className="main-card">
-        <Card.Body>
-          <Card.Title>Order #11</Card.Title>
-          <ShippingDetailsCard />
-          <ProductCard page="order-confirmation" />
-          <ProductCard page="order-confirmation" />
-          <section className="order-summary">
-            <Card.Title>Total purchase: 50$</Card.Title>
-            <Card.Title>Order date: 01/07/2022</Card.Title>
-            <Card.Title>Shipped date: 01/07/2022</Card.Title>
-          </section>
-        </Card.Body>
-      </Card>
-      <Card className="main-card">
-        <Card.Body>
-          <Card.Title>Order #12</Card.Title>
-          <ShippingDetailsCard />
-          <ProductCard page="order-confirmation" />
-          <ProductCard page="order-confirmation" />
-          <ProductCard page="order-confirmation" />
-          <section className="order-summary">
-            <Card.Title>Total purchase: 80$</Card.Title>
-            <Card.Title>Order date: 01/07/2022</Card.Title>
-            <Card.Title>Shipped date: 01/07/2022</Card.Title>
-          </section>
-        </Card.Body>
-      </Card>
+      {orders && orders.map(order => <Order order={order} />)}
+      {/* <Order  />
+      <Order /> */}
     </div>
   );
 }

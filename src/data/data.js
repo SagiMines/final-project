@@ -1,9 +1,3 @@
-import { getReq } from '../DAL/serverData';
-
-// const getCategories = async () => {
-//   return await getReq('categories');
-// };
-
 export const navSlidersData = () => {
   return {
     hamburger: {

@@ -132,10 +132,29 @@
   font-weight: lighter;
 }
 
-.order-confirmation-float-right-price {
-  float: right;
-}
-
 .order-confirmation-details-container {
   margin-top: 1rem;
+}
+
+.order-product-details {
+  height: 100%;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.order-product-details > * {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.order-product-total-price {
+  font-weight: bold !important;
+}
+
+@media only screen and (max-width: 991px) {
+  .order-product-image-column,
+  .order-product-details-column {
+    justify-content: center;
+    text-align: center;
+  }
 }
