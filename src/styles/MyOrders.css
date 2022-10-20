@@ -18,9 +18,13 @@
 }
 
 .order-summary {
-  margin: 2rem 0;
+  margin: 3rem 0;
   display: flex;
   justify-content: space-between;
+  border-top: solid 1px rgb(216, 211, 211);
+}
+.order-summary > * {
+  margin-top: 3rem;
 }
 
 .main-card .shipping-details-card > .card-body {

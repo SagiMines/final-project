@@ -12,3 +12,12 @@
   font-weight: bold !important;
   font-size: 20px !important;
 }
+
+.accordion {
+  margin-bottom: 1rem;
+}
+
+.accordion-button-order-confirmation {
+  padding-left: 0;
+  padding-right: 0;
+}

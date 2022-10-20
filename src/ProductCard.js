@@ -485,27 +485,51 @@ function ProductCard(props) {
           )}
 
           {props.page === 'order-confirmation' && (
-            <>
-              <Card.Img
-                src={props.purchasedProduct && props.purchasedProduct.image}
-              />
-              <Row className="order-confirmation-details-container">
-                <Col>
-                  <Card.Text>
-                    Quantity:{' '}
-                    {props.purchasedProduct && props.purchasedProduct.amount}
-                  </Card.Text>
-                </Col>
-                <Col>
-                  <Card.Text className="order-confirmation-float-right-price">
-                    Total Price:{' '}
-                    {props.purchasedProduct &&
-                      props.purchasedProduct.finalPrice}
-                    $
-                  </Card.Text>
-                </Col>
-              </Row>
-            </>
+            <Row className="order-confirmation-details-container">
+              <Col
+                sm={12}
+                md={12}
+                lg={3}
+                className="order-product-image-column"
+              >
+                <Card.Img src={props.orderDetails.productImage} />
+              </Col>
+              <Col className="order-product-details-column">
+                <Row>
+                  <Card.Title>{props.orderDetails.productName}</Card.Title>
+                </Row>
+                <Row className="order-product-details">
+                  <Col sm={12} md={12} lg={4}>
+                    <Card.Text>
+                      Unit Price:{' '}
+                      {props.orderDetails.finalPrice /
+                        props.orderDetails.amount ===
+                      props.orderDetails.unitPrice ? (
+                        `${props.orderDetails.unitPrice}$`
+                      ) : (
+                        <span>
+                          <span className="old-price">
+                            {`${props.orderDetails.unitPrice}$`}
+                          </span>
+                          {` ${
+                            props.orderDetails.finalPrice /
+                            props.orderDetails.amount
+                          }$`}
+                        </span>
+                      )}
+                    </Card.Text>
+                  </Col>
+                  <Col sm={12} md={12} lg={4}>
+                    <Card.Text>Quantity: {props.orderDetails.amount}</Card.Text>
+                  </Col>
+                  <Col sm={12} md={12} lg={4}>
+                    <Card.Text className="order-product-total-price">
+                      Total Price: {props.orderDetails.finalPrice}$
+                    </Card.Text>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           )}
           <div></div>
         </Card.Body>

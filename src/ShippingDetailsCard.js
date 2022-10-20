@@ -1,4 +1,5 @@
 import { Card } from 'react-bootstrap';
+import Accordion from 'react-bootstrap/Accordion';
 import './styles/ShippingDetailsCard.css';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
@@ -41,41 +42,67 @@ function ShippingDetailsCard(props) {
     getTheUserDetails();
   }, []);
   return (
-    <Card className="shipping-details-card">
-      {orderData.userDetails && (
-        <Card.Body>
-          <Card.Title>
-            {!orderData.shippingDetails && (
-              <>
+    <>
+      {orderData.shippingDetails && (
+        <Accordion flush>
+          <Accordion.Item eventKey="0">
+            <Accordion.Button
+              className={
+                props.page !== 'review'
+                  ? 'accordion-button-order-confirmation'
+                  : false
+              }
+            >
+              Shipping Details
+            </Accordion.Button>
+
+            <Accordion.Body>
+              <Card className="shipping-details-card">
+                {orderData.userDetails && (
+                  <Card.Body>
+                    <Card.Title>
+                      {'Shipping Details '}
+                      {props.page === 'review' && (
+                        <Link to="/my-account">
+                          <Card.Link className="change-address">
+                            Change
+                          </Card.Link>
+                        </Link>
+                      )}
+                    </Card.Title>
+
+                    <Card.Text>{`${orderData.userDetails.firstName} ${orderData.userDetails.lastName}`}</Card.Text>
+                    <Card.Text>{orderData.userDetails.phone}</Card.Text>
+                    <Card.Text>{orderData.userDetails.address}</Card.Text>
+                    <Card.Text>{orderData.userDetails.city}</Card.Text>
+                    <Card.Text>{orderData.userDetails.postalCode}</Card.Text>
+                    <Card.Text>{orderData.userDetails.country}</Card.Text>
+                  </Card.Body>
+                )}
+              </Card>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+      )}
+      {!orderData.shippingDetails && props.page === 'review' && (
+        <>
+          <Card className="shipping-details-card">
+            <Card.Body>
+              <Card.Title>
                 <Card.Text className="missing-shipping-details">
                   Please fill shipping details before proceeding
                 </Card.Text>
-              </>
-            )}
-            {orderData.shippingDetails ? `Shipping Details` : ''}
-            {props.page === 'review' && (
-              <Link to="/my-account">
-                <Card.Link className="change-address">
-                  {orderData.shippingDetails
-                    ? 'Change'
-                    : 'Enter Shipping Details'}
-                </Card.Link>
-              </Link>
-            )}
-          </Card.Title>
-          {orderData.shippingDetails && (
-            <>
-              <Card.Text>{`${orderData.userDetails.firstName} ${orderData.userDetails.lastName}`}</Card.Text>
-              <Card.Text>{orderData.userDetails.phone}</Card.Text>
-              <Card.Text>{orderData.userDetails.address}</Card.Text>
-              <Card.Text>{orderData.userDetails.city}</Card.Text>
-              <Card.Text>{orderData.userDetails.postalCode}</Card.Text>
-              <Card.Text>{orderData.userDetails.country}</Card.Text>
-            </>
-          )}
-        </Card.Body>
+                <Link to="/my-account">
+                  <Card.Link className="change-address">
+                    Enter Shipping Details
+                  </Card.Link>
+                </Link>
+              </Card.Title>
+            </Card.Body>
+          </Card>
+        </>
       )}
-    </Card>
+    </>
   );
 }
 

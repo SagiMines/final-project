@@ -22,8 +22,8 @@ function RoutesManager(props) {
       <Route path="/" exact element={<HomePage data={props.data} />} />
       <Route
         //needs to change to match each product's ID
-        path="/product"
-        element={<ProductDetails data={props.data} id={props.id} />}
+        path="/product/:id"
+        element={<ProductDetails />}
       />
       <Route
         //needs to change to match each user's ID
