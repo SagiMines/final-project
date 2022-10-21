@@ -151,6 +151,11 @@
   font-weight: bold !important;
 }
 
+.center-product-image {
+  display: flex;
+  justify-content: center;
+}
+
 @media only screen and (max-width: 991px) {
   .order-product-image-column,
   .order-product-details-column {

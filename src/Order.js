@@ -7,9 +7,9 @@ function Order(props) {
     <Card className="main-card">
       <Card.Body>
         <Card.Title>{`Order #${props.order.id}`}</Card.Title>
-        <ShippingDetailsCard />
+        <ShippingDetailsCard page="my-orders" />
         {props.order.orderDetails.map(product => (
-          <ProductCard page="order-confirmation" orderDetails={product} />
+          <ProductCard page="my-orders" orderDetails={product} />
         ))}
         <section className="order-summary">
           <Card.Title>

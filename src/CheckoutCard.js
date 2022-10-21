@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 function CheckoutCard(props) {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  console.log(user);
 
   const handleOrder = async () => {
     console.log(props.page);
@@ -36,12 +35,12 @@ function CheckoutCard(props) {
             : await deleteOrderedCartItems();
           user.totalCartItems = props.buyNowProduct ? user.totalCartItems : 0;
           console.log(user);
-          if (user.wishListProducts) {
-            console.log(user.buyNowProduct);
-            delete user.wishListProducts[user.buyNowProduct.id];
-            deleteProductFromWishList(user.buyNowProduct.id);
-            delete user.buyNowProduct;
-          }
+          // if (user.wishListProducts) {
+          //   console.log(user.buyNowProduct);
+          //   delete user.wishListProducts[user.buyNowProduct.id];
+          //   deleteProductFromWishList(user.buyNowProduct.id);
+          //   delete user.buyNowProduct;
+          // }
           setUser({ ...user });
           if (areOrderedCartItemsDeleted) {
             navigate('/order-confirmation');
@@ -79,32 +78,26 @@ function CheckoutCard(props) {
   const addOrderDetailsToDb = async orderId => {
     console.log(props.buyNowProduct);
     if (!props.buyNowProduct) {
-      for (const cartItem of user.finalCart) {
-        if (cartItem.checked) {
-          const productId = cartItem.id;
-          const unitPrice = cartItem.unitPrice;
-          const amount = cartItem.amount;
-          const finalPrice = cartItem.discount
-            ? unitPrice * amount -
-              unitPrice * amount * (cartItem.discount * 0.01)
-            : unitPrice * amount;
+      for (const cartItem of props.cartSummary.cart) {
+        const productId = cartItem.id;
+        const unitPrice = cartItem.unitPrice;
+        const amount = cartItem.amount;
+        const finalPrice = cartItem.discount
+          ? unitPrice * amount - unitPrice * amount * (cartItem.discount * 0.01)
+          : unitPrice * amount;
 
-          const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
-          const isOrderDetailsAddedToDb = await postReq(
-            'order-details',
-            reqBody
+        const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
+        const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
+        const isProductUnitsInStockUpdated = await patchReq(
+          `products?product-id=${cartItem.id}&amount=${
+            cartItem.unitsInStock - cartItem.amount
+          }`
+        );
+        if (!isOrderDetailsAddedToDb || !isProductUnitsInStockUpdated) {
+          console.log(
+            'Something went wrong with the data sent to the database.'
           );
-          const isProductUnitsInStockUpdated = await patchReq(
-            `products?product-id=${cartItem.id}&amount=${
-              cartItem.unitsInStock - cartItem.amount
-            }`
-          );
-          if (!isOrderDetailsAddedToDb || !isProductUnitsInStockUpdated) {
-            console.log(
-              'Something went wrong with the data sent to the database.'
-            );
-            return false;
-          }
+          return false;
         }
       }
     } else {
@@ -134,19 +127,28 @@ function CheckoutCard(props) {
   };
 
   const deleteOrderedCartItems = async () => {
-    for (const cartItem of user.finalCart) {
-      if (cartItem.checked) {
-        const isDeletedFromCart = await deleteReq(
-          `cart?user-id=${user.userId}&product-id=${cartItem.id}`
-        );
-        if (!isDeletedFromCart) {
-          console.log(
-            'Something went wrong with the data sent to the database.'
-          );
-          return false;
-        }
+    for (const cartItem of props.cartSummary.cart) {
+      const isDeletedFromCart = await deleteReq(
+        `cart?user-id=${user.userId}&product-id=${cartItem.id}`
+      );
+      if (!isDeletedFromCart) {
+        console.log('Something went wrong with the data sent to the database.');
+        return false;
       }
     }
+    // for (const cartItem of user.finalCart) {
+    //   if (cartItem.checked) {
+    //     const isDeletedFromCart = await deleteReq(
+    //       `cart?user-id=${user.userId}&product-id=${cartItem.id}`
+    //     );
+    //     if (!isDeletedFromCart) {
+    //       console.log(
+    //         'Something went wrong with the data sent to the database.'
+    //       );
+    //       return false;
+    //     }
+    //   }
+    // }
     return true;
   };
 

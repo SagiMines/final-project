@@ -48,7 +48,7 @@ function ShippingDetailsCard(props) {
           <Accordion.Item eventKey="0">
             <Accordion.Button
               className={
-                props.page !== 'review'
+                props.page === 'my-orders'
                   ? 'accordion-button-order-confirmation'
                   : false
               }
