@@ -3,56 +3,101 @@ import NumericInput from 'react-numeric-input';
 import { useContext, useEffect, useState } from 'react';
 import './styles/ProductCard.css';
 import { UserContext } from './UserContext';
-import { postReq, getReq, deleteReq } from './DAL/serverData';
-import { useNavigate } from 'react-router-dom';
+import { patchReq, postReq, getReq, deleteReq } from './DAL/serverData';
+import { Link, useNavigate } from 'react-router-dom';
 
 function ProductCard(props) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [productsAmount, setProductsAmount] = useState({});
-  const [checkClick, setCheckClick] = useState(true);
+  const [checkClick, setCheckClick] = useState({});
+  const [state, setState] = useState({});
 
   const handleAmountChange = (valueAsNumber, valueAsString, input) => {
     productsAmount[input.name] = valueAsNumber;
     setProductsAmount({ ...productsAmount });
   };
 
-  const handleCheckProductClick = () => {
+  const handleCheckProductClick = async () => {
     // const id = Number(e.target.name);
 
     // const foundCart = cartData.cartProducts.find(cart => cart.id === id);
-    if (!checkClick) {
+    if (!checkClick.isChecked) {
       props.currentProduct.checked = true;
       //calculate the price with or without the discount
-      user.totalCartPrice =
-        user.totalCartPrice +
+      props.cartState.cartData.totalPrice =
+        props.cartState.cartData.totalPrice +
         (props.currentProduct.discount
           ? props.currentProduct.amount * props.currentProduct.unitPrice -
             props.currentProduct.amount *
               props.currentProduct.unitPrice *
               (props.currentProduct.discount * 0.01)
           : props.currentProduct.amount * props.currentProduct.unitPrice);
-      user.totalCartItems = user.totalCartItems + props.currentProduct.amount;
+
+      props.cartState.cartData.totalAmount =
+        props.cartState.cartData.totalAmount + props.currentProduct.amount;
+
+      // user.totalCartPrice =
+      //   user.totalCartPrice +
+      //   (props.currentProduct.discount
+      //     ? props.currentProduct.amount * props.currentProduct.unitPrice -
+      //       props.currentProduct.amount *
+      //         props.currentProduct.unitPrice *
+      //         (props.currentProduct.discount * 0.01)
+      //     : props.currentProduct.amount * props.currentProduct.unitPrice);
+      // user.totalCartItems = user.totalCartItems + props.currentProduct.amount;
     } else {
       props.currentProduct.checked = false;
-      user.totalCartPrice =
-        user.totalCartPrice -
+
+      props.cartState.cartData.totalPrice =
+        props.cartState.cartData.totalPrice -
         (props.currentProduct.discount
           ? props.currentProduct.amount * props.currentProduct.unitPrice -
             props.currentProduct.amount *
               props.currentProduct.unitPrice *
               (props.currentProduct.discount * 0.01)
           : props.currentProduct.amount * props.currentProduct.unitPrice);
-      user.totalCartItems = user.totalCartItems - props.currentProduct.amount;
+
+      props.cartState.cartData.totalAmount =
+        props.cartState.cartData.totalAmount - props.currentProduct.amount;
+
+      // user.totalCartPrice =
+      //   user.totalCartPrice -
+      //   (props.currentProduct.discount
+      //     ? props.currentProduct.amount * props.currentProduct.unitPrice -
+      //       props.currentProduct.amount *
+      //         props.currentProduct.unitPrice *
+      //         (props.currentProduct.discount * 0.01)
+      //     : props.currentProduct.amount * props.currentProduct.unitPrice);
+      // user.totalCartItems = user.totalCartItems - props.currentProduct.amount;
     }
-    const foundUser = user.finalCart.find(
-      cart => cart.id === props.currentProduct.id
+
+    const foundProduct = props.cartState.cartData.cartProducts.find(
+      cartProduct => cartProduct.id === props.currentProduct.id
     );
-    if (foundUser) {
-      foundUser.checked = props.currentProduct.checked;
+    // const foundUser = user.finalCart.find(
+    //   cart => cart.id === props.currentProduct.id
+    // );
+    if (foundProduct) {
+      foundProduct.checked = props.currentProduct.checked;
     }
+    // console.log(props.currentProduct);
+    // setUser({ ...user });
+    props.cartState.setCartData({ ...props.cartState.cartData });
+    user.totalCartItems = props.cartState.cartData.totalAmount;
+    checkClick.isChecked = !checkClick.isChecked;
+    setCheckClick({ ...checkClick });
     setUser({ ...user });
-    setCheckClick(!checkClick);
+    const reqBody = {
+      userId: user.userId,
+      productId: props.currentProduct.id,
+      amount: props.currentProduct.amount,
+      checked: checkClick.isChecked,
+    };
+    const isCartUpdated = await patchReq(`cart`, reqBody);
+    if (isCartUpdated) {
+      console.log('Successfully updated the database.');
+    }
   };
 
   const handleBuyNow = e => {
@@ -78,23 +123,28 @@ function ProductCard(props) {
       const reqBody = { userId: user.userId, productId };
       const isAddedToWishList = await postReq('wishlist', reqBody);
       if (isAddedToWishList) {
-        do {
-          props.productsState.state.userWishlist = await getReq(
-            `wishlist?user-id=${user.userId}`
+        if (props.page === 'category') {
+          do {
+            props.productsState.state.userWishlist = await getReq(
+              `wishlist?user-id=${user.userId}`
+            );
+          } while (
+            !props.productsState.state.userWishlist.find(
+              wishListItem =>
+                wishListItem.userId === user.userId &&
+                wishListItem.productId === productId
+            )
           );
-        } while (
-          !props.productsState.state.userWishlist.find(
-            wishListItem =>
-              wishListItem.userId === user.userId &&
-              wishListItem.productId === productId
-          )
-        );
-        props.productsState.setState({ ...props.productsState.state });
+          props.productsState.setState({ ...props.productsState.state });
+        }
         console.log(
           'The item was added successfully to the wishlist database.'
         );
+        //changes the heart icon
+        state.isInWishList = true;
+        setState({ ...state });
       } else {
-        console.log('Could not fetch data from the server');
+        console.log('Could not fetch productData from the server');
       }
     } else {
       // local storage to guest users
@@ -112,33 +162,33 @@ function ProductCard(props) {
       );
       //Delete from products page
     } else {
-      console.log(user);
       const productId = Number(e.target.slot);
       const isDeletedFromWishlist = await deleteReq(
         `wishlist?user-id=${user.userId}&product-id=${productId}`
       );
       if (isDeletedFromWishlist) {
-        do {
-          props.productsState.state.userWishlist = await getReq(
-            `wishlist?user-id=${user.userId}`
+        if (props.page === 'category') {
+          do {
+            props.productsState.state.userWishlist = await getReq(
+              `wishlist?user-id=${user.userId}`
+            );
+          } while (
+            props.productsState.state.userWishlist.find(
+              wishListItem =>
+                wishListItem.userId === user.userId &&
+                wishListItem.productId === productId
+            )
           );
-        } while (
-          props.productsState.state.userWishlist.find(
-            wishListItem =>
-              wishListItem.userId === user.userId &&
-              wishListItem.productId === productId
-          )
-        );
-        if (user.wishListProducts) {
-          delete user.wishListProducts[productId];
-          setUser({ ...user });
+          props.productsState.setState({ ...props.productsState.state });
         }
-        props.productsState.setState({ ...props.productsState.state });
         console.log(
           'The item was deleted successfully from the wishlist database.'
         );
+        //changes the heart icon
+        state.isInWishList = false;
+        setState({ ...state });
       } else {
-        console.log('Could not fetch data from the server');
+        console.log('Could not fetch productData from the server');
       }
     }
   };
@@ -151,12 +201,10 @@ function ProductCard(props) {
   const handleAddToCart = async e => {
     if (user) {
       const productId = Number(e.target.value);
-      const amount = productsAmount[productId]
-        ? productsAmount[e.target.value]
-        : 1;
-      const reqBody = { userId: user.userId, productId, amount };
+      const amount = productsAmount[productId] ? productsAmount[productId] : 1;
+      const reqBody = { userId: user.userId, productId, amount, checked: true };
       const isCartUpdated = await postReq('cart', reqBody);
-      console.log(isCartUpdated);
+      //Need to remove when updating the cart page to get from db
       if (isCartUpdated) {
         user.totalCartItems = await updateCartDetails();
 
@@ -165,12 +213,47 @@ function ProductCard(props) {
         }
         setUser({ ...user });
       } else {
-        console.log('Could not fetch data from the server');
+        console.log('Could not fetch productData from the server');
       }
     }
   };
 
+  const isProductInWishlist = async productId => {
+    console.log(productsAmount);
+    const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
+    const isProductInWishlist = userWishlist.find(
+      wishlistData => wishlistData.productId === productId
+    );
+
+    if (isProductInWishlist) {
+      state.isInWishList = true;
+    } else {
+      state.isInWishList = false;
+    }
+    setState({ ...state });
+  };
+
+  const setCartCheckBox = async () => {
+    const userCart = await getReq(`cart/${user.userId}`);
+    const currentProduct = userCart.find(
+      cartItem => cartItem.productId === props.currentProduct.id
+    );
+    console.log(currentProduct);
+
+    checkClick.isChecked = currentProduct.checked;
+
+    setCheckClick({ ...checkClick });
+  };
+
   useEffect(() => {
+    if (props.page === 'product-page') {
+      isProductInWishlist(props.productData.id);
+    } else if (props.page === 'category') {
+      isProductInWishlist(props.product.id);
+    } else if (props.page === 'cart') {
+      setCartCheckBox();
+    }
+
     if (props.currentProduct && props.currentProduct.checked === undefined) {
       props.currentProduct.checked = true;
       setCheckClick(props.currentProduct.checked);
@@ -205,14 +288,16 @@ function ProductCard(props) {
 
   return (
     <>
-      <Card className="product-card">
+      <Card
+        className={props.page === 'product-page' ? 'col-sm' : 'product-card'}
+      >
         {props.page === 'cart' && (
           <Form.Check
             name={props.currentProduct.id}
             className="choose-button"
             type="checkbox"
             id="default-checkbox"
-            defaultChecked={checkClick}
+            defaultChecked={checkClick.isChecked}
             onClick={handleCheckProductClick}
           />
         )}
@@ -259,7 +344,12 @@ function ProductCard(props) {
           )}
           {props.page === 'category' && (
             <>
-              <Card.Img src={props.product.image} />
+              <Link
+                className="center-product-image"
+                to={`/product/${props.product.id}`}
+              >
+                <Card.Img src={props.product.image} />
+              </Link>
               <Row>
                 <Card.Title>{props.product.productName}</Card.Title>
               </Row>
@@ -325,18 +415,14 @@ function ProductCard(props) {
                   Add to cart
                 </Button>
                 <a className="card-button col-md">
-                  {props.productsState.state.userWishlist.filter(
-                    product => product.productId === props.product.id
-                  ).length > 0 && (
+                  {state.isInWishList && (
                     <i
                       onClick={handleDeleteFromWishList}
                       slot={props.product.id}
                       className="fa fa-solid fa-heart"
                     ></i>
                   )}
-                  {props.productsState.state.userWishlist.filter(
-                    product => product.productId === props.product.id
-                  ).length === 0 && (
+                  {!state.isInWishList && (
                     <i
                       onClick={handleAddToWishlist}
                       slot={props.product.id}
@@ -350,49 +436,52 @@ function ProductCard(props) {
 
           {(props.page === 'cart' || props.page === 'review') && (
             <>
-              <Card.Img src={props.currentProduct.image} />
+              <Link
+                className="center-product-image"
+                to={`/product/${props.currentProduct.id}`}
+              >
+                <Card.Img src={props.currentProduct.image} />
+              </Link>
               <Card.Title>{props.currentProduct.productName}</Card.Title>
               <section className="card-buttons row">
-                <Row>
-                  {props.page === 'cart' && (
-                    <Card.Text className="price-section-category">
-                      {props.currentProduct.discount ? (
-                        <span>
-                          {`${
-                            props.currentProduct.unitPrice *
-                              props.currentProduct.amount -
-                            props.currentProduct.unitPrice *
-                              props.currentProduct.amount *
-                              (0.01 * props.currentProduct.discount)
-                          }$ `}
-                          <span className="old-price">
+                {props.page === 'cart' && (
+                  <>
+                    <Row>
+                      <Card.Text className="price-section-category">
+                        {props.currentProduct.discount ? (
+                          <span>
                             {`${
+                              props.currentProduct.unitPrice *
+                                props.currentProduct.amount -
+                              props.currentProduct.unitPrice *
+                                props.currentProduct.amount *
+                                (0.01 * props.currentProduct.discount)
+                            }$ `}
+                            <span className="old-price">
+                              {`${
+                                props.currentProduct.unitPrice *
+                                props.currentProduct.amount
+                              }$`}
+                            </span>
+                          </span>
+                        ) : (
+                          <span>
+                            {` ${
                               props.currentProduct.unitPrice *
                               props.currentProduct.amount
                             }$`}
                           </span>
-                        </span>
-                      ) : (
-                        <span>
-                          {` ${
-                            props.currentProduct.unitPrice *
-                            props.currentProduct.amount
-                          }$`}
-                        </span>
-                      )}
-                      <span className="price-per-unit">{` (${
-                        props.currentProduct.discount
-                          ? props.currentProduct.unitPrice -
-                            props.currentProduct.unitPrice *
-                              (0.01 * props.currentProduct.discount)
-                          : props.currentProduct.unitPrice
-                      }$ for 1 unit)`}</span>
-                    </Card.Text>
-                  )}
-                </Row>
+                        )}
+                        <span className="price-per-unit">{` (${
+                          props.currentProduct.discount
+                            ? props.currentProduct.unitPrice -
+                              props.currentProduct.unitPrice *
+                                (0.01 * props.currentProduct.discount)
+                            : props.currentProduct.unitPrice
+                        }$ for 1 unit)`}</span>
+                      </Card.Text>
+                    </Row>
 
-                {props.page === 'cart' && (
-                  <>
                     <Row>
                       <Col className="amount">
                         <NumericInput
@@ -485,6 +574,41 @@ function ProductCard(props) {
           )}
 
           {props.page === 'order-confirmation' && (
+            <>
+              <Link
+                className="center-product-image"
+                to={`/product/${props.purchasedProduct.productId}`}
+              >
+                <Card.Img
+                  src={
+                    props.purchasedProduct &&
+                    props.purchasedProduct.productImage
+                  }
+                />
+              </Link>
+              <Row>
+                <Card.Title>{props.purchasedProduct.productName}</Card.Title>
+              </Row>
+              <Row className="order-confirmation-details-container">
+                <Col>
+                  <Card.Text>
+                    Quantity:{' '}
+                    {props.purchasedProduct && props.purchasedProduct.amount}
+                  </Card.Text>
+                </Col>
+                <Col>
+                  <Card.Text className="order-confirmation-float-right-price order-product-total-price">
+                    Total Price:{' '}
+                    {props.purchasedProduct &&
+                      props.purchasedProduct.finalPrice}
+                    $
+                  </Card.Text>
+                </Col>
+              </Row>
+            </>
+          )}
+
+          {props.page === 'my-orders' && (
             <Row className="order-confirmation-details-container">
               <Col
                 sm={12}
@@ -492,7 +616,9 @@ function ProductCard(props) {
                 lg={3}
                 className="order-product-image-column"
               >
-                <Card.Img src={props.orderDetails.productImage} />
+                <Link to={`/product/${props.orderDetails.productId}`}>
+                  <Card.Img src={props.orderDetails.productImage} />
+                </Link>
               </Col>
               <Col className="order-product-details-column">
                 <Row>
@@ -531,7 +657,88 @@ function ProductCard(props) {
               </Col>
             </Row>
           )}
-          <div></div>
+
+          {props.page === 'product-page' && (
+            <>
+              <Card.Title>{props.productData.productName}</Card.Title>
+              <Card.Text>{props.productData.description}</Card.Text>
+              <section className="quantity">
+                {props.productData.unitsInStock !== 0 && (
+                  <NumericInput
+                    name={props.productData.id}
+                    onChange={handleAmountChange}
+                    min={1}
+                    max={props.productData.unitsInStock}
+                    value={1}
+                  />
+                )}
+
+                <span
+                  className={
+                    props.productData.unitsInStock ? 'on-stock' : 'out-of-stock'
+                  }
+                >
+                  {props.productData.unitsInStock > 0
+                    ? 'On Stock!'
+                    : 'Out of Stock'}
+                </span>
+              </section>
+              <Card.Title className="price">
+                {props.productData.discount ? (
+                  <>
+                    Price: <span>{props.productData.unitPrice}$</span>
+                    {` ${
+                      props.productData.unitPrice -
+                      props.productData.unitPrice *
+                        props.productData.discount *
+                        0.01
+                    }`}
+                    $ ({props.productData.discount}% discount)
+                  </>
+                ) : (
+                  `Price: ${props.productData.unitPrice}$`
+                )}
+              </Card.Title>
+              <Row className="buttons">
+                <Col xl={3}>
+                  <Button
+                    onClick={handleBuyNow}
+                    value={props.productData.id}
+                    className="product-button"
+                    disabled={props.productData.unitsInStock ? false : true}
+                  >
+                    Buy now!
+                  </Button>
+                </Col>
+                <Col xl={3}>
+                  <Button
+                    onClick={handleAddToCart}
+                    value={props.productData.id}
+                    className="product-button"
+                    disabled={props.productData.unitsInStock ? false : true}
+                  >
+                    Add to cart
+                  </Button>
+                </Col>
+                <Col xl={3} className="product-wishlist">
+                  {state.isInWishList && (
+                    <i
+                      onClick={handleDeleteFromWishList}
+                      className="fa fa-solid fa-heart"
+                      slot={props.productData.id}
+                    ></i>
+                  )}
+                  {!state.isInWishList && (
+                    <i
+                      onClick={handleAddToWishlist}
+                      className="far fa-heart"
+                      slot={props.productData.id}
+                    ></i>
+                  )}
+                </Col>
+              </Row>
+            </>
+          )}
         </Card.Body>
       </Card>
     </>

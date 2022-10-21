@@ -52,6 +52,33 @@
   }
 }
 
+.react-numeric-input {
+  width: 3rem;
+}
+
+.price {
+  margin-top: 1.5rem !important;
+}
+
+.price > span {
+  text-decoration: line-through;
+}
+
+.on-stock {
+  color: green;
+}
+
+.product-button {
+  width: 100%;
+}
+.out-of-stock {
+  color: red;
+}
+
+.product-wishlist {
+  text-align: center;
+}
+
 @media only screen and (max-width: 768px) {
   .buttons,
   .product > .row {

@@ -3,6 +3,8 @@ import ProductInfo from './ProductInfo';
 import './styles/ProductPage.css';
 import { useState, useEffect } from 'react';
 import { getReq } from './DAL/serverData';
+import ProductCard from './ProductCard';
+import { Row } from 'react-bootstrap';
 
 function ProductPage(props) {
   const [product, setProduct] = useState();
@@ -22,8 +24,11 @@ function ProductPage(props) {
           <ProductCarousel
             images={product.productImages}
             name={product.productName}
-          ></ProductCarousel>
-          <ProductInfo data={product}></ProductInfo>
+          />
+
+          <ProductCard page="product-page" productData={product} />
+
+          {/* <ProductInfo data={product}></ProductInfo> */}
         </div>
       )}
     </div>

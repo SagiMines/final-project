@@ -1,9 +1,13 @@
 import NumericInput from 'react-numeric-input';
 import { Row, Col } from 'react-bootstrap';
 import { Card, Button } from 'react-bootstrap';
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
 import './styles/ProductInfo.css';
 
 function ProductInfo(props) {
+  const { user, setUser } = useContext(UserContext);
+
   return (
     <Card className="col-sm">
       <Card.Body>
@@ -11,7 +15,7 @@ function ProductInfo(props) {
         <Card.Text>{props.data.description}</Card.Text>
         <section className="quantity">
           {props.data.unitsInStock !== 0 && (
-            <NumericInput min={1} max={99} value={1} />
+            <NumericInput min={1} max={props.data.unitsInStock} value={1} />
           )}
 
           <span
@@ -52,7 +56,8 @@ function ProductInfo(props) {
             </Button>
           </Col>
           <Col xl={3} className="product-wishlist">
-            <i className="fa fa-solid fa-heart"></i>
+            {<i className="fa fa-solid fa-heart" slot={props.data.id}></i>}
+            <i className="far fa-heart" slot={props.data.id}></i>
           </Col>
         </Row>
       </Card.Body>

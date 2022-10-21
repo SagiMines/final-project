@@ -17,11 +17,14 @@ function OrderConfirmation() {
       `order-details/${userOrder.order.id}`
     );
     for (const order of userOrder.orderDetails) {
-      order.image = (
+      order.productImage = (
         await getReq(`product-images/${order.productId}`)
       )[0].imageSrc;
+      order.productName = (
+        await getReq(`products/${order.productId}`)
+      ).productName;
     }
-    console.log(userOrder);
+    // console.log(userOrder);
     setUserOrder({ ...userOrder });
   };
 

@@ -34,11 +34,9 @@ function ShoppingCart() {
         )
         .reduce((a, b) => a + b, 0);
       setCartData({ ...cartData });
-      user.finalCart = cartData.cartProducts;
       user.totalCartItems = cartData.totalAmount;
-      user.totalCartPrice = cartData.totalPrice;
+
       setUser({ ...user });
-      // console.log(user);
     }
   };
 
@@ -60,36 +58,43 @@ function ShoppingCart() {
 
   // updates the UI if the user change the amount of a product
   const handleAmountChange = async (valueAsNumber, valueAsString, input) => {
-    const productId = input.name;
+    const productId = Number(input.name);
     //updates the database
-    if (
-      await patchReq(
-        `cart?user-id=${user.userId}&product-id=${productId}&amount=${valueAsString}`
-      )
-    ) {
+    const currentProduct = cartData.cartProducts.find(
+      product => product.id === productId
+    );
+    const reqBody = {
+      userId: user.userId,
+      productId,
+      amount: valueAsNumber,
+      checked: currentProduct.checked,
+    };
+    if (await patchReq(`cart`, reqBody)) {
       console.log('The item has been successfully updated in the database');
     }
 
     const found = cartData.cartProducts.find(
-      product => product.id === Number(input.name)
+      product => product.id === productId
     );
     found.amount = valueAsNumber;
-    cartData.totalAmount = cartData.cartProducts
-      .map(product => product.amount)
-      .reduce((a, b) => a + b, 0);
 
-    cartData.totalPrice = cartData.cartProducts
-      .map(product =>
-        product.discount
-          ? product.unitPrice * product.amount -
-            product.unitPrice * product.amount * (0.01 * product.discount)
-          : product.unitPrice * product.amount
-      )
-      .reduce((a, b) => a + b, 0);
+    if (found.checked) {
+      cartData.totalAmount = cartData.cartProducts
+        .map(product => product.amount)
+        .reduce((a, b) => a + b, 0);
+
+      cartData.totalPrice = cartData.cartProducts
+        .map(product =>
+          product.discount
+            ? product.unitPrice * product.amount -
+              product.unitPrice * product.amount * (0.01 * product.discount)
+            : product.unitPrice * product.amount
+        )
+        .reduce((a, b) => a + b, 0);
+    }
     setCartData({ ...cartData });
-    user.finalCart = cartData.cartProducts;
+
     user.totalCartItems = cartData.totalAmount;
-    user.totalCartPrice = cartData.totalPrice;
     setUser({ ...user });
   };
 
@@ -99,7 +104,10 @@ function ShoppingCart() {
     cartData.cartProducts = [];
 
     for (const cart of cartData.cart) {
-      cartData.cartProducts.push(await getReq(`products/${cart.productId}`));
+      const cartItem = await getReq(`products/${cart.productId}`);
+      console.log(cartItem);
+      cartItem.checked = cart.checked;
+      cartData.cartProducts.push(cartItem);
     }
 
     for (const product of cartData.cartProducts) {
@@ -112,24 +120,32 @@ function ShoppingCart() {
       product.amount = foundCart.amount;
     }
 
-    cartData.totalAmount = cartData.cartProducts
-      .map(product => product.amount)
-      .reduce((a, b) => a + b, 0);
+    const checkedCartProducts = cartData.cartProducts.filter(
+      product => product.checked
+    );
+    cartData.totalAmount = 0;
+    cartData.totalPrice = 0;
+    if (checkedCartProducts.length > 1) {
+      for (const product of checkedCartProducts) {
+        cartData.totalAmount += product.amount;
 
-    cartData.totalPrice = cartData.cartProducts
-      .map(product =>
-        product.discount
+        cartData.totalPrice += product.discount
           ? product.unitPrice * product.amount -
             product.unitPrice * product.amount * (0.01 * product.discount)
-          : product.unitPrice * product.amount
-      )
-      .reduce((a, b) => a + b, 0);
+          : product.unitPrice * product.amount;
+      }
+    } else if (checkedCartProducts.length === 1) {
+      cartData.totalAmount = checkedCartProducts[0].amount;
+      cartData.totalPrice = checkedCartProducts[0].discount
+        ? checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount -
+          checkedCartProducts[0].unitPrice *
+            checkedCartProducts[0].amount *
+            (0.01 * checkedCartProducts[0].discount)
+        : checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount;
+    }
 
     setCartData({ ...cartData });
-    user.finalCart = cartData.cartProducts;
     user.totalCartItems = cartData.totalAmount;
-    user.totalCartPrice = cartData.totalPrice;
-
     setUser({ ...user });
   };
 
@@ -149,6 +165,7 @@ function ShoppingCart() {
                 <ProductCard
                   key={idx.toString()}
                   page="cart"
+                  cartState={{ cartData, setCartData }}
                   currentProduct={product}
                   onAmountChange={handleAmountChange}
                   onDeleteClick={handleDeleteClick}
@@ -157,13 +174,15 @@ function ShoppingCart() {
               ))}
             </Col>
             <Col md>
-              <CheckoutCard
-                page="cart"
-                cartSummary={{
-                  totalAmount: user.totalCartItems,
-                  totalPrice: user.totalCartPrice,
-                }}
-              />
+              {cartData && (
+                <CheckoutCard
+                  page="cart"
+                  cartSummary={{
+                    totalAmount: cartData.totalAmount,
+                    totalPrice: cartData.totalPrice,
+                  }}
+                />
+              )}
             </Col>
           </Row>
         </div>
