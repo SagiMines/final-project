@@ -2,7 +2,7 @@ import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './styles/CheckoutCard.css';
 import { UserContext } from './UserContext';
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   convertJsDatePatternToMysqlPattern,
   deleteReq,
@@ -14,10 +14,10 @@ import { useNavigate } from 'react-router-dom';
 
 function CheckoutCard(props) {
   const { user, setUser } = useContext(UserContext);
+  const [reviewState, setReviewState] = useState({});
   const navigate = useNavigate();
 
   const handleOrder = async () => {
-    console.log(props.page);
     if (props.page === 'cart') {
       navigate('/review-order');
     } else {
@@ -34,13 +34,6 @@ function CheckoutCard(props) {
             ? true
             : await deleteOrderedCartItems();
           user.totalCartItems = props.buyNowProduct ? user.totalCartItems : 0;
-          console.log(user);
-          // if (user.wishListProducts) {
-          //   console.log(user.buyNowProduct);
-          //   delete user.wishListProducts[user.buyNowProduct.id];
-          //   deleteProductFromWishList(user.buyNowProduct.id);
-          //   delete user.buyNowProduct;
-          // }
           setUser({ ...user });
           if (areOrderedCartItemsDeleted) {
             navigate('/order-confirmation');
@@ -120,7 +113,6 @@ function CheckoutCard(props) {
         console.log('Something went wrong with the data sent to the database.');
         return false;
       }
-      // delete user.buyNowProduct;
     }
 
     return true;
@@ -136,44 +128,48 @@ function CheckoutCard(props) {
         return false;
       }
     }
-    // for (const cartItem of user.finalCart) {
-    //   if (cartItem.checked) {
-    //     const isDeletedFromCart = await deleteReq(
-    //       `cart?user-id=${user.userId}&product-id=${cartItem.id}`
-    //     );
-    //     if (!isDeletedFromCart) {
-    //       console.log(
-    //         'Something went wrong with the data sent to the database.'
-    //       );
-    //       return false;
-    //     }
-    //   }
-    // }
     return true;
   };
 
+  const checkIfUserShippingDetailsAreFilled = async () => {
+    const userDetails = await getTheUser();
+    console.log(Object.values(userDetails).find(value => !value));
+    if (Object.values(userDetails).find(value => value === null) === null) {
+      reviewState.areDetailsFilled = false;
+    } else {
+      reviewState.areDetailsFilled = true;
+    }
+    reviewState.finished = true;
+    setReviewState({ ...reviewState });
+  };
+
+  useEffect(() => {
+    checkIfUserShippingDetailsAreFilled();
+  }, []);
   return (
     <Card className="checkout-card">
-      <Card.Body>
-        <Card.Title>{`Total Amount (${props.cartSummary.totalAmount} Items): ${props.cartSummary.totalPrice}$`}</Card.Title>
-        <Button
-          disabled={
-            (user.needToFillDetails && props.page === 'review') ||
-            !props.cartSummary.totalPrice
-              ? true
-              : false
-          }
-          onClick={handleOrder}
-          className="checkout-button"
-        >
-          {props.page === 'cart' ? 'Proceed to checkout' : 'Place your order'}
-        </Button>
-        {props.page === 'review' && (
-          <Link to="/shopping-cart">
-            <Button className="checkout-button">Cancle</Button>
-          </Link>
-        )}
-      </Card.Body>
+      {reviewState.finished && (
+        <Card.Body>
+          <Card.Title>{`Total Amount (${props.cartSummary.totalAmount} Items): ${props.cartSummary.totalPrice}$`}</Card.Title>
+          <Button
+            disabled={
+              (!reviewState.areDetailsFilled && props.page === 'review') ||
+              !props.cartSummary.totalPrice
+                ? true
+                : false
+            }
+            onClick={handleOrder}
+            className="checkout-button"
+          >
+            {props.page === 'cart' ? 'Proceed to checkout' : 'Place your order'}
+          </Button>
+          {props.page === 'review' && (
+            <Link to="/shopping-cart">
+              <Button className="checkout-button">Cancle</Button>
+            </Link>
+          )}
+        </Card.Body>
+      )}
     </Card>
   );
 }

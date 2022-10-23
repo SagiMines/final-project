@@ -32,9 +32,13 @@ function MyOrders() {
   return (
     <div className="container my-orders-container">
       <h1 className="my-orders-title">Your Orders</h1>
-      {orders && orders.map(order => <Order order={order} />)}
-      {/* <Order  />
-      <Order /> */}
+      {orders &&
+        orders.map(
+          (order, idx) =>
+            order.orderDetails.length > 0 && (
+              <Order key={idx.toString()} order={order} />
+            )
+        )}
     </div>
   );
 }

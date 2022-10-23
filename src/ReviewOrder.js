@@ -25,12 +25,10 @@ function ReviewOrder() {
   const setReviewCart = async () => {
     const cart = await getReq(`cart/${user.userId}`);
     const checkedCartProducts = cart.filter(cartProduct => cartProduct.checked);
-    console.log(checkedCartProducts);
     cartReview.finalCart = [];
 
     for (const reviewProduct of checkedCartProducts) {
       const product = await getReq(`products/${reviewProduct.productId}`);
-      console.log(product);
       product.image = (
         await getReq(`product-images/${reviewProduct.productId}`)
       )[0].imageSrc;
@@ -42,7 +40,6 @@ function ReviewOrder() {
       }
     }
 
-    console.log(cartReview);
     setCartReview({ ...cartReview });
   };
 
@@ -59,8 +56,6 @@ function ReviewOrder() {
             (0.01 * cartProduct.discount)
         : cartProduct.unitPrice * cartProduct.amount;
     }
-    console.log(cartReview.totalCartItems);
-    console.log(cartReview.totalCartPrice);
     setCartReview({ ...cartReview });
   };
 

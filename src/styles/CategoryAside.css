@@ -44,22 +44,21 @@
   text-align: center;
 }
 
-.nav-link {
-  text-align: start;
-  color: black !important;
-}
-
-.nav-link > img {
+.category-link-container > img {
   margin-right: 8px;
 }
 
-.sidebar div:nth-child(5) > a > img {
+.sidebar div:nth-child(4) > div > img {
   transform: scaleX(-1);
 }
 
 .category-link {
   text-decoration: none;
   color: black;
+}
+
+.category-link-container {
+  padding: 0.5rem 1rem;
 }
 
 @media only screen and (max-width: 1000px) {

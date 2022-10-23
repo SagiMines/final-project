@@ -20,13 +20,12 @@ function CategoryAside() {
     <aside className="category-aside">
       {categories && (
         <Nav className="col-md-12 d-none d-md-block bg-light sidebar">
-          <div className="sidebar-sticky"></div>
           <Nav.Item className="heading">
             <Nav.Link disabled>Categories</Nav.Link>
           </Nav.Item>
-          {categories.map(category => (
-            <Nav.Item>
-              <Nav.Link>
+          {categories.map((category, idx) => (
+            <Nav.Item key={idx.toString()}>
+              <Nav.Item className="category-link-container">
                 <img
                   src={`/icons/categories-icons/${category.categoryName.replaceAll(
                     ' ',
@@ -39,7 +38,7 @@ function CategoryAside() {
                 >
                   {category.categoryName}
                 </Link>
-              </Nav.Link>
+              </Nav.Item>
             </Nav.Item>
           ))}
         </Nav>

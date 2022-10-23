@@ -8,8 +8,12 @@ function Order(props) {
       <Card.Body>
         <Card.Title>{`Order #${props.order.id}`}</Card.Title>
         <ShippingDetailsCard page="my-orders" />
-        {props.order.orderDetails.map(product => (
-          <ProductCard page="my-orders" orderDetails={product} />
+        {props.order.orderDetails.map((product, idx) => (
+          <ProductCard
+            key={idx.toString()}
+            page="my-orders"
+            orderDetails={product}
+          />
         ))}
         <section className="order-summary">
           <Card.Title>
@@ -22,9 +26,7 @@ function Order(props) {
           <Card.Title>
             Total purchase:{' '}
             {props.order.orderDetails.length > 1
-              ? props.order.orderDetails.reduce(
-                  (a, b) => a.finalPrice + b.finalPrice
-                )
+              ? props.order.orderDetails.reduce((a, b) => a + b.finalPrice, 0)
               : props.order.orderDetails[0].finalPrice}
             $
           </Card.Title>

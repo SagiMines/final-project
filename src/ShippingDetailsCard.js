@@ -12,9 +12,7 @@ function ShippingDetailsCard(props) {
 
   const getTheUserDetails = async () => {
     orderData.userDetails = await getReq(`users/${user.userId}`);
-    console.log(orderData);
     setOrderData({ ...orderData });
-    console.log(orderData.userDetails);
     areAllRequiredDetailsFilled();
   };
 
@@ -27,15 +25,12 @@ function ShippingDetailsCard(props) {
       }
     }
 
-    console.log(isNotFilled);
     if (isNotFilled) {
       orderData.shippingDetails = false;
-      user.needToFillDetails = true;
-      setUser({ ...user });
     } else {
       orderData.shippingDetails = true;
-      delete user.needToFillDetails;
     }
+    setOrderData({ ...orderData });
   };
 
   useEffect(() => {
@@ -63,10 +58,8 @@ function ShippingDetailsCard(props) {
                     <Card.Title>
                       {'Shipping Details '}
                       {props.page === 'review' && (
-                        <Link to="/my-account">
-                          <Card.Link className="change-address">
-                            Change
-                          </Card.Link>
+                        <Link className="change-address" to="/my-account">
+                          Change
                         </Link>
                       )}
                     </Card.Title>
@@ -92,10 +85,8 @@ function ShippingDetailsCard(props) {
                 <Card.Text className="missing-shipping-details">
                   Please fill shipping details before proceeding
                 </Card.Text>
-                <Link to="/my-account">
-                  <Card.Link className="change-address">
-                    Enter Shipping Details
-                  </Card.Link>
+                <Link className="change-address" to="/my-account">
+                  Enter Shipping Details
                 </Link>
               </Card.Title>
             </Card.Body>

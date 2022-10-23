@@ -25,7 +25,6 @@ function ChangePassword(props) {
     },
   });
 
-  console.log(user);
   const handleChange = e => {
     let currentValueName = e.target.name.split(' ');
     currentValueName[1] =
@@ -91,7 +90,6 @@ function ChangePassword(props) {
   const updatePassword = async () => {
     let userDetails;
     do {
-      // if(props.page)
       userDetails =
         props.page !== 'update'
           ? await getReq(`users/forgotten-password-user`)
@@ -128,24 +126,8 @@ function ChangePassword(props) {
     const AreThereErrors = errorsArr.find(error => error);
 
     if (!AreThereErrors) {
-      // if (props.page === 'update') {
       await updatePassword();
-      //   } else {
-      //     await updatePasswordWhenForgotten();
-      //   }
-      // }
     }
-
-    // const updatePasswordWhenForgotten = async () => {
-    //   const user = await getReq(`users/forgotten-password-user`);
-    //   console.log(user);
-
-    //   user.password = values.newPassword.value;
-    //   const isPasswordUpdated = await patchReq(`users/${user.userId}`)
-    //   // const isPasswordUpdated = await postReq(`users/change-password`, reqBody);
-    //   // if (isPasswordUpdated) {
-    //   //   navigate('/change-password-success');
-    //   // }
   };
 
   return (

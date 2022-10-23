@@ -26,9 +26,10 @@ function NavSlider(props) {
         onMouseLeave={() => props.onMouseLeave()}
         className={`${props.name}-slider`}
       >
-        {props.sections.map(section =>
+        {props.sections.map((section, idx) =>
           section === 'Categories' ? (
             <label
+              key={idx.toString()}
               className="nav-slider-name"
               onMouseEnter={() => props.showCategories()}
               onMouseLeave={() => props.removeCategories()}
@@ -36,11 +37,15 @@ function NavSlider(props) {
               {section}
             </label>
           ) : section === 'Log Out' ? (
-            <label className="nav-slider-name" onClick={logOut}>
+            <label
+              key={idx.toString()}
+              className="nav-slider-name"
+              onClick={logOut}
+            >
               {section}
             </label>
           ) : (
-            <Link to={section.route}>
+            <Link key={idx.toString()} to={section.route}>
               <label className="nav-slider-name">{section.name}</label>
             </Link>
           )
@@ -58,8 +63,8 @@ function NavSlider(props) {
           }}
           className={`${props.categoryName}-slider`}
         >
-          {props.categoriesSections.map(category => (
-            <Link to={`/categories/${category.id}`}>
+          {props.categoriesSections.map((category, idx) => (
+            <Link key={idx.toString()} to={`/categories/${category.id}`}>
               <label className="nav-slider-name">{category.categoryName}</label>
             </Link>
           ))}

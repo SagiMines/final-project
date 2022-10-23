@@ -24,7 +24,6 @@ function OrderConfirmation() {
         await getReq(`products/${order.productId}`)
       ).productName;
     }
-    // console.log(userOrder);
     setUserOrder({ ...userOrder });
   };
 
@@ -42,8 +41,9 @@ function OrderConfirmation() {
           <ShippingDetailsCard page="order-confirmation" />
           <Row className="review-data">
             <Col md>
-              {userOrder.orderDetails.map(product => (
+              {userOrder.orderDetails.map((product, idx) => (
                 <ProductCard
+                  key={idx.toString()}
                   page="order-confirmation"
                   purchasedProduct={product}
                 />

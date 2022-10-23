@@ -19,9 +19,6 @@ function ProductCard(props) {
   };
 
   const handleCheckProductClick = async () => {
-    // const id = Number(e.target.name);
-
-    // const foundCart = cartData.cartProducts.find(cart => cart.id === id);
     if (!checkClick.isChecked) {
       props.currentProduct.checked = true;
       //calculate the price with or without the discount
@@ -36,16 +33,6 @@ function ProductCard(props) {
 
       props.cartState.cartData.totalAmount =
         props.cartState.cartData.totalAmount + props.currentProduct.amount;
-
-      // user.totalCartPrice =
-      //   user.totalCartPrice +
-      //   (props.currentProduct.discount
-      //     ? props.currentProduct.amount * props.currentProduct.unitPrice -
-      //       props.currentProduct.amount *
-      //         props.currentProduct.unitPrice *
-      //         (props.currentProduct.discount * 0.01)
-      //     : props.currentProduct.amount * props.currentProduct.unitPrice);
-      // user.totalCartItems = user.totalCartItems + props.currentProduct.amount;
     } else {
       props.currentProduct.checked = false;
 
@@ -60,29 +47,16 @@ function ProductCard(props) {
 
       props.cartState.cartData.totalAmount =
         props.cartState.cartData.totalAmount - props.currentProduct.amount;
-
-      // user.totalCartPrice =
-      //   user.totalCartPrice -
-      //   (props.currentProduct.discount
-      //     ? props.currentProduct.amount * props.currentProduct.unitPrice -
-      //       props.currentProduct.amount *
-      //         props.currentProduct.unitPrice *
-      //         (props.currentProduct.discount * 0.01)
-      //     : props.currentProduct.amount * props.currentProduct.unitPrice);
-      // user.totalCartItems = user.totalCartItems - props.currentProduct.amount;
     }
 
     const foundProduct = props.cartState.cartData.cartProducts.find(
       cartProduct => cartProduct.id === props.currentProduct.id
     );
-    // const foundUser = user.finalCart.find(
-    //   cart => cart.id === props.currentProduct.id
-    // );
+
     if (foundProduct) {
       foundProduct.checked = props.currentProduct.checked;
     }
-    // console.log(props.currentProduct);
-    // setUser({ ...user });
+
     props.cartState.setCartData({ ...props.cartState.cartData });
     user.totalCartItems = props.cartState.cartData.totalAmount;
     checkClick.isChecked = !checkClick.isChecked;
@@ -124,6 +98,7 @@ function ProductCard(props) {
       const isAddedToWishList = await postReq('wishlist', reqBody);
       if (isAddedToWishList) {
         if (props.page === 'category') {
+          console.log(props.productsState.state);
           do {
             props.productsState.state.userWishlist = await getReq(
               `wishlist?user-id=${user.userId}`
@@ -136,6 +111,18 @@ function ProductCard(props) {
             )
           );
           props.productsState.setState({ ...props.productsState.state });
+        }
+        // if the product is also in the cart we need to delete it
+        const userCart = await getReq(`cart/${user.userId}`);
+        const isProductInCart = userCart.find(
+          cartProduct => cartProduct.productId === productId
+        );
+        if (isProductInCart) {
+          await deleteReq(
+            `cart?user-id=${user.userId}&product-id=${productId}`
+          );
+          user.totalCartItems = await updateCartDetails(reqBody);
+          setUser({ ...user });
         }
         console.log(
           'The item was added successfully to the wishlist database.'
@@ -152,17 +139,26 @@ function ProductCard(props) {
   };
 
   const handleDeleteFromWishList = async e => {
+    const productId = Number(e.target.slot);
     //Delete from the wishlist page
     if (props.wishListItem) {
-      delete user.wishListProducts[props.wishListItem.id];
-      const products = Object.values(user.wishListProducts);
-      props.wishListRender.setWishList([...products]);
       await deleteReq(
         `wishlist?user-id=${user.userId}&product-id=${props.wishListItem.id}`
       );
+      let products;
+      do {
+        products = await getReq(`wishlist?user-id=${user.userId}`);
+      } while (
+        props.wishListRender.wishList.find(
+          wishlistItem =>
+            wishlistItem.userId === user.userId &&
+            wishlistItem.productId === productId
+        )
+      );
+
+      props.wishListRender.setWishList([...products]);
       //Delete from products page
     } else {
-      const productId = Number(e.target.slot);
       const isDeletedFromWishlist = await deleteReq(
         `wishlist?user-id=${user.userId}&product-id=${productId}`
       );
@@ -193,9 +189,22 @@ function ProductCard(props) {
     }
   };
 
-  const updateCartDetails = async () => {
+  const updateCartDetails = async reqBody => {
     await getReq(`cart/${user.userId}`);
-    return (await getReq(`cart/${user.userId}`)).length;
+    let userCart;
+    do {
+      userCart = await getReq(`cart/${user.userId}`);
+    } while (
+      userCart.find(
+        cartItem =>
+          cartItem.userId !== reqBody.userId &&
+          cartItem.productId !== reqBody.productId
+      )
+    );
+
+    const cartItemsAmount = userCart.reduce((a, b) => a + b.amount, 0);
+
+    return cartItemsAmount;
   };
 
   const handleAddToCart = async e => {
@@ -204,12 +213,25 @@ function ProductCard(props) {
       const amount = productsAmount[productId] ? productsAmount[productId] : 1;
       const reqBody = { userId: user.userId, productId, amount, checked: true };
       const isCartUpdated = await postReq('cart', reqBody);
-      //Need to remove when updating the cart page to get from db
       if (isCartUpdated) {
-        user.totalCartItems = await updateCartDetails();
-
+        user.totalCartItems = await updateCartDetails(reqBody);
+        // If the product is in the wishlist also we need to delete it
+        if (props.page === 'category' || props.page === 'product-page') {
+          const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
+          const isProductInWishlist = userWishlist.find(
+            wishlistProduct => wishlistProduct.productId === productId
+          );
+          if (isProductInWishlist) {
+            await deleteReq(
+              `wishlist?user-id=${user.userId}&product-id=${productId}`
+            );
+            state.isInWishList = !state.isInWishList;
+            setState({ ...state });
+          }
+        }
+        // Delete the product from the wishlist when added to cart from the wishlist page
         if (props.page === 'wishlist') {
-          await handleDeleteFromWishList();
+          await handleDeleteFromWishList(e);
         }
         setUser({ ...user });
       } else {
@@ -219,7 +241,6 @@ function ProductCard(props) {
   };
 
   const isProductInWishlist = async productId => {
-    console.log(productsAmount);
     const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
     const isProductInWishlist = userWishlist.find(
       wishlistData => wishlistData.productId === productId
@@ -238,7 +259,6 @@ function ProductCard(props) {
     const currentProduct = userCart.find(
       cartItem => cartItem.productId === props.currentProduct.id
     );
-    console.log(currentProduct);
 
     checkClick.isChecked = currentProduct.checked;
 
@@ -258,32 +278,6 @@ function ProductCard(props) {
       props.currentProduct.checked = true;
       setCheckClick(props.currentProduct.checked);
     }
-
-    // remove this when done with the purchase process
-    if (props.currentProduct) {
-      if (!user.finalCart) {
-        user.finalCart = [];
-        user.finalCart.push(props.currentProduct);
-      } else {
-        const found = user.finalCart.find(
-          cart => cart.id === props.currentProduct.id
-        );
-        if (!found) {
-          user.finalCart.push(props.currentProduct);
-        } else {
-          found.checked = props.currentProduct.checked;
-        }
-      }
-    }
-
-    if (props.page === 'wishlist' && props.wishListItem) {
-      if (user.wishListProducts) {
-        user.wishListProducts[props.wishListItem.id] = props.wishListItem;
-      } else {
-        user.wishListProducts = {};
-      }
-    }
-    setUser({ ...user });
   }, []);
 
   return (

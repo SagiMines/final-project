@@ -11,7 +11,7 @@ import { getReq } from './DAL/serverData';
 function Navbar() {
   const [sliders, setSliders] = useState(null);
   const { user, setUser } = useContext(UserContext);
-  let [cartData, setCartData] = useState(null);
+  const [cartData, setCartData] = useState({});
 
   const getCategories = async () => {
     return await getReq('categories');
@@ -25,42 +25,54 @@ function Navbar() {
 
   const setTheCart = async () => {
     setCategoriesSlider();
-    cartData = {};
+
     cartData.cart = await getReq(`cart/${user.userId}`);
-    cartData.cartProducts = [];
+    if (cartData.cart.length) {
+      cartData.cartProducts = [];
 
-    for (const cart of cartData.cart) {
-      cartData.cartProducts.push(await getReq(`products/${cart.productId}`));
+      for (const cart of cartData.cart) {
+        const currentProduct = await getReq(`products/${cart.productId}`);
+        if (
+          cartData.cartProducts.length &&
+          !cartData.cartProducts.find(
+            product => product.id === currentProduct.id
+          )
+        ) {
+          cartData.cartProducts.push(currentProduct);
+        } else if (!cartData.cartProducts.length) {
+          cartData.cartProducts.push(currentProduct);
+        }
+      }
+
+      for (const product of cartData.cartProducts) {
+        const productImg = (await getReq(`product-images/${product.id}`))[0]
+          .imageSrc;
+        product.image = productImg;
+        const foundCart = cartData.cart.find(
+          cart => cart.productId === product.id
+        );
+        product.amount = foundCart.amount;
+        product.checked = foundCart.checked ? true : false;
+      }
+
+      cartData.totalAmount = cartData.cartProducts
+        .map(product => product.checked && product.amount)
+        .reduce((a, b) => a + b, 0);
+
+      cartData.totalPrice = cartData.cartProducts
+        .map(product =>
+          product.discount
+            ? product.unitPrice * product.amount -
+              product.unitPrice * product.amount * (0.01 * product.discount)
+            : product.unitPrice * product.amount
+        )
+        .reduce((a, b) => a + b, 0);
+
+      user.totalCartItems = cartData.totalAmount;
+    } else {
+      user.totalCartItems = 0;
     }
-
-    for (const product of cartData.cartProducts) {
-      const productImg = (await getReq(`product-images/${product.id}`))[0]
-        .imageSrc;
-      product.image = productImg;
-      const foundCart = cartData.cart.find(
-        cart => cart.productId === product.id
-      );
-      product.amount = foundCart.amount;
-    }
-
-    cartData.totalAmount = cartData.cartProducts
-      .map(product => product.amount)
-      .reduce((a, b) => a + b, 0);
-
-    cartData.totalPrice = cartData.cartProducts
-      .map(product =>
-        product.discount
-          ? product.unitPrice * product.amount -
-            product.unitPrice * product.amount * (0.01 * product.discount)
-          : product.unitPrice * product.amount
-      )
-      .reduce((a, b) => a + b, 0);
-
     setCartData({ ...cartData });
-    user.finalCart = cartData.cartProducts;
-    user.totalCartItems = cartData.totalAmount;
-    user.totalCartPrice = cartData.totalPrice;
-
     setUser({ ...user });
   };
 

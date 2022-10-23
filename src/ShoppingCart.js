@@ -102,50 +102,54 @@ function ShoppingCart() {
     cartData = {};
     cartData.cart = await getReq(`cart/${user.userId}`);
     cartData.cartProducts = [];
-
-    for (const cart of cartData.cart) {
-      const cartItem = await getReq(`products/${cart.productId}`);
-      console.log(cartItem);
-      cartItem.checked = cart.checked;
-      cartData.cartProducts.push(cartItem);
-    }
-
-    for (const product of cartData.cartProducts) {
-      const productImg = (await getReq(`product-images/${product.id}`))[0]
-        .imageSrc;
-      product.image = productImg;
-      const foundCart = cartData.cart.find(
-        cart => cart.productId === product.id
-      );
-      product.amount = foundCart.amount;
-    }
-
-    const checkedCartProducts = cartData.cartProducts.filter(
-      product => product.checked
-    );
     cartData.totalAmount = 0;
     cartData.totalPrice = 0;
-    if (checkedCartProducts.length > 1) {
-      for (const product of checkedCartProducts) {
-        cartData.totalAmount += product.amount;
 
-        cartData.totalPrice += product.discount
-          ? product.unitPrice * product.amount -
-            product.unitPrice * product.amount * (0.01 * product.discount)
-          : product.unitPrice * product.amount;
+    if (cartData.cart) {
+      for (const cart of cartData.cart) {
+        const cartItem = await getReq(`products/${cart.productId}`);
+        cartItem.checked = cart.checked;
+        cartData.cartProducts.push(cartItem);
       }
-    } else if (checkedCartProducts.length === 1) {
-      cartData.totalAmount = checkedCartProducts[0].amount;
-      cartData.totalPrice = checkedCartProducts[0].discount
-        ? checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount -
-          checkedCartProducts[0].unitPrice *
-            checkedCartProducts[0].amount *
-            (0.01 * checkedCartProducts[0].discount)
-        : checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount;
+
+      for (const product of cartData.cartProducts) {
+        const productImg = (await getReq(`product-images/${product.id}`))[0]
+          .imageSrc;
+        product.image = productImg;
+        const foundCart = cartData.cart.find(
+          cart => cart.productId === product.id
+        );
+        product.amount = foundCart.amount;
+      }
+
+      const checkedCartProducts = cartData.cartProducts.filter(
+        product => product.checked
+      );
+
+      if (checkedCartProducts.length > 1) {
+        for (const product of checkedCartProducts) {
+          cartData.totalAmount += product.amount;
+
+          cartData.totalPrice += product.discount
+            ? product.unitPrice * product.amount -
+              product.unitPrice * product.amount * (0.01 * product.discount)
+            : product.unitPrice * product.amount;
+        }
+      } else if (checkedCartProducts.length === 1) {
+        cartData.totalAmount = checkedCartProducts[0].amount;
+        cartData.totalPrice = checkedCartProducts[0].discount
+          ? checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount -
+            checkedCartProducts[0].unitPrice *
+              checkedCartProducts[0].amount *
+              (0.01 * checkedCartProducts[0].discount)
+          : checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount;
+      }
+      user.totalCartItems = cartData.totalAmount;
+    } else {
+      user.totalCartItems = 0;
     }
 
     setCartData({ ...cartData });
-    user.totalCartItems = cartData.totalAmount;
     setUser({ ...user });
   };
 
