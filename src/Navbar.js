@@ -104,6 +104,7 @@ function Navbar() {
               {sliders.hamburger.collapseState && (
                 <NavSlider
                   isCategories={sliders.categories.collapseState}
+                  isUser={sliders.user.collapseState}
                   onMouseEnter={() => {
                     sliders.hamburger.collapseState = true;
                     setSliders({ ...sliders });
@@ -112,8 +113,16 @@ function Navbar() {
                     sliders.categories.collapseState = true;
                     setSliders({ ...sliders });
                   }}
+                  showUser={() => {
+                    sliders.user.collapseState = true;
+                    setSliders({ ...sliders });
+                  }}
                   onMouseLeave={() => {
                     sliders.hamburger.collapseState = false;
+                    setSliders({ ...sliders });
+                  }}
+                  removeUser={() => {
+                    sliders.user.collapseState = false;
                     setSliders({ ...sliders });
                   }}
                   removeCategories={() => {
@@ -122,9 +131,11 @@ function Navbar() {
                   }}
                   name={sliders.hamburger.collapseName}
                   categoryName={sliders.categories.collapseName}
+                  userName={sliders.user.collapseName}
                   categoriesSections={sliders.categories.sections}
+                  userSections={sliders.user.sections.connected}
                   sections={
-                    Cookies.get('user_id')
+                    user
                       ? sliders.hamburger.sections.connected
                       : sliders.hamburger.sections.disconnected
                   }
@@ -181,7 +192,7 @@ function Navbar() {
                       }}
                       name={sliders.user.name}
                       sections={
-                        Cookies.get('user_id')
+                        user
                           ? sliders.user.sections.connected
                           : sliders.user.sections.disconnected
                       }
@@ -204,12 +215,17 @@ function Navbar() {
                   {sliders.hamburger.state && (
                     <NavSlider
                       isCategories={sliders.categories.state}
+                      isUser={sliders.user.hamburgerState}
                       onMouseEnter={() => {
                         sliders.hamburger.state = true;
                         setSliders({ ...sliders });
                       }}
                       showCategories={() => {
                         sliders.categories.state = true;
+                        setSliders({ ...sliders });
+                      }}
+                      showUser={() => {
+                        sliders.user.hamburgerState = true;
                         setSliders({ ...sliders });
                       }}
                       onMouseLeave={() => {
@@ -220,11 +236,17 @@ function Navbar() {
                         sliders.categories.state = false;
                         setSliders({ ...sliders });
                       }}
+                      removeUser={() => {
+                        sliders.user.hamburgerState = false;
+                        setSliders({ ...sliders });
+                      }}
                       name={sliders.hamburger.name}
                       categoryName={sliders.categories.name}
+                      userName={sliders.user.hamburgerName}
                       categoriesSections={sliders.categories.sections}
+                      userSections={sliders.user.sections.connected}
                       sections={
-                        Cookies.get('user_id')
+                        user
                           ? sliders.hamburger.sections.connected
                           : sliders.hamburger.sections.disconnected
                       }

@@ -26,7 +26,7 @@ function LogIn() {
     e.preventDefault();
     const isOkay = await postReq('login', state.user);
     if (isOkay) {
-      setUser(getUserIdFromCookie());
+      setUser({ userId: await getUserIdFromCookie() });
       navigate('/');
     } else {
       state.passed = false;
