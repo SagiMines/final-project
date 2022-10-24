@@ -95,10 +95,12 @@ label {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
 }
 
+.account-slider > *,
 .hamburger-slider > *,
 .user-slider > *,
 .categories-slider > *,
 .hamburger-collapse-slider > *,
+.account-collapse-slider > *,
 .categories-collapse-slider > * {
   cursor: pointer;
   display: block;
@@ -113,6 +115,17 @@ label {
   transform: translateY(100%) translateX(-250px);
   width: 150px;
   height: 230px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  border-radius: 3px;
+}
+
+.account-slider {
+  position: absolute;
+  bottom: -10px;
+  transform: translateY(100%) translateX(-250px);
+  width: 150px;
+  height: 100px;
   border: 1px solid #a4a5a5;
   background: #f3f3f3;
   border-radius: 3px;
@@ -149,6 +162,17 @@ label {
   transform: translateY(96%) translateX(-236px);
   width: 150px;
   height: 230px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  border-radius: 3px;
+}
+
+.account-collapse-slider {
+  position: absolute;
+  bottom: -10px;
+  transform: translateY(91%) translateX(-236px);
+  width: 150px;
+  height: 100px;
   border: 1px solid #a4a5a5;
   background: #f3f3f3;
   border-radius: 3px;

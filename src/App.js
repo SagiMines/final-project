@@ -38,7 +38,7 @@ function App() {
     <Router>
       {data && (
         <UserContext.Provider value={{ user, setUser }}>
-          <Navbar />
+          <Navbar key={user ? 1 : 2} />
           <RoutesManager
             /*for ProductDetails: */ data={data}
             id={2}

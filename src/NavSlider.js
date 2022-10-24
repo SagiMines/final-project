@@ -2,12 +2,18 @@ import { Link } from 'react-router-dom';
 import { getUserIdFromCookie, postReq } from './DAL/serverData';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext';
+import { useContext } from 'react';
+
 function NavSlider(props) {
+  const { user, setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
   const logOut = async () => {
     const userId = await getUserIdFromCookie();
     const isValid = await postReq('logout', { userId });
     if (isValid) {
+      setUser(null);
       Cookies.remove('user_id');
       Cookies.remove('connect.sid');
       navigate('/');
@@ -44,6 +50,15 @@ function NavSlider(props) {
             >
               {section}
             </label>
+          ) : section === 'Account' ? (
+            <label
+              key={idx.toString()}
+              className="nav-slider-name"
+              onMouseEnter={() => props.showUser()}
+              onMouseLeave={() => props.removeUser()}
+            >
+              {section}
+            </label>
           ) : (
             <Link key={idx.toString()} to={section.route}>
               <label className="nav-slider-name">{section.name}</label>
@@ -68,6 +83,35 @@ function NavSlider(props) {
               <label className="nav-slider-name">{category.categoryName}</label>
             </Link>
           ))}
+        </div>
+      )}
+      {props.isUser && (
+        <div
+          onMouseEnter={() => {
+            props.showUser();
+            props.onMouseEnter();
+          }}
+          onMouseLeave={() => {
+            props.removeUser();
+            props.onMouseLeave();
+          }}
+          className={`${props.userName}-slider`}
+        >
+          {props.userSections.map((section, idx) =>
+            section === 'Log Out' ? (
+              <label
+                onClick={logOut}
+                key={idx.toString()}
+                className="nav-slider-name"
+              >
+                {section}
+              </label>
+            ) : (
+              <Link key={idx.toString()} to={`/${section.route}`}>
+                <label className="nav-slider-name">{section.name}</label>
+              </Link>
+            )
+          )}
         </div>
       )}
     </>
