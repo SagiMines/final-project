@@ -69,7 +69,6 @@ function CheckoutCard(props) {
   };
 
   const addOrderDetailsToDb = async orderId => {
-    console.log(props.buyNowProduct);
     if (!props.buyNowProduct) {
       for (const cartItem of props.cartSummary.cart) {
         const productId = cartItem.id;
@@ -133,7 +132,6 @@ function CheckoutCard(props) {
 
   const checkIfUserShippingDetailsAreFilled = async () => {
     const userDetails = await getTheUser();
-    console.log(Object.values(userDetails).find(value => !value));
     if (Object.values(userDetails).find(value => value === null) === null) {
       reviewState.areDetailsFilled = false;
     } else {

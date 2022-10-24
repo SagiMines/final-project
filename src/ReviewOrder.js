@@ -9,17 +9,17 @@ import { patchReq, getReq } from './DAL/serverData';
 
 function ReviewOrder() {
   const { user, setUser } = useContext(UserContext);
-  const [buyNow, setBuyNow] = useState(
-    JSON.parse(localStorage.getItem('buy-now'))
-  );
+  const [buyNow, setBuyNow] = useState({
+    buyNowData: JSON.parse(localStorage.getItem('buy-now')),
+  });
   const [cartReview, setCartReview] = useState({});
 
   const getPriceForBuyNow = () => {
-    let totalPrice = user.buyNowProduct.discount
-      ? user.buyNowProduct.unitPrice -
-        user.buyNowProduct.unitPrice * (0.01 * user.buyNowProduct.discount)
-      : user.buyNowProduct.unitPrice;
-    return totalPrice * user.buyNowProduct.amount;
+    let totalPrice = buyNow.buyNowProduct.discount
+      ? buyNow.buyNowProduct.unitPrice -
+        buyNow.buyNowProduct.unitPrice * (0.01 * buyNow.buyNowProduct.discount)
+      : buyNow.buyNowProduct.unitPrice;
+    return totalPrice * buyNow.buyNowProduct.amount;
   };
 
   const setReviewCart = async () => {
@@ -60,15 +60,17 @@ function ReviewOrder() {
   };
 
   const setReview = async () => {
-    if (buyNow) {
+    if (buyNow.buyNowData) {
       localStorage.removeItem('buy-now');
-      user.buyNowProduct = await getReq(`products/${buyNow.productId}`);
-      user.buyNowProduct.image = (
-        await getReq(`product-images/${buyNow.productId}`)
+      buyNow.buyNowProduct = await getReq(
+        `products/${buyNow.buyNowData.productId}`
+      );
+      buyNow.buyNowProduct.image = (
+        await getReq(`product-images/${buyNow.buyNowData.productId}`)
       )[0].imageSrc;
-      user.buyNowProduct.amount = buyNow.amount;
-      user.buyNowProduct.checked = true;
-      setUser({ ...user });
+      buyNow.buyNowProduct.amount = buyNow.buyNowData.amount;
+      buyNow.buyNowProduct.checked = true;
+      setBuyNow({ ...buyNow });
     } else {
       await setReviewCart();
       getTheCartDetails();
@@ -124,7 +126,7 @@ function ReviewOrder() {
       <ShippingDetailsCard page="review" />
       <Row className="review-data">
         <Col md>
-          {!buyNow &&
+          {!buyNow.buyNowData &&
             cartReview.finalCart &&
             cartReview.finalCart.map((cart, idx) => (
               <ProductCard
@@ -134,23 +136,23 @@ function ReviewOrder() {
                 onAmountChange={handleAmountChange}
               />
             ))}
-          {user.buyNowProduct && user.buyNowProduct.checked && (
-            <ProductCard page="review" currentProduct={user.buyNowProduct} />
+          {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
+            <ProductCard page="review" currentProduct={buyNow.buyNowProduct} />
           )}
         </Col>
         <Col md>
           <CheckoutCard
             page="review"
             cartSummary={{
-              totalAmount: user.buyNowProduct
-                ? user.buyNowProduct.amount
+              totalAmount: buyNow.buyNowProduct
+                ? buyNow.buyNowProduct.amount
                 : cartReview.totalCartItems,
-              totalPrice: user.buyNowProduct
+              totalPrice: buyNow.buyNowProduct
                 ? getPriceForBuyNow()
                 : cartReview.totalCartPrice,
               cart: cartReview.finalCart,
             }}
-            buyNowProduct={user.buyNowProduct}
+            buyNowProduct={buyNow.buyNowProduct}
           />
         </Col>
       </Row>
