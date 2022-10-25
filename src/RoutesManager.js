@@ -16,10 +16,10 @@ import MyOrders from './MyOrders';
 import EmailConfirmationPage from './EmailConfirmationPage';
 import { Routes, Route } from 'react-router-dom';
 
-function RoutesManager(props) {
+function RoutesManager() {
   return (
     <Routes>
-      <Route path="/" exact element={<HomePage data={props.data} />} />
+      <Route path="/" exact element={<HomePage />} />
       <Route
         //needs to change to match each product's ID
         path="/product/:id"
@@ -76,7 +76,7 @@ function RoutesManager(props) {
       <Route
         //needs to change to add the user's ID
         path="/change-password"
-        element={<ChangePassword page={props.page} />}
+        element={<ChangePassword page="update" />}
       />
       <Route
         //needs to change to add the user's ID/orders ID

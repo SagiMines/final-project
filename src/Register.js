@@ -7,7 +7,6 @@ import countryList from 'country-list';
 import SelectForm from './SelectForm';
 import { useNavigate } from 'react-router-dom';
 import { getReq, postReq, isConnected } from './DAL/serverData';
-import Cookies from 'js-cookie';
 
 function Register() {
   const navigate = useNavigate();

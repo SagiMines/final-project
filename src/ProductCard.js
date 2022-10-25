@@ -98,7 +98,6 @@ function ProductCard(props) {
       const isAddedToWishList = await postReq('wishlist', reqBody);
       if (isAddedToWishList) {
         if (props.page === 'category') {
-          console.log(props.productsState.state);
           do {
             props.productsState.state.userWishlist = await getReq(
               `wishlist?user-id=${user.userId}`
@@ -366,15 +365,17 @@ function ProductCard(props) {
                 </Card.Text>
               </Row>
               <Row className="amount-section">
-                <Col className="amount">
-                  <NumericInput
-                    name={props.product.id}
-                    onChange={handleAmountChange}
-                    min={1}
-                    max={100}
-                    defaultValue={1}
-                  />
-                </Col>
+                {props.product.unitsInStock > 0 && (
+                  <Col className="amount">
+                    <NumericInput
+                      name={props.product.id}
+                      onChange={handleAmountChange}
+                      min={1}
+                      max={props.product.unitsInStock}
+                      defaultValue={1}
+                    />
+                  </Col>
+                )}
                 <Col>
                   <Card.Text
                     className={

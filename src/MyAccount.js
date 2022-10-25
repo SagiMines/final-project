@@ -1,4 +1,4 @@
-import { Button, Card, Row, Col } from 'react-bootstrap';
+import { Button, Card, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './styles/MyAccount.css';
 import { useContext, useEffect, useState } from 'react';
