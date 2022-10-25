@@ -1,10 +1,8 @@
 import ProductCarousel from './ProductCarousel';
-import ProductInfo from './ProductInfo';
 import './styles/ProductPage.css';
 import { useState, useEffect } from 'react';
 import { getReq } from './DAL/serverData';
 import ProductCard from './ProductCard';
-import { Row } from 'react-bootstrap';
 
 function ProductPage(props) {
   const [product, setProduct] = useState();
@@ -27,8 +25,6 @@ function ProductPage(props) {
           />
 
           <ProductCard page="product-page" productData={product} />
-
-          {/* <ProductInfo data={product}></ProductInfo> */}
         </div>
       )}
     </div>

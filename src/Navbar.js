@@ -3,7 +3,6 @@ import { navSlidersData } from './data/data';
 import { Link } from 'react-router-dom';
 import { Row } from 'react-bootstrap';
 import './styles/Navbar.css';
-import Cookies from 'js-cookie';
 import { UserContext } from './UserContext';
 import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';

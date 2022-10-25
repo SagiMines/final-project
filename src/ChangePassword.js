@@ -1,6 +1,5 @@
 import { Form, Button } from 'react-bootstrap';
 import FormInput from './FormInput';
-import { Link } from 'react-router-dom';
 import './styles/ChangePassword.css';
 import { useContext, useState } from 'react';
 import { UserContext } from './UserContext';

@@ -1,6 +1,5 @@
 import CategoryAside from './CategoryAside';
 import ProductPage from './ProductPage';
-import './styles/ProductDetails.css';
 import { useParams } from 'react-router-dom';
 function ProductDetails() {
   const { id } = useParams();

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
-import { getReq, postReq } from './DAL/serverData';
+import { getReq } from './DAL/serverData';
 import FormInput from './FormInput';
 import './styles/ForgotPW1.css';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +30,6 @@ function ForgotPW1() {
   const handleClick = async e => {
     e.preventDefault();
     if (emailCheck(input.value)) {
-      // const reqBody = { email: input.value };
       try {
         await getReq(`users?email=${input.value}`);
         const isEmailSent = await getReq(

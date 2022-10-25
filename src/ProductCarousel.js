@@ -1,46 +1,69 @@
-import { Carousel } from 'react-bootstrap';
+import { Carousel, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './styles/ProductCarousel.css';
 
 function ProductCarousel(props) {
-  const getTopProducts = () => {
-    const data = props.data;
-    const topProductsArr = [];
-    const topProductsImagesArr = [];
-    for (const topProduct of data.topProducts) {
-      topProductsArr.push(
-        data.products.find(product => product.id === topProduct.productId)
-      );
-      topProductsImagesArr.push(
-        data.productImages.find(image => image.id === topProduct.productId)
-          .imageSrc
-      );
-    }
-    return topProductsImagesArr;
-  };
-
   return (
     <Carousel fade variant="dark" className="col-sm">
-      {props.images
-        ? props.images.map((image, idx) => (
-            <Carousel.Item key={idx.toString()}>
-              <img
-                className="d-block w-100"
-                src={image.imageSrc}
-                title={props.name}
-                alt={`#${idx + 1} slide`}
-              />
-            </Carousel.Item>
-          ))
-        : getTopProducts().map((image, idx) => (
-            <Carousel.Item key={idx.toString()}>
+      {props.images &&
+        props.images.map((image, idx) => (
+          <Carousel.Item key={idx.toString()}>
+            <img
+              className="d-block w-100"
+              src={image.imageSrc}
+              title={props.name}
+              alt={props.name}
+            />
+          </Carousel.Item>
+        ))}
+      {props.topProducts &&
+        props.topProducts.map((topProduct, idx) => (
+          <Carousel.Item key={idx.toString()}>
+            <Link
+              className="carousel-link-to-product"
+              to={`/product/${topProduct.id}`}
+            >
               <img
                 className="d-block w-100 "
-                src={image}
-                title={`Top Product #${idx + 1}`}
-                alt={`#${idx + 1} slide`}
+                src={topProduct.productImages[0].imageSrc}
+                title={topProduct.productName}
+                alt={`${topProduct.productName} - Top product`}
               />
-            </Carousel.Item>
-          ))}
+
+              <Container>
+                <p className="top-product-title-container">
+                  <span className="top-product-title">
+                    {topProduct.productName}
+                  </span>
+                </p>
+                <svg
+                  xmlns="//www.w3.org/2000/svg"
+                  version="1.1"
+                  className="svg-filters"
+                  style={{ display: 'none' }}
+                >
+                  <defs>
+                    <filter id="marker-shape">
+                      <feTurbulence
+                        type="fractalNoise"
+                        baseFrequency="0 0.15"
+                        numOctaves="1"
+                        result="warp"
+                      />
+                      <feDisplacementMap
+                        xChannelSelector="R"
+                        yChannelSelector="G"
+                        scale="30"
+                        in="SourceGraphic"
+                        in2="warp"
+                      />
+                    </filter>
+                  </defs>
+                </svg>
+              </Container>
+            </Link>
+          </Carousel.Item>
+        ))}
     </Carousel>
   );
 }

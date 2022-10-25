@@ -43,9 +43,6 @@ function CheckoutCard(props) {
     }
   };
 
-  const deleteProductFromWishList = async productId => {
-    await deleteReq(`wishlist?user-id=${user.userId}&product-id=${productId}`);
-  };
   const getTheUser = async () => {
     return await getReq(`users/${user.userId}`);
   };
