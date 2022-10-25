@@ -3,6 +3,7 @@ import Order from './Order';
 import { UserContext } from './UserContext';
 import { useState, useEffect, useContext } from 'react';
 import { getReq } from './DAL/serverData';
+import { Container } from 'react-bootstrap';
 
 function MyOrders() {
   const { user, setUser } = useContext(UserContext);
@@ -32,6 +33,11 @@ function MyOrders() {
   return (
     <div className="container my-orders-container">
       <h1 className="my-orders-title">Your Orders</h1>
+      {!orders && (
+        <Container className="loading-icon">
+          <img src="/icons/loading.gif"></img>
+        </Container>
+      )}
       {orders &&
         orders.map(
           (order, idx) =>

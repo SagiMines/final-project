@@ -7,3 +7,8 @@ body {
 .main-content {
   display: flex;
 }
+
+.loading-icon {
+  display: flex;
+  justify-content: center;
+}
