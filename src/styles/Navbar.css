@@ -12,7 +12,7 @@ header {
   padding: 5px;
 }
 .search-bar {
-  width: 55%;
+  width: 92%;
   margin-top: 2px;
   height: 50%;
   text-indent: 10px;
@@ -24,6 +24,11 @@ header {
   margin-right: 15px;
 }
 
+.collapse-search-bar {
+  width: 100%;
+  margin-right: 0;
+}
+
 .fa,
 .far {
   cursor: pointer;
@@ -33,6 +38,7 @@ header {
 
 .navbar-toggler {
   margin-top: 4px;
+  margin-left: 2px;
 }
 
 .fa-heart {
@@ -65,9 +71,11 @@ label {
   width: 100%;
 }
 
+.search-container,
 .hamburger-container,
 .user-container,
-.collapse-hamburger-container {
+.collapse-hamburger-container,
+.collapse-search-container {
   display: inline-block;
   position: relative;
 }
@@ -95,6 +103,38 @@ label {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
 }
 
+.search-slider {
+  display: block;
+  position: absolute;
+  bottom: -10px;
+  width: 210px;
+  border: 1px solid #a4a5a5;
+  background: #f3f3f3;
+  /* background: #fff; */
+  border-radius: 10px;
+}
+
+.length-1 {
+  transform: translateY(85%) translateX(11px);
+}
+
+.length-2 {
+  transform: translateY(92.5%) translateX(11px);
+}
+
+.length-3 {
+  transform: translateY(95%) translateX(11px);
+}
+
+.length-4 {
+  transform: translateY(96.5%) translateX(11px);
+}
+
+.length-5 {
+  transform: translateY(97.1%) translateX(11px);
+}
+
+.search-slider > *,
 .account-slider > *,
 .hamburger-slider > *,
 .user-slider > *,
@@ -148,7 +188,7 @@ label {
 }
 
 .hamburger-collapse-slider-pointer {
-  transform: translateX(24px);
+  transform: translateX(17px);
   border: solid 10px transparent;
   border-bottom-color: #f3f3f3;
   position: absolute;
@@ -208,4 +248,32 @@ label {
 
 .nav-slider-name:hover {
   color: rgb(44, 44, 232);
+}
+.search-result-product-image-container {
+  max-width: 70px;
+  max-height: 48px;
+}
+
+.search-result-product-image-container > img {
+  width: 100%;
+  height: 100%;
+}
+
+.search-result {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.collapse-icons-container {
+  display: flex;
+}
+
+/* .collapse-search-container {
+  margin-right: 0;
+} */
+
+@media screen and (min-width: 992px) {
+  .collapse-search-container {
+    display: none;
+  }
 }

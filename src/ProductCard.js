@@ -664,7 +664,7 @@ function ProductCard(props) {
                     onChange={handleAmountChange}
                     min={1}
                     max={props.productData.unitsInStock}
-                    value={1}
+                    defaultValue={1}
                   />
                 )}
 
