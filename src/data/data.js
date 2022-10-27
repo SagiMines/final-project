@@ -45,6 +45,13 @@ export const navSlidersData = () => {
       name: 'categories',
       collapseName: 'categories-collapse',
     },
+    search: {
+      value: '',
+      state: false,
+      collapseState: false,
+      name: 'search',
+      collapseName: 'search-collapse',
+    },
   };
 };
 
