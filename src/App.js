@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './styles/App.css';
 import { getUserIdFromCookie } from './DAL/serverData';
 import { UserContext } from './UserContext';
+import FabContainer from './FabContainer';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,7 +24,8 @@ function App() {
     <Router>
       <UserContext.Provider value={{ user, setUser }}>
         <Navbar key={user ? 1 : 0} />
-        <RoutesManager />
+        {user && user.totalCartItems > 0 && <FabContainer />}
+        {user && <RoutesManager />}
         <Footer />
       </UserContext.Provider>
     </Router>

@@ -1,0 +1,47 @@
+.fab-container > div {
+  width: fit-content;
+}
+
+.fab-link {
+  text-decoration: none;
+}
+
+.fab-container {
+  position: fixed !important;
+  right: 15px;
+  top: 50%;
+  z-index: 100;
+}
+
+.fab-cart {
+  background-color: #8dbfc8 !important;
+}
+
+.fab-icon {
+  font-size: 22px;
+}
+
+.fab-cart-amount-popon {
+  display: -webkit-inline-box;
+  position: absolute;
+  right: 11px;
+  top: 3px;
+}
+
+.fab-cart-amount-popon > * {
+  width: 1.3rem;
+  height: 1.3rem;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 15px;
+  align-content: center;
+  font-weight: 500;
+  justify-content: center;
+}
+
+@media screen and (min-width: 768px) {
+  .fab-container {
+    display: none;
+  }
+}

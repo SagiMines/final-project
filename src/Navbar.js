@@ -28,8 +28,6 @@ function Navbar() {
   };
 
   const setTheCart = async () => {
-    setCategoriesSlider();
-
     cartData.cart = await getReq(`cart/${user.userId}`);
     if (cartData.cart.length) {
       cartData.cartProducts = [];
@@ -86,15 +84,19 @@ function Navbar() {
   };
 
   useEffect(() => {
+    setCategoriesSlider();
+  }, []);
+
+  useEffect(() => {
     if (user) {
       setTheCart();
     }
-  }, []);
+  }, [user]);
 
   return (
     <header>
       {sliders && (
-        <nav className="navbar fixed-top navbar-expand-lg">
+        <nav className="navbar fixed-top navbar-expand-md">
           <div className="container-fluid">
             <Link to="/" className="navbar-brand">
               <img src="/icons/workshop-logo.png" alt="Site Logo" />
