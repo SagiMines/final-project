@@ -36,7 +36,7 @@ function WishList() {
 
   useEffect(() => {
     getUserWishList();
-  }, []);
+  }, [wishList]);
 
   return (
     <>

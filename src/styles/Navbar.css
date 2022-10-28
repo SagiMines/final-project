@@ -272,7 +272,7 @@ label {
   margin-right: 0;
 } */
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 768px) {
   .collapse-search-container {
     display: none;
   }

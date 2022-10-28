@@ -189,7 +189,7 @@ function ProductCard(props) {
   };
 
   const updateCartDetails = async reqBody => {
-    await getReq(`cart/${user.userId}`);
+    // await getReq(`cart/${user.userId}`);
     let userCart;
     do {
       userCart = await getReq(`cart/${user.userId}`);
