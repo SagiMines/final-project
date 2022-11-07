@@ -10,23 +10,51 @@ import { UserContext } from './UserContext';
 import FabContainer from './FabContainer';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
+  const [guestTotalCartItems, setGuestTotalCartItems] = useState();
+
+  const getUser = async () => {
+    const userId = await getUserIdFromCookie();
+    setUser(userId ? { userId } : null);
+    if (!userId) {
+      if (!localStorage.getItem('guestCart')) {
+        localStorage.setItem('guestCart', JSON.stringify([]));
+        setGuestTotalCartItems(0);
+      } else {
+        const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+        const cartTotalItems = guestCart.reduce((accumulator, object) => {
+          return accumulator + object.amount;
+        }, 0);
+        setGuestTotalCartItems(cartTotalItems);
+      }
+      if (!localStorage.getItem('guestWishlist')) {
+        localStorage.setItem('guestWishlist', JSON.stringify([]));
+      }
+    }
+  };
 
   useEffect(() => {
-    //get the user ID (if exists)
-    (async () => {
-      const userId = await getUserIdFromCookie();
-      setUser(userId ? { userId } : null);
-    })();
+    getUser();
   }, []);
 
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser }}>
-        <Navbar key={user ? 1 : 0} />
-        {user && user.totalCartItems > 0 && <FabContainer />}
-        {user && <RoutesManager />}
-        <Footer />
+      <UserContext.Provider
+        value={{ user, setUser, guestTotalCartItems, setGuestTotalCartItems }}
+      >
+        {(user || guestTotalCartItems >= 0) && (
+          <>
+            <Navbar key={user ? 1 : 0} />
+            {user &&
+              user.totalCartItems !== 0 &&
+              user.totalCartItems !== undefined && <FabContainer user={true} />}
+            {!user &&
+              guestTotalCartItems !== 0 &&
+              guestTotalCartItems !== undefined && <FabContainer />}
+            <RoutesManager />
+            <Footer />
+          </>
+        )}
       </UserContext.Provider>
     </Router>
   );

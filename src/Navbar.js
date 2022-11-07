@@ -1,10 +1,10 @@
 import NavSlider from './NavSlider';
 import { navSlidersData } from './data/data';
 import { Link } from 'react-router-dom';
-import { Container, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import './styles/Navbar.css';
 import { UserContext } from './UserContext';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 import SearchSlider from './SearchSlider';
 import useComponentVisible from './custom-hooks/useComponentVisible';
@@ -12,8 +12,9 @@ import useComponentVisible from './custom-hooks/useComponentVisible';
 function Navbar() {
   const [sliders, setSliders] = useState(null);
   const { user, setUser } = useContext(UserContext);
+  const { guestTotalCartItems, setGuestTotalCartItems } =
+    useContext(UserContext);
   const [cartData, setCartData] = useState({});
-  // const searchRef = useRef();
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -28,7 +29,13 @@ function Navbar() {
   };
 
   const setTheCart = async () => {
-    cartData.cart = await getReq(`cart/${user.userId}`);
+    //User
+    if (user) {
+      cartData.cart = await getReq(`cart/${user.userId}`);
+      //Guest
+    } else {
+      cartData.cart = JSON.parse(localStorage.getItem('guestCart'));
+    }
     if (cartData.cart.length) {
       cartData.cartProducts = [];
 
@@ -53,8 +60,10 @@ function Navbar() {
         const foundCart = cartData.cart.find(
           cart => cart.productId === product.id
         );
-        product.amount = foundCart.amount;
-        product.checked = foundCart.checked ? true : false;
+        if (foundCart) {
+          product.amount = foundCart.amount;
+          product.checked = foundCart.checked ? true : false;
+        }
       }
 
       cartData.totalAmount = cartData.cartProducts
@@ -70,12 +79,25 @@ function Navbar() {
         )
         .reduce((a, b) => a + b, 0);
 
-      user.totalCartItems = cartData.totalAmount;
+      //User
+      if (user) {
+        user.totalCartItems = cartData.totalAmount;
+        setUser({ ...user });
+        //Guest
+      } else {
+        setGuestTotalCartItems(cartData.totalAmount);
+      }
     } else {
-      user.totalCartItems = 0;
+      //User
+      if (user) {
+        user.totalCartItems = 0;
+        setUser({ ...user });
+        //Guest
+      } else {
+        setGuestTotalCartItems(0);
+      }
     }
     setCartData({ ...cartData });
-    setUser({ ...user });
   };
 
   const updateSearchValue = e => {
@@ -85,13 +107,8 @@ function Navbar() {
 
   useEffect(() => {
     setCategoriesSlider();
+    setTheCart();
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      setTheCart();
-    }
-  }, [user]);
 
   return (
     <header>
@@ -222,6 +239,13 @@ function Navbar() {
                     user.totalCartItems !== undefined && (
                       <div className="cart-amount-popon">
                         <Row>{user.totalCartItems}</Row>
+                      </div>
+                    )}
+                  {!user &&
+                    guestTotalCartItems !== 0 &&
+                    guestTotalCartItems !== undefined && (
+                      <div className="cart-amount-popon">
+                        <Row>{guestTotalCartItems}</Row>
                       </div>
                     )}
                 </Link>

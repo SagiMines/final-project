@@ -8,7 +8,7 @@ import XRegExp from 'xregexp';
 import MyAccountDetailsColumns from './MyAccountDetailsColumns';
 
 function MyAccount() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [userInfo, setUserInfo] = useState({});
 
   // The main funtion that changes the user data and updates the DB

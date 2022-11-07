@@ -8,36 +8,28 @@ import { useContext, useEffect, useState } from 'react';
 
 function ShoppingCart() {
   const { user, setUser } = useContext(UserContext);
+  const { setGuestTotalCartItems } = useContext(UserContext);
   let [cartData, setCartData] = useState(null);
 
   // updates the UI when the user deletes an item from the cart
   const handleDeleteClick = async e => {
-    const productId = e.target.name;
-    //updates the database
-    if (
-      await deleteReq(`cart?user-id=${user.userId}&product-id=${productId}`)
-    ) {
-      console.log('The item has been successfully deleted from the database.');
-      const filtered = cartData.cartProducts.filter(
-        product => product.id !== Number(e.target.name)
+    const productId = Number(e.target.name);
+    //User
+    if (user) {
+      let cart;
+      await deleteReq(`cart?user-id=${user.userId}&product-id=${productId}`);
+      do {
+        cart = await getReq(`cart/${user.userId}`);
+      } while (cart.find(item => item.productId === productId));
+      //Guest
+    } else {
+      const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      const filteredCart = guestCart.filter(
+        cartProduct => cartProduct.productId !== productId
       );
-      cartData.cartProducts = filtered;
-      cartData.totalAmount = cartData.cartProducts
-        .map(product => product.amount)
-        .reduce((a, b) => a + b, 0);
-      cartData.totalPrice = cartData.cartProducts
-        .map(product =>
-          product.discount
-            ? product.unitPrice * product.amount -
-              product.unitPrice * product.amount * (0.01 * product.discount)
-            : product.unitPrice * product.amount
-        )
-        .reduce((a, b) => a + b, 0);
-      setCartData({ ...cartData });
-      user.totalCartItems = cartData.totalAmount;
-
-      setUser({ ...user });
+      localStorage.setItem('guestCart', JSON.stringify(filteredCart));
     }
+    await setTheCart();
   };
 
   const handleMoveToWishlistClick = async e => {
@@ -47,30 +39,58 @@ function ShoppingCart() {
   };
 
   const addToWishlist = async productId => {
-    const reqBody = { userId: user.userId, productId };
-    const isAddedToWishlist = postReq(`wishlist`, reqBody);
-    if (isAddedToWishlist) {
-      console.log('The product was added successfully to the database.');
+    let reqBody;
+    //User
+    if (user) {
+      reqBody = { userId: user.userId, productId };
+      const isAddedToWishlist = postReq(`wishlist`, reqBody);
+      if (isAddedToWishlist) {
+        console.log('The product was added successfully to the database.');
+      } else {
+        console.log('Server error');
+      }
+      //Guest
     } else {
-      console.log('Server error');
+      reqBody = { productId };
+      const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+      guestWishlist.push(reqBody);
+      localStorage.setItem('guestWishlist', JSON.stringify(guestWishlist));
+      console.log('The product was added successfully to the database.');
     }
   };
 
   // updates the UI if the user change the amount of a product
   const handleAmountChange = async (valueAsNumber, valueAsString, input) => {
     const productId = Number(input.name);
-    //updates the database
     const currentProduct = cartData.cartProducts.find(
       product => product.id === productId
     );
-    const reqBody = {
-      userId: user.userId,
-      productId,
-      amount: valueAsNumber,
-      checked: currentProduct.checked,
-    };
-    if (await patchReq(`cart`, reqBody)) {
-      console.log('The item has been successfully updated in the database');
+    let reqBody;
+    //User
+    if (user) {
+      reqBody = {
+        userId: user.userId,
+        productId,
+        amount: valueAsNumber,
+        checked: currentProduct.checked,
+      };
+      if (await patchReq(`cart`, reqBody)) {
+        console.log('The item has been successfully updated in the database');
+      }
+      //Guest
+    } else {
+      reqBody = {
+        productId,
+        amount: valueAsNumber,
+        checked: currentProduct.checked,
+      };
+      const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      const foundCartProduct = guestCart.find(
+        cartProduct => cartProduct.productId === reqBody.productId
+      );
+      foundCartProduct.amount = reqBody.amount;
+      localStorage.setItem('guestCart', JSON.stringify(guestCart));
+      console.log('The item has been successfully updated');
     }
 
     const found = cartData.cartProducts.find(
@@ -80,36 +100,53 @@ function ShoppingCart() {
 
     if (found.checked) {
       cartData.totalAmount = cartData.cartProducts
-        .map(product => product.amount)
+        .map(product => product.checked && product.amount)
         .reduce((a, b) => a + b, 0);
 
       cartData.totalPrice = cartData.cartProducts
         .map(product =>
           product.discount
-            ? product.unitPrice * product.amount -
-              product.unitPrice * product.amount * (0.01 * product.discount)
-            : product.unitPrice * product.amount
+            ? product.checked &&
+              product.unitPrice * product.amount -
+                product.unitPrice * product.amount * (0.01 * product.discount)
+            : product.checked && product.unitPrice * product.amount
         )
         .reduce((a, b) => a + b, 0);
     }
     setCartData({ ...cartData });
 
-    user.totalCartItems = cartData.totalAmount;
-    setUser({ ...user });
+    //User
+    if (user) {
+      user.totalCartItems = cartData.totalAmount;
+      setUser({ ...user });
+      //Guest
+    } else {
+      setGuestTotalCartItems(cartData.totalAmount);
+    }
   };
 
   const setTheCart = async () => {
     cartData = {};
-    cartData.cart = await getReq(`cart/${user.userId}`);
+    //User
+    if (user) {
+      cartData.cart = await getReq(`cart/${user.userId}`);
+      //Guest
+    } else {
+      cartData.cart = JSON.parse(localStorage.getItem('guestCart'));
+    }
     cartData.cartProducts = [];
-    cartData.totalAmount = 0;
-    cartData.totalPrice = 0;
 
     if (cartData.cart) {
       for (const cart of cartData.cart) {
         const cartItem = await getReq(`products/${cart.productId}`);
         cartItem.checked = cart.checked;
-        cartData.cartProducts.push(cartItem);
+        if (
+          !cartData.cartProducts.find(
+            cartProduct => cartProduct.id === cartItem.id
+          )
+        ) {
+          cartData.cartProducts.push(cartItem);
+        }
       }
 
       for (const product of cartData.cartProducts) {
@@ -125,7 +162,8 @@ function ShoppingCart() {
       const checkedCartProducts = cartData.cartProducts.filter(
         product => product.checked
       );
-
+      cartData.totalAmount = 0;
+      cartData.totalPrice = 0;
       if (checkedCartProducts.length > 1) {
         for (const product of checkedCartProducts) {
           cartData.totalAmount += product.amount;
@@ -144,13 +182,25 @@ function ShoppingCart() {
               (0.01 * checkedCartProducts[0].discount)
           : checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount;
       }
-      user.totalCartItems = cartData.totalAmount;
+      //User
+      if (user) {
+        user.totalCartItems = cartData.totalAmount;
+        setUser({ ...user });
+        //Guest
+      } else {
+        setGuestTotalCartItems(cartData.totalAmount);
+      }
     } else {
-      user.totalCartItems = 0;
+      //User
+      if (user) {
+        user.totalCartItems = 0;
+        setUser({ ...user });
+        //Guest
+      } else {
+        setGuestTotalCartItems(0);
+      }
     }
-
     setCartData({ ...cartData });
-    setUser({ ...user });
   };
 
   useEffect(() => {
