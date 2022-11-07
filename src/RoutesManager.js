@@ -15,8 +15,10 @@ import MyAccount from './MyAccount';
 import MyOrders from './MyOrders';
 import EmailConfirmationPage from './EmailConfirmationPage';
 import { Routes, Route } from 'react-router-dom';
-
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
 function RoutesManager() {
+  const { user } = useContext(UserContext);
   return (
     <Routes>
       <Route path="/" exact element={<HomePage />} />
@@ -68,21 +70,27 @@ function RoutesManager() {
         path="/change-password-success"
         element={<PasswordChangeSuccess />}
       />
-      <Route
-        //needs to change to add the user's ID
-        path="/my-account"
-        element={<MyAccount />}
-      />
-      <Route
-        //needs to change to add the user's ID
-        path="/change-password"
-        element={<ChangePassword page="update" />}
-      />
-      <Route
-        //needs to change to add the user's ID/orders ID
-        path="/my-orders"
-        element={<MyOrders />}
-      />
+      {user && (
+        <Route
+          //needs to change to add the user's ID
+          path="/my-account"
+          element={<MyAccount />}
+        />
+      )}
+      {user && (
+        <Route
+          //needs to change to add the user's ID
+          path="/change-password"
+          element={<ChangePassword page="update" />}
+        />
+      )}
+      {user && (
+        <Route
+          //needs to change to add the user's ID/orders ID
+          path="/my-orders"
+          element={<MyOrders />}
+        />
+      )}
       <Route path="/categories/:id" element={<CategoryPage />} />
       <Route
         //needs to change to add the user's ID/orders ID

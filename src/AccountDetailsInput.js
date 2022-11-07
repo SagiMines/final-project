@@ -1,12 +1,16 @@
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import countryList from 'country-list';
 import SelectForm from './SelectForm';
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
 
 function AccountDetailsInput(props) {
+  const { user } = useContext(UserContext);
   return (
     <InputGroup className="mb-3">
       {props.placeHolder !== 'Country' && (
         <Form.Control
+          name={!user ? props.inputKey : undefined}
           className="update-value"
           placeholder={props.placeHolder}
           onChange={props.onChange}
@@ -23,7 +27,7 @@ function AccountDetailsInput(props) {
           defaultValue={props.currentValue ? props.currentValue : ''}
         />
       )}
-      <Button onClick={props.onClick}>Update</Button>
+      {user && <Button onClick={props.onClick}>Update</Button>}
     </InputGroup>
   );
 }

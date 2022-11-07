@@ -5,14 +5,24 @@ import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 
 function WishList() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [wishList, setWishList] = useState(null);
 
   const getUserWishList = async () => {
-    const newWishList = await getReq(`wishlist?user-id=${user.userId}`);
+    let newWishList;
+    if (user) {
+      newWishList = await getReq(`wishlist?user-id=${user.userId}`);
+    } else {
+      newWishList = JSON.parse(localStorage.getItem('guestWishlist'));
+    }
+    const wishListProductsArray = await generateWishlistProducts(newWishList);
+    setWishList(wishListProductsArray);
+  };
+
+  const generateWishlistProducts = async wishlist => {
     const wishListProductsArray = [];
-    if (newWishList.length > 0) {
-      for (const wishListProduct of newWishList) {
+    if (wishlist.length > 0) {
+      for (const wishListProduct of wishlist) {
         const product = await getProductById(wishListProduct.productId);
         const productImageSrc = await getProductImageById(
           wishListProduct.productId
@@ -21,7 +31,7 @@ function WishList() {
         wishListProductsArray.push(product);
       }
     }
-    setWishList(wishListProductsArray);
+    return wishListProductsArray;
   };
 
   const getProductById = async id => {
@@ -36,7 +46,7 @@ function WishList() {
 
   useEffect(() => {
     getUserWishList();
-  }, [wishList]);
+  }, []);
 
   return (
     <>
@@ -56,6 +66,7 @@ function WishList() {
                 page="wishlist"
                 wishListItem={wishListItem}
                 wishListRender={{ wishList, setWishList }}
+                generateWishlistProducts={generateWishlistProducts}
               />
             ))}
         </div>

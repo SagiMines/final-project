@@ -3,7 +3,7 @@ import { getUserIdFromCookie, postReq } from './DAL/serverData';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 function NavSlider(props) {
   const { user, setUser } = useContext(UserContext);
@@ -13,9 +13,15 @@ function NavSlider(props) {
     const userId = await getUserIdFromCookie();
     const isValid = await postReq('logout', { userId });
     if (isValid) {
-      setUser(null);
+      if (!localStorage.getItem('guestCart')) {
+        localStorage.setItem('guestCart', JSON.stringify([]));
+      }
+      if (!localStorage.getItem('guestWishlist')) {
+        localStorage.setItem('guestWishlist', JSON.stringify([]));
+      }
       Cookies.remove('user_id');
       Cookies.remove('connect.sid');
+      setUser(null);
       navigate('/');
     }
   };

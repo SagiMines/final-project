@@ -6,7 +6,7 @@ import { getReq } from './DAL/serverData';
 import { Container } from 'react-bootstrap';
 
 function MyOrders() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [orders, setOrders] = useState();
 
   const getUserOrders = async () => {

@@ -10,7 +10,7 @@ import { useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
 
 function CategoryPage() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { id } = useParams();
   const [state, setState] = useState();
   // Handles the rendering of the SortBy component
@@ -36,8 +36,14 @@ function CategoryPage() {
     const category = await getReq(`categories/${id}`);
     const products = await getReq(`products?category-id=${id}`);
     await attachImagesToProducts(products);
-    const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
-    setState({ products, category, userWishlist });
+    let wishlist;
+    if (user) {
+      wishlist = await getReq(`wishlist?user-id=${user.userId}`);
+    } else if (localStorage.getItem('guestWishlist')) {
+      wishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+    }
+
+    setState({ products, category, userWishlist: wishlist });
   };
 
   // Attaches images to the products

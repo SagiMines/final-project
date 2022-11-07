@@ -4,7 +4,7 @@ import './styles/TopProducts.css';
 import { useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 
-function TopProducts(props) {
+function TopProducts() {
   const [topProducts, setTopProducts] = useState();
 
   const getTopProducts = async () => {
@@ -28,9 +28,11 @@ function TopProducts(props) {
       <Row>
         <label className="top-products-text">Top Products</label>
       </Row>
-      <Row>
-        <ProductCarousel topProducts={topProducts} />
-      </Row>
+      {topProducts && (
+        <Row>
+          <ProductCarousel topProducts={topProducts} />
+        </Row>
+      )}
     </div>
   );
 }

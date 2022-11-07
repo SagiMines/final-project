@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ChangePassword(props) {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [values, setValues] = useState({
     oldPassword: {
       value: null,
@@ -46,6 +46,8 @@ function ChangePassword(props) {
           values.verifyPassword.error = null;
         }
         break;
+      default:
+        console.log('Wrong input');
     }
     setValues({ ...values });
   };

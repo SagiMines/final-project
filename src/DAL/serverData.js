@@ -56,16 +56,24 @@ export const getReq = async route => {
   const req = await fetch(`http://localhost:8000/api/${route}`, {
     credentials: 'include',
   });
-  const ans = await req.json();
-  return ans;
+  try {
+    const ans = await req.json();
+    return ans;
+  } catch {
+    return undefined;
+  }
 };
 
 export const getUserIdFromCookie = async () => {
-  try {
-    const cookieValue = encodeURIComponent(Cookies.get('user_id'));
-    const userId = await getReq(`login/${cookieValue}`);
-    return userId;
-  } catch {
+  if (Cookies.get('user_id')) {
+    try {
+      const cookieValue = encodeURIComponent(Cookies.get('user_id'));
+      const userId = await getReq(`login/${cookieValue}`);
+      return userId;
+    } catch {
+      return false;
+    }
+  } else {
     return false;
   }
 };

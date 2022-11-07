@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function ProductCard(props) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const { setGuestTotalCartItems } = useContext(UserContext);
   const [productsAmount, setProductsAmount] = useState({});
   const [checkClick, setCheckClick] = useState({});
   const [state, setState] = useState({});
@@ -58,19 +59,38 @@ function ProductCard(props) {
     }
 
     props.cartState.setCartData({ ...props.cartState.cartData });
-    user.totalCartItems = props.cartState.cartData.totalAmount;
     checkClick.isChecked = !checkClick.isChecked;
     setCheckClick({ ...checkClick });
-    setUser({ ...user });
-    const reqBody = {
-      userId: user.userId,
-      productId: props.currentProduct.id,
-      amount: props.currentProduct.amount,
-      checked: checkClick.isChecked,
-    };
-    const isCartUpdated = await patchReq(`cart`, reqBody);
-    if (isCartUpdated) {
-      console.log('Successfully updated the database.');
+    let reqBody;
+    //User
+    if (user) {
+      reqBody = {
+        userId: user.userId,
+        productId: props.currentProduct.id,
+        amount: props.currentProduct.amount,
+        checked: checkClick.isChecked,
+      };
+
+      const isCartUpdated = await patchReq(`cart`, reqBody);
+      if (isCartUpdated) {
+        console.log('Successfully updated the database.');
+      }
+      user.totalCartItems = props.cartState.cartData.totalAmount;
+      setUser({ ...user });
+      //Guest
+    } else {
+      reqBody = {
+        productId: props.currentProduct.id,
+        amount: props.currentProduct.amount,
+        checked: checkClick.isChecked,
+      };
+      const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      const foundCartProduct = guestCart.find(
+        cartProduct => cartProduct.productId === reqBody.productId
+      );
+      foundCartProduct.checked = reqBody.checked;
+      localStorage.setItem('guestCart', JSON.stringify(guestCart));
+      setGuestTotalCartItems(props.cartState.cartData.totalAmount);
     }
   };
 
@@ -79,22 +99,30 @@ function ProductCard(props) {
     productsAmount[e.target.value] = productsAmount[e.target.value]
       ? productsAmount[e.target.value]
       : 1;
-    localStorage.setItem(
-      'buy-now',
-      JSON.stringify({
+    let reqBody;
+    if (user) {
+      reqBody = {
         userId: user.userId,
         productId: e.target.value,
         amount: productsAmount[e.target.value],
-      })
-    );
+      };
+      //Guest
+    } else {
+      reqBody = {
+        productId: e.target.value,
+        amount: productsAmount[e.target.value],
+      };
+    }
+    localStorage.setItem('buy-now', JSON.stringify(reqBody));
     navigate('/review-order');
   };
 
   // Handles a user click on an unfilled heart and adds the clcked product to the wishlist
   const handleAddToWishlist = async e => {
+    const productId = Number(e.target.slot);
+    let reqBody;
     if (user) {
-      const productId = Number(e.target.slot);
-      const reqBody = { userId: user.userId, productId };
+      reqBody = { userId: user.userId, productId };
       const isAddedToWishList = await postReq('wishlist', reqBody);
       if (isAddedToWishList) {
         if (props.page === 'category') {
@@ -127,20 +155,55 @@ function ProductCard(props) {
           'The item was added successfully to the wishlist database.'
         );
         //changes the heart icon
-        state.isInWishList = true;
-        setState({ ...state });
+        // state.isInWishList = true;
+        // setState({ ...state });
       } else {
         console.log('Could not fetch productData from the server');
       }
     } else {
       // local storage to guest users
+      reqBody = { productId };
+      const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+      const isProductInWishlist = guestWishlist.find(
+        item => item.productId === productId
+      );
+      if (!isProductInWishlist) {
+        guestWishlist.push(reqBody);
+        localStorage.setItem('guestWishlist', JSON.stringify(guestWishlist));
+        if (props.page === 'category') {
+          props.productsState.state.userWishlist = guestWishlist;
+          props.productsState.setState({ ...props.productsState.state });
+        }
+      } else {
+        return;
+      }
+      const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      const isProductInCart = guestCart.find(
+        cartProduct => cartProduct.productId === productId
+      );
+      if (isProductInCart) {
+        const filteredCart = guestCart.filter(
+          cartProduct => cartProduct.productId !== productId
+        );
+        localStorage.setItem('guestCart', JSON.stringify(filteredCart));
+        const cartTotalItems = filteredCart.reduce((accumulator, object) => {
+          return accumulator + object.amount;
+        }, 0);
+        setGuestTotalCartItems(cartTotalItems);
+      }
     }
+    //changes the heart icon
+    state.isInWishList = true;
+    setState({ ...state });
   };
 
   const handleDeleteFromWishList = async e => {
-    const productId = Number(e.target.slot);
-    //Delete from the wishlist page
-    if (props.wishListItem) {
+    const productId =
+      props.page !== 'wishlist'
+        ? Number(e.target.slot)
+        : Number(e.target.value);
+    //Delete from the wishlist page with a user
+    if (props.wishListItem && user) {
       await deleteReq(
         `wishlist?user-id=${user.userId}&product-id=${props.wishListItem.id}`
       );
@@ -148,16 +211,14 @@ function ProductCard(props) {
       do {
         products = await getReq(`wishlist?user-id=${user.userId}`);
       } while (
-        props.wishListRender.wishList.find(
-          wishlistItem =>
-            wishlistItem.userId === user.userId &&
-            wishlistItem.productId === productId
-        )
+        products.find(wishlistItem => wishlistItem.productId === productId)
       );
+      const wishlistProducts = await props.generateWishlistProducts(products);
 
-      props.wishListRender.setWishList([...products]);
-      //Delete from products page
-    } else {
+      props.wishListRender.setWishList([...wishlistProducts]);
+    }
+    //Delete from products page
+    else if (user) {
       const isDeletedFromWishlist = await deleteReq(
         `wishlist?user-id=${user.userId}&product-id=${productId}`
       );
@@ -169,12 +230,9 @@ function ProductCard(props) {
             );
           } while (
             props.productsState.state.userWishlist.find(
-              wishListItem =>
-                wishListItem.userId === user.userId &&
-                wishListItem.productId === productId
+              wishListItem => wishListItem.productId === productId
             )
           );
-          props.productsState.setState({ ...props.productsState.state });
         }
         console.log(
           'The item was deleted successfully from the wishlist database.'
@@ -185,6 +243,27 @@ function ProductCard(props) {
       } else {
         console.log('Could not fetch productData from the server');
       }
+      //Delete from the wishlist page with a guest
+    } else {
+      const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+      const filteredWishlist = guestWishlist.filter(
+        wishlistProduct => wishlistProduct.productId !== productId
+      );
+      const wishlistProducts = await props.generateWishlistProducts(
+        filteredWishlist
+      );
+      localStorage.setItem('guestWishlist', JSON.stringify(filteredWishlist));
+      if (props.wishListItem) {
+        props.wishListRender.setWishList([...wishlistProducts]);
+      } else {
+        if (props.page === 'category') {
+          props.productsState.state.userWishlist = filteredWishlist;
+          props.productsState.setState({ ...props.productsState.state });
+        }
+        //changes the heart icon
+        state.isInWishList = false;
+        setState({ ...state });
+      }
     }
   };
 
@@ -194,23 +273,20 @@ function ProductCard(props) {
     do {
       userCart = await getReq(`cart/${user.userId}`);
     } while (
-      userCart.find(
-        cartItem =>
-          cartItem.userId !== reqBody.userId &&
-          cartItem.productId !== reqBody.productId
-      )
+      !userCart.find(cartItem => cartItem.productId === reqBody.productId)
     );
-
-    const cartItemsAmount = userCart.reduce((a, b) => a + b.amount, 0);
+    const filteredCart = userCart.filter(cartItem => cartItem.checked);
+    const cartItemsAmount = filteredCart.reduce((a, b) => a + b.amount, 0);
 
     return cartItemsAmount;
   };
 
   const handleAddToCart = async e => {
+    const productId = Number(e.target.value);
+    const amount = productsAmount[productId] ? productsAmount[productId] : 1;
+    let reqBody;
     if (user) {
-      const productId = Number(e.target.value);
-      const amount = productsAmount[productId] ? productsAmount[productId] : 1;
-      const reqBody = { userId: user.userId, productId, amount, checked: true };
+      reqBody = { userId: user.userId, productId, amount, checked: true };
       const isCartUpdated = await postReq('cart', reqBody);
       if (isCartUpdated) {
         user.totalCartItems = await updateCartDetails(reqBody);
@@ -224,6 +300,7 @@ function ProductCard(props) {
             await deleteReq(
               `wishlist?user-id=${user.userId}&product-id=${productId}`
             );
+
             state.isInWishList = !state.isInWishList;
             setState({ ...state });
           }
@@ -236,13 +313,60 @@ function ProductCard(props) {
       } else {
         console.log('Could not fetch productData from the server');
       }
+    } else {
+      // Guest handler
+      reqBody = { productId, amount, checked: true };
+      const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      const isProductInCart = guestCart.find(
+        cartItem => cartItem.productId === productId
+      );
+      if (isProductInCart) {
+        isProductInCart.amount = amount;
+        isProductInCart.checked = true;
+      } else {
+        guestCart.push(reqBody);
+      }
+      localStorage.setItem('guestCart', JSON.stringify(guestCart));
+      const cartTotalItems = guestCart.reduce((accumulator, object) => {
+        return accumulator + object.amount;
+      }, 0);
+      setGuestTotalCartItems(cartTotalItems);
+      // If the product is in the wishlist also we need to delete it
+      if (props.page === 'category' || props.page === 'product-page') {
+        const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+        const isProductInWishlist = guestWishlist.find(
+          wishlistProduct => wishlistProduct.productId === productId
+        );
+        if (isProductInWishlist) {
+          const filteredWishlist = guestWishlist.filter(
+            wishlistProduct => wishlistProduct.productId !== productId
+          );
+          localStorage.setItem(
+            'guestWishlist',
+            JSON.stringify(filteredWishlist)
+          );
+          state.isInWishList = !state.isInWishList;
+          setState({ ...state });
+        }
+      }
+      if (props.page === 'wishlist') {
+        await handleDeleteFromWishList(e);
+      }
     }
   };
 
   const isProductInWishlist = async productId => {
-    const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
-    const isProductInWishlist = userWishlist.find(
-      wishlistData => wishlistData.productId === productId
+    let wishlist;
+    if (user) {
+      wishlist = await getReq(`wishlist?user-id=${user.userId}`);
+    } else if (localStorage.getItem('guestWishlist')) {
+      wishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+    } else {
+      wishlist = [];
+    }
+
+    const isProductInWishlist = wishlist.find(
+      wishlistItem => wishlistItem.productId === productId
     );
 
     if (isProductInWishlist) {
@@ -254,28 +378,45 @@ function ProductCard(props) {
   };
 
   const setCartCheckBox = async () => {
-    const userCart = await getReq(`cart/${user.userId}`);
-    const currentProduct = userCart.find(
+    let cart;
+    //User
+    if (user) {
+      cart = await getReq(`cart/${user.userId}`);
+      //Guest
+    } else {
+      cart = JSON.parse(localStorage.getItem('guestCart'));
+    }
+
+    const currentProduct = cart.find(
       cartItem => cartItem.productId === props.currentProduct.id
     );
-
-    checkClick.isChecked = currentProduct.checked;
+    if (currentProduct) {
+      checkClick.isChecked = currentProduct.checked;
+    }
 
     setCheckClick({ ...checkClick });
   };
 
   useEffect(() => {
+    if (props.page === 'cart') {
+      setCartCheckBox();
+      if (props.currentProduct && props.currentProduct.checked === undefined) {
+        props.currentProduct.checked = true;
+        setCheckClick(props.currentProduct.checked);
+      }
+    }
+  }, [props.currentProduct]);
+
+  useEffect(() => {
+    // Checks on every product change if it is in the wishlist
+    if (props.page === 'category') {
+      isProductInWishlist(props.product.id);
+    }
+  }, [props.product]);
+
+  useEffect(() => {
     if (props.page === 'product-page') {
       isProductInWishlist(props.productData.id);
-    } else if (props.page === 'category') {
-      isProductInWishlist(props.product.id);
-    } else if (props.page === 'cart') {
-      setCartCheckBox();
-    }
-
-    if (props.currentProduct && props.currentProduct.checked === undefined) {
-      props.currentProduct.checked = true;
-      setCheckClick(props.currentProduct.checked);
     }
   }, []);
 

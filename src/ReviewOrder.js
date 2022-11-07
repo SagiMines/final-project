@@ -5,14 +5,19 @@ import ShippingDetailsCard from './ShippingDetailsCard';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
 import './styles/ReviewOrder.css';
-import { patchReq, getReq } from './DAL/serverData';
+import { getReq, patchReq, postReq } from './DAL/serverData';
+import { useLocation } from 'react-router-dom';
 
 function ReviewOrder() {
-  const { user, setUser } = useContext(UserContext);
+  const { state } = useLocation();
+  const { user } = useContext(UserContext);
   const [buyNow, setBuyNow] = useState({
     buyNowData: JSON.parse(localStorage.getItem('buy-now')),
   });
   const [cartReview, setCartReview] = useState({});
+  const [guestShippingDetails, setGuestShippingDetails] = useState();
+  const [areGuestDetailsCompleted, setAreGuestDetailsCompleted] =
+    useState(false);
 
   const getPriceForBuyNow = () => {
     let totalPrice = buyNow.buyNowProduct.discount
@@ -23,7 +28,14 @@ function ReviewOrder() {
   };
 
   const setReviewCart = async () => {
-    const cart = await getReq(`cart/${user.userId}`);
+    let cart;
+    //User
+    if (user) {
+      cart = await getReq(`cart/${user.userId}`);
+      //Guest
+    } else {
+      cart = JSON.parse(localStorage.getItem('guestCart'));
+    }
     const checkedCartProducts = cart.filter(cartProduct => cartProduct.checked);
     cartReview.finalCart = [];
 
@@ -59,6 +71,28 @@ function ReviewOrder() {
     setCartReview({ ...cartReview });
   };
 
+  const handleGuestSavedOrder = async () => {
+    const savedGuestOrder = state;
+    let userCart;
+    userCart = await getReq(`cart/${user.userId}`);
+    if (userCart.length) {
+      for (const item of userCart) {
+        item.checked = false;
+        const isCartUpdated = await patchReq(`cart`, item);
+        if (isCartUpdated) {
+          console.log('Successfully updated the cart.');
+        }
+      }
+    }
+    for (const item of savedGuestOrder) {
+      const isAddedToCart = await postReq(`cart`, item);
+      if (isAddedToCart) {
+        console.log('Successfully updated the cart.');
+      }
+    }
+    // localStorage.removeItem('savedGuestOrder');
+  };
+
   const setReview = async () => {
     if (buyNow.buyNowData) {
       localStorage.removeItem('buy-now');
@@ -72,50 +106,39 @@ function ReviewOrder() {
       buyNow.buyNowProduct.checked = true;
       setBuyNow({ ...buyNow });
     } else {
+      if (state) {
+        await handleGuestSavedOrder();
+      }
       await setReviewCart();
       getTheCartDetails();
     }
   };
 
-  const handleAmountChange = async (valueAsNumber, valueAsString, input) => {
-    const productId = Number(input.name);
-    //updates the database
-    const currentProduct = cartReview.finalCart.find(
-      product => product.id === productId
+  const areDetailsOkay = () => {
+    const guestInputValues = Object.values(guestShippingDetails).filter(
+      value => value.value.length === 0
     );
-    const reqBody = {
-      userId: user.userId,
-      productId,
-      amount: valueAsNumber,
-      checked: currentProduct.checked,
-    };
-    if (await patchReq(`cart`, reqBody)) {
-      console.log('The item has been successfully updated in the database');
+
+    const guestInputError = Object.values(guestShippingDetails).filter(
+      value => value.errorMessage !== null
+    );
+
+    if (guestInputValues.length === 0 && guestInputError.length === 0) {
+      setAreGuestDetailsCompleted(true);
+    } else {
+      setAreGuestDetailsCompleted(false);
     }
-
-    const found = cartReview.finalCart.find(
-      product => product.id === productId
-    );
-    found.amount = valueAsNumber;
-
-    cartReview.totalCartItems = cartReview.finalCart
-      .map(product => product.amount)
-      .reduce((a, b) => a + b, 0);
-
-    cartReview.totalCartPrice = cartReview.finalCart
-      .map(product =>
-        product.discount
-          ? product.unitPrice * product.amount -
-            product.unitPrice * product.amount * (0.01 * product.discount)
-          : product.unitPrice * product.amount
-      )
-      .reduce((a, b) => a + b, 0);
-
-    setCartReview({ ...cartReview });
-
-    user.totalCartItems = cartReview.totalCartItems;
-    setUser({ ...user });
   };
+
+  useEffect(() => {
+    if (guestShippingDetails) {
+      areDetailsOkay();
+    }
+  }, [guestShippingDetails]);
+
+  useEffect(() => {
+    setReview();
+  }, [state]);
 
   useEffect(() => {
     setReview();
@@ -123,7 +146,16 @@ function ReviewOrder() {
   return (
     <div className="container review-container">
       <h1 className="review-title">Review Your Order</h1>
-      <ShippingDetailsCard page="review" />
+      {!user && (
+        <ShippingDetailsCard
+          guestShippingDetailsState={{
+            guestShippingDetails,
+            setGuestShippingDetails,
+          }}
+          page="review"
+        />
+      )}
+      {user && <ShippingDetailsCard page="review" />}
       <Row className="review-data">
         <Col md>
           {!buyNow.buyNowData &&
@@ -133,7 +165,7 @@ function ReviewOrder() {
                 page="review"
                 key={idx.toString()}
                 currentProduct={cart}
-                onAmountChange={handleAmountChange}
+                // onAmountChange={handleAmountChange}
               />
             ))}
           {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
@@ -141,19 +173,39 @@ function ReviewOrder() {
           )}
         </Col>
         <Col md>
-          <CheckoutCard
-            page="review"
-            cartSummary={{
-              totalAmount: buyNow.buyNowProduct
-                ? buyNow.buyNowProduct.amount
-                : cartReview.totalCartItems,
-              totalPrice: buyNow.buyNowProduct
-                ? getPriceForBuyNow()
-                : cartReview.totalCartPrice,
-              cart: cartReview.finalCart,
-            }}
-            buyNowProduct={buyNow.buyNowProduct}
-          />
+          {!user && (
+            <CheckoutCard
+              page="review"
+              guestShippingDetailsState={
+                areGuestDetailsCompleted ? guestShippingDetails : undefined
+              }
+              cartSummary={{
+                totalAmount: buyNow.buyNowProduct
+                  ? buyNow.buyNowProduct.amount
+                  : cartReview.totalCartItems,
+                totalPrice: buyNow.buyNowProduct
+                  ? getPriceForBuyNow()
+                  : cartReview.totalCartPrice,
+                cart: cartReview.finalCart,
+              }}
+              buyNowProduct={buyNow.buyNowProduct}
+            />
+          )}
+          {user && (
+            <CheckoutCard
+              page="review"
+              cartSummary={{
+                totalAmount: buyNow.buyNowProduct
+                  ? buyNow.buyNowProduct.amount
+                  : cartReview.totalCartItems,
+                totalPrice: buyNow.buyNowProduct
+                  ? getPriceForBuyNow()
+                  : cartReview.totalCartPrice,
+                cart: cartReview.finalCart,
+              }}
+              buyNowProduct={buyNow.buyNowProduct}
+            />
+          )}
         </Col>
       </Row>
     </div>
