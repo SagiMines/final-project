@@ -3,7 +3,7 @@ import Order from './Order';
 import { UserContext } from './UserContext';
 import { useState, useEffect, useContext } from 'react';
 import { getReq } from './DAL/serverData';
-import { Container } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 
 function MyOrders() {
   const { user } = useContext(UserContext);
@@ -11,18 +11,21 @@ function MyOrders() {
 
   const getUserOrders = async () => {
     const userOrders = await getReq(`orders/${user.userId}`);
+
     const ordersArr = [];
-    for (const order of userOrders) {
-      const orderData = await getReq(`orders/${order.id}?join=true`);
-      for (const details of orderData.orderDetails) {
-        details.productImage = (
-          await getReq(`product-images/${details.productId}`)
-        )[0].imageSrc;
-        details.productName = (
-          await getReq(`products/${details.productId}`)
-        ).productName;
+    if (userOrders) {
+      for (const order of userOrders) {
+        const orderData = await getReq(`orders/${order.id}?join=true`);
+        for (const details of orderData.orderDetails) {
+          details.productImage = (
+            await getReq(`product-images/${details.productId}`)
+          )[0].imageSrc;
+          details.productName = (
+            await getReq(`products/${details.productId}`)
+          ).productName;
+        }
+        ordersArr.push(orderData);
       }
-      ordersArr.push(orderData);
     }
     setOrders([...ordersArr]);
   };
@@ -36,6 +39,15 @@ function MyOrders() {
       {!orders && (
         <Container className="loading-icon">
           <img src="/icons/loading.gif"></img>
+        </Container>
+      )}
+      {orders && !orders.length && (
+        <Container>
+          <Card>
+            <Card.Body>
+              <Card.Title>You haven't made any orders yet</Card.Title>
+            </Card.Body>
+          </Card>
         </Container>
       )}
       {orders &&

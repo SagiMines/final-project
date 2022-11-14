@@ -3,18 +3,26 @@ import { getUserIdFromCookie, postReq } from './DAL/serverData';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 function NavSlider(props) {
   const { user, setUser } = useContext(UserContext);
-
+  const { setGuestTotalCartItems } = useContext(UserContext);
   const navigate = useNavigate();
+
   const logOut = async () => {
-    const userId = await getUserIdFromCookie();
+    const userId = user.userId;
     const isValid = await postReq('logout', { userId });
     if (isValid) {
       if (!localStorage.getItem('guestCart')) {
         localStorage.setItem('guestCart', JSON.stringify([]));
+        setGuestTotalCartItems(0);
+      } else {
+        const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+        const cartTotalItems = guestCart.reduce((accumulator, object) => {
+          return accumulator + object.amount;
+        }, 0);
+        setGuestTotalCartItems(cartTotalItems);
       }
       if (!localStorage.getItem('guestWishlist')) {
         localStorage.setItem('guestWishlist', JSON.stringify([]));

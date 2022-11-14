@@ -492,16 +492,15 @@ function ProductCard(props) {
                   {props.product && props.product.discount ? (
                     <>
                       <span className="old-price">
-                        {props.product.unitPrice}$
+                        ${props.product.unitPrice}
                       </span>
-                      {` ${
+                      {` $${+(
                         props.product.unitPrice -
                         props.product.unitPrice * props.product.discount * 0.01
-                      }`}
-                      $
+                      ).toFixed(2)}`}
                     </>
                   ) : (
-                    `${props.product ? `${props.product.unitPrice}$` : '20$'}`
+                    `$${props.product.unitPrice}`
                   )}
                 </Card.Text>
               </Row>
@@ -586,35 +585,35 @@ function ProductCard(props) {
                       <Card.Text className="price-section-category">
                         {props.currentProduct.discount ? (
                           <span>
-                            {`${
+                            {`$${
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount -
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount *
                                 (0.01 * props.currentProduct.discount)
-                            }$ `}
+                            } `}
                             <span className="old-price">
-                              {`${
+                              {`$${
                                 props.currentProduct.unitPrice *
                                 props.currentProduct.amount
-                              }$`}
+                              }`}
                             </span>
                           </span>
                         ) : (
                           <span>
-                            {` ${
+                            {` $${
                               props.currentProduct.unitPrice *
                               props.currentProduct.amount
-                            }$`}
+                            }`}
                           </span>
                         )}
-                        <span className="price-per-unit">{` (${
+                        <span className="price-per-unit">{` ($${
                           props.currentProduct.discount
                             ? props.currentProduct.unitPrice -
                               props.currentProduct.unitPrice *
                                 (0.01 * props.currentProduct.discount)
                             : props.currentProduct.unitPrice
-                        }$ for 1 unit)`}</span>
+                        } for 1 unit)`}</span>
                       </Card.Text>
                     </Row>
 
@@ -672,35 +671,35 @@ function ProductCard(props) {
                       <Card.Text className="price-section-review">
                         {props.currentProduct.discount ? (
                           <span>
-                            {`${
+                            {`$${
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount -
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount *
                                 (0.01 * props.currentProduct.discount)
-                            }$ `}
+                            } `}
                             <span className="old-price">
-                              {`${
+                              {`$${
                                 props.currentProduct.unitPrice *
                                 props.currentProduct.amount
-                              }$`}
+                              }`}
                             </span>
                           </span>
                         ) : (
                           <span>
-                            {` ${
+                            {` $${
                               props.currentProduct.unitPrice *
                               props.currentProduct.amount
-                            }$`}
+                            }`}
                           </span>
                         )}
-                        <span className="price-per-unit">{` (${
+                        <span className="price-per-unit">{` ($${
                           props.currentProduct.discount
                             ? props.currentProduct.unitPrice -
                               props.currentProduct.unitPrice *
                                 (0.01 * props.currentProduct.discount)
                             : props.currentProduct.unitPrice
-                        }$ for 1 unit)`}</span>
+                        } for 1 unit)`}</span>
                       </Card.Text>
                     </Col>
                   </Row>
@@ -734,10 +733,9 @@ function ProductCard(props) {
                 </Col>
                 <Col>
                   <Card.Text className="order-confirmation-float-right-price order-product-total-price">
-                    Total Price:{' '}
+                    Total Price: $
                     {props.purchasedProduct &&
                       props.purchasedProduct.finalPrice}
-                    $
                   </Card.Text>
                 </Col>
               </Row>
@@ -767,16 +765,16 @@ function ProductCard(props) {
                       {props.orderDetails.finalPrice /
                         props.orderDetails.amount ===
                       props.orderDetails.unitPrice ? (
-                        `${props.orderDetails.unitPrice}$`
+                        `$${props.orderDetails.unitPrice}`
                       ) : (
                         <span>
                           <span className="old-price">
-                            {`${props.orderDetails.unitPrice}$`}
+                            {`$${props.orderDetails.unitPrice}`}
                           </span>
-                          {` ${
+                          {` $${
                             props.orderDetails.finalPrice /
                             props.orderDetails.amount
-                          }$`}
+                          }`}
                         </span>
                       )}
                     </Card.Text>
@@ -786,7 +784,7 @@ function ProductCard(props) {
                   </Col>
                   <Col sm={12} md={12} lg={4}>
                     <Card.Text className="order-product-total-price">
-                      Total Price: {props.orderDetails.finalPrice}$
+                      Total Price: ${props.orderDetails.finalPrice}
                     </Card.Text>
                   </Col>
                 </Row>
@@ -822,17 +820,17 @@ function ProductCard(props) {
               <Card.Title className="price">
                 {props.productData.discount ? (
                   <>
-                    Price: <span>{props.productData.unitPrice}$</span>
-                    {` ${
+                    Price: <span>${props.productData.unitPrice}</span>
+                    {` $${
                       props.productData.unitPrice -
                       props.productData.unitPrice *
                         props.productData.discount *
                         0.01
                     }`}
-                    $ ({props.productData.discount}% discount)
+                    ({props.productData.discount}% discount)
                   </>
                 ) : (
-                  `Price: ${props.productData.unitPrice}$`
+                  `Price: $${props.productData.unitPrice}`
                 )}
               </Card.Title>
               <Row className="buttons">

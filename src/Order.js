@@ -24,11 +24,10 @@ function Order(props) {
               .join('/')}
           </Card.Title>
           <Card.Title>
-            Total purchase:{' '}
+            Total purchase: $
             {props.order.orderDetails.length > 1
               ? props.order.orderDetails.reduce((a, b) => a + b.finalPrice, 0)
               : props.order.orderDetails[0].finalPrice}
-            $
           </Card.Title>
         </section>
       </Card.Body>

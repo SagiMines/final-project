@@ -24,7 +24,7 @@ function ReviewOrder() {
       ? buyNow.buyNowProduct.unitPrice -
         buyNow.buyNowProduct.unitPrice * (0.01 * buyNow.buyNowProduct.discount)
       : buyNow.buyNowProduct.unitPrice;
-    return totalPrice * buyNow.buyNowProduct.amount;
+    return +(totalPrice * buyNow.buyNowProduct.amount).toFixed(2);
   };
 
   const setReviewCart = async () => {
