@@ -95,6 +95,8 @@ function MyAccount() {
           updateUserData();
         }
         break;
+      default:
+        console.log('Wrong input');
     }
   };
 

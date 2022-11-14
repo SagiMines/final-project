@@ -174,6 +174,8 @@ function ShippingDetailsCard(props) {
             userInfo.changeInputValue
           )
         );
+      default:
+        console.log('Wrong input');
 
         updateUserData();
     }

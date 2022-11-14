@@ -34,14 +34,57 @@ function CheckoutCard(props) {
           const isOrderDetailsUpdated = await addOrderDetailsToDb(
             userLastOrderId
           );
+
           if (isOrderDetailsUpdated) {
             const areOrderedCartItemsDeleted = props.buyNowProduct
               ? true
               : await deleteOrderedCartItems();
             user.totalCartItems = props.buyNowProduct ? user.totalCartItems : 0;
             setUser({ ...user });
+
             if (areOrderedCartItemsDeleted) {
-              navigate('/order-confirmation');
+              let cartTotalWithoutDiscount;
+              let cartTotalWithDiscount;
+              if (props.cartSummary.cart) {
+                cartTotalWithoutDiscount = props.cartSummary.cart.reduce(
+                  (a, b) => a + b.priceWithoutDiscount,
+                  0
+                );
+
+                cartTotalWithDiscount = props.cartSummary.cart.reduce(
+                  (a, b) => a + b.finalPrice,
+                  0
+                );
+              } else if (props.buyNowProduct) {
+                cartTotalWithoutDiscount =
+                  props.buyNowProduct.priceWithoutDiscount;
+
+                cartTotalWithDiscount = props.buyNowProduct.finalPrice;
+              }
+
+              const saving = cartTotalWithoutDiscount - cartTotalWithDiscount;
+              const confirmationEmailBody = {
+                user: userDetails,
+                cartProducts: props.cartSummary.cart
+                  ? props.cartSummary.cart
+                  : [props.buyNowProduct],
+                orderDate: new Date().toLocaleDateString(),
+                orderId: userLastOrderId,
+                cartTotalWithoutDiscount,
+                cartTotalWithDiscount,
+                saving,
+              };
+              const isConfirmationMailSent = await postReq(
+                `order-details/order-confirmation`,
+                confirmationEmailBody
+              );
+              if (isConfirmationMailSent) {
+                navigate('/order-confirmation');
+              } else {
+                console.log(
+                  'An error occurred in trying to send an email to the user'
+                );
+              }
             }
           }
         }
@@ -56,14 +99,16 @@ function CheckoutCard(props) {
           randomPass = Math.floor(Math.random() * 10000000000).toString();
         } while (randomPass.toString().length < 10);
         reqBody.password = randomPass;
-        // console.log(randomPass);
-        const isGuestUserWasCreated = postReq(`register?guest=true`, reqBody);
+        const isGuestUserWasCreated = await postReq(
+          `register?guest=true`,
+          reqBody
+        );
         if (isGuestUserWasCreated) {
           let newUserId;
           do {
             newUserId = await getReq(`users?email=${reqBody.email}`);
           } while (!newUserId);
-
+          const userDetails = newUserId;
           newUserId = newUserId.id;
           Cookies.set('new-user-id', JSON.stringify(newUserId), {
             expires: 1,
@@ -76,12 +121,48 @@ function CheckoutCard(props) {
               userLastOrderId
             );
             if (isOrderDetailsUpdated) {
+              let cartTotalWithoutDiscount;
+              let cartTotalWithDiscount;
+              if (props.cartSummary.cart) {
+                cartTotalWithoutDiscount = props.cartSummary.cart.reduce(
+                  (a, b) => a + b.priceWithoutDiscount,
+                  0
+                );
+
+                cartTotalWithDiscount = props.cartSummary.cart.reduce(
+                  (a, b) => a + b.finalPrice,
+                  0
+                );
+              } else if (props.buyNowProduct) {
+                cartTotalWithoutDiscount =
+                  props.buyNowProduct.priceWithoutDiscount;
+
+                cartTotalWithDiscount = props.buyNowProduct.finalPrice;
+              }
+
+              const saving = cartTotalWithoutDiscount - cartTotalWithDiscount;
+              const confirmationEmailBody = {
+                user: userDetails,
+                cartProducts: props.cartSummary.cart
+                  ? props.cartSummary.cart
+                  : [props.buyNowProduct],
+                orderDate: new Date().toLocaleDateString(),
+                orderId: userLastOrderId,
+                cartTotalWithoutDiscount,
+                cartTotalWithDiscount,
+                saving,
+              };
+              const isConfirmationMailSent = await postReq(
+                `order-details/order-confirmation`,
+                confirmationEmailBody
+              );
               localStorage.setItem('guestCart', JSON.stringify([]));
               if (!props.buyNowProduct) {
                 setGuestTotalCartItems(0);
               }
-
-              navigate('/order-confirmation');
+              if (isConfirmationMailSent) {
+                navigate('/order-confirmation');
+              }
             }
           }
         }
@@ -133,6 +214,8 @@ function CheckoutCard(props) {
           ? unitPrice * amount - unitPrice * amount * (cartItem.discount * 0.01)
           : unitPrice * amount;
 
+        cartItem.finalPrice = finalPrice;
+        cartItem.priceWithoutDiscount = unitPrice * amount;
         const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
         const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
         const isProductUnitsInStockUpdated = await patchReq(
@@ -155,7 +238,8 @@ function CheckoutCard(props) {
         ? unitPrice * amount -
           unitPrice * amount * (props.buyNowProduct.discount * 0.01)
         : unitPrice * amount;
-
+      props.buyNowProduct.finalPrice = finalPrice;
+      props.buyNowProduct.priceWithoutDiscount = finalPrice * amount;
       const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
       const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
       const isProductUnitsInStockUpdated = await patchReq(
@@ -209,11 +293,7 @@ function CheckoutCard(props) {
     <Card className="checkout-card">
       {reviewState.finished && (
         <Card.Body>
-          <Card.Title>{`Total Amount (${
-            props.cartSummary.totalAmount
-          } Items): ${(
-            Math.floor(props.cartSummary.totalPrice * 100) / 100
-          ).toFixed(2)}$`}</Card.Title>
+          <Card.Title>{`Total Amount (${props.cartSummary.totalAmount} Items): $${props.cartSummary.totalPrice}`}</Card.Title>
           <Button
             disabled={
               (user &&

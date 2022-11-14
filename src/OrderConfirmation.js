@@ -64,7 +64,7 @@ function OrderConfirmation() {
               <Card>
                 <Card.Body>
                   <Card.Title>
-                    Purchase Total:{' '}
+                    Purchase Total: $
                     {userOrder.orderDetails.length > 1 &&
                       userOrder.orderDetails.reduce(
                         (previousOrderItem, currentOrderItem) =>
@@ -73,7 +73,6 @@ function OrderConfirmation() {
                       )}
                     {userOrder.orderDetails.length === 1 &&
                       userOrder.orderDetails[0].finalPrice}
-                    $
                   </Card.Title>
                 </Card.Body>
               </Card>
