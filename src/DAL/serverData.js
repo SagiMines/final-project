@@ -9,7 +9,10 @@ export const patchReq = async (route, data) => {
     credentials: 'include',
   };
 
-  const req = await fetch(`http://localhost:8000/api/${route}`, requestOptions);
+  const req = await fetch(
+    `https://workshop-s.herokuapp.com/api/${route}`,
+    requestOptions
+  );
   const ans = await req.json();
   const status = ans.statusCode;
   if (status === 200) val = true;
@@ -25,7 +28,10 @@ export const deleteReq = async route => {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
-  const req = await fetch(`http://localhost:8000/api/${route}`, requestOptions);
+  const req = await fetch(
+    `https://workshop-s.herokuapp.com/api/${route}`,
+    requestOptions
+  );
   const ans = await req.json();
   const status = ans.statusCode;
   if (status === 200) val = true;
@@ -43,7 +49,10 @@ export const postReq = async (route, data) => {
     credentials: 'include',
   };
 
-  const req = await fetch(`http://localhost:8000/api/${route}`, requestOptions);
+  const req = await fetch(
+    `https://workshop-s.herokuapp.com/api/${route}`,
+    requestOptions
+  );
   const ans = await req.json();
   const status = ans.statusCode;
   if (status === 200) val = true;
@@ -53,7 +62,7 @@ export const postReq = async (route, data) => {
 };
 
 export const getReq = async route => {
-  const req = await fetch(`http://localhost:8000/api/${route}`, {
+  const req = await fetch(`https://workshop-s.herokuapp.com/api/${route}`, {
     credentials: 'include',
   });
   try {
