@@ -7,6 +7,7 @@ export const patchReq = async (route, data) => {
     headers: { 'Content-Type': 'application/json' },
     body: data ? JSON.stringify(data) : undefined,
     credentials: 'include',
+    withCredentials: true,
   };
 
   const req = await fetch(
@@ -27,6 +28,7 @@ export const deleteReq = async route => {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
+    withCredentials: true,
   };
   const req = await fetch(
     `https://workshop-s.herokuapp.com/api/${route}`,
@@ -47,6 +49,7 @@ export const postReq = async (route, data) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
     credentials: 'include',
+    withCredentials: true,
   };
 
   const req = await fetch(
@@ -64,6 +67,7 @@ export const postReq = async (route, data) => {
 export const getReq = async route => {
   const req = await fetch(`https://workshop-s.herokuapp.com/api/${route}`, {
     credentials: 'include',
+    withCredentials: true,
   });
   try {
     const ans = await req.json();
