@@ -491,13 +491,17 @@ function ProductCard(props) {
                 <Card.Text className="price-section-category">
                   {props.product && props.product.discount ? (
                     <>
+                      <span className="discount-price">
+                        {`$${+(
+                          props.product.unitPrice -
+                          props.product.unitPrice *
+                            props.product.discount *
+                            0.01
+                        ).toFixed(2)} `}
+                      </span>
                       <span className="old-price">
                         ${props.product.unitPrice}
                       </span>
-                      {` $${+(
-                        props.product.unitPrice -
-                        props.product.unitPrice * props.product.discount * 0.01
-                      ).toFixed(2)}`}
                     </>
                   ) : (
                     `$${props.product.unitPrice}`
@@ -584,7 +588,7 @@ function ProductCard(props) {
                     <Row>
                       <Card.Text className="price-section-category">
                         {props.currentProduct.discount ? (
-                          <span>
+                          <span className="discount-price">
                             {`$${
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount -
@@ -670,7 +674,7 @@ function ProductCard(props) {
                     <Col>
                       <Card.Text className="price-section-review">
                         {props.currentProduct.discount ? (
-                          <span>
+                          <span className="discount-price">
                             {`$${
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount -
@@ -820,17 +824,21 @@ function ProductCard(props) {
               <Card.Title className="price">
                 {props.productData.discount ? (
                   <>
-                    Price: <span>${props.productData.unitPrice}</span>
-                    {` $${
-                      props.productData.unitPrice -
-                      props.productData.unitPrice *
-                        props.productData.discount *
-                        0.01
-                    }`}
-                    ({props.productData.discount}% discount)
+                    <span className="discount-price-product-page">
+                      {` $${
+                        props.productData.unitPrice -
+                        props.productData.unitPrice *
+                          props.productData.discount *
+                          0.01
+                      } `}
+                    </span>
+                    <span className="old-price-product-page">
+                      ${props.productData.unitPrice}
+                    </span>
+                    {` (${props.productData.discount}% discount)`}
                   </>
                 ) : (
-                  `Price: $${props.productData.unitPrice}`
+                  `$${props.productData.unitPrice}`
                 )}
               </Card.Title>
               <Row className="buttons">

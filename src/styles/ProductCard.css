@@ -90,7 +90,9 @@
 }
 
 .old-price {
+  color: black;
   text-decoration: line-through;
+  font-weight: 300;
 }
 
 .stock-container {
@@ -110,6 +112,10 @@
   color: black !important;
   font-weight: bold !important;
   font-size: 20px !important;
+}
+
+.discount-price {
+  color: #d01345 !important;
 }
 
 .price-section-review {

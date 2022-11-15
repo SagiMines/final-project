@@ -306,7 +306,12 @@ function CheckoutCard(props) {
               (!user &&
                 JSON.parse(localStorage.getItem('guestCart')) &&
                 !JSON.parse(localStorage.getItem('guestCart')).length &&
-                props.page === 'cart')
+                props.page === 'cart') ||
+              (!user &&
+                JSON.parse(localStorage.getItem('guestCart')) &&
+                !JSON.parse(localStorage.getItem('guestCart')).find(
+                  item => item.checked
+                ))
                 ? true
                 : false
             }
