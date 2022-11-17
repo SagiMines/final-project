@@ -90,6 +90,8 @@ export const getReq = async route => {
 
 export const getUserIdFromCookie = async () => {
   console.log('in cookie function');
+  console.log(Cookies.get('user_id', { domain: 'workshop-s.herokuapp.com' }));
+  console.log(Cookies.get('user_id'));
   if (Cookies.get('user_id')) {
     console.log('in cookie if');
     try {
