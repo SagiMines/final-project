@@ -11,7 +11,9 @@ export const patchReq = async (route, data) => {
   };
 
   const req = await fetch(
-    `https://workshop-s.herokuapp.com/api/${route}`,
+    process.env.NODE_ENV === 'production'
+      ? `https://workshop-s.herokuapp.com/api/${route}`
+      : `http://localhost:8000/api/${route}`,
     requestOptions
   );
   const ans = await req.json();
@@ -31,7 +33,9 @@ export const deleteReq = async route => {
     withCredentials: true,
   };
   const req = await fetch(
-    `https://workshop-s.herokuapp.com/api/${route}`,
+    process.env.NODE_ENV === 'production'
+      ? `https://workshop-s.herokuapp.com/api/${route}`
+      : `http://localhost:8000/api/${route}`,
     requestOptions
   );
   const ans = await req.json();
@@ -53,7 +57,9 @@ export const postReq = async (route, data) => {
   };
 
   const req = await fetch(
-    `https://workshop-s.herokuapp.com/api/${route}`,
+    process.env.NODE_ENV === 'production'
+      ? `https://workshop-s.herokuapp.com/api/${route}`
+      : `http://localhost:8000/api/${route}`,
     requestOptions
   );
   const ans = await req.json();
@@ -65,10 +71,15 @@ export const postReq = async (route, data) => {
 };
 
 export const getReq = async route => {
-  const req = await fetch(`https://workshop-s.herokuapp.com/api/${route}`, {
-    credentials: 'include',
-    withCredentials: true,
-  });
+  const req = await fetch(
+    process.env.NODE_ENV === 'production'
+      ? `https://workshop-s.herokuapp.com/api/${route}`
+      : `http://localhost:8000/api/${route}`,
+    {
+      credentials: 'include',
+      withCredentials: true,
+    }
+  );
   try {
     const ans = await req.json();
     return ans;
