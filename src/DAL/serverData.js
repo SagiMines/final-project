@@ -89,17 +89,22 @@ export const getReq = async route => {
 };
 
 export const getUserIdFromCookie = async () => {
+  console.log('in cookie function');
   if (Cookies.get('user_id')) {
+    console.log('in cookie if');
     try {
+      console.log('in cookie try');
       const cookieValue = encodeURIComponent(Cookies.get('user_id'));
       console.log(Cookies.get('user_id'));
       console.log(cookieValue);
       const userId = await getReq(`login/${cookieValue}`);
       return userId;
     } catch {
+      console.log('in cookie catch');
       return false;
     }
   } else {
+    console.log('in cookie else');
     return false;
   }
 };
