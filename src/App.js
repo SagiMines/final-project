@@ -16,7 +16,7 @@ function App() {
   const getUser = async () => {
     const userId = await getUserIdFromCookie();
     console.log(userId);
-    setUser(userId ? { userId } : null);
+    setUser(userId !== false ? { userId } : null);
 
     if (!userId) {
       if (!localStorage.getItem('guestCart')) {
