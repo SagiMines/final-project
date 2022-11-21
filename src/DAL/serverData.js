@@ -12,7 +12,7 @@ export const patchReq = async (route, data) => {
 
   const req = await fetch(
     process.env.NODE_ENV === 'production'
-      ? `https://workshop-s.herokuapp.com/api/${route}`
+      ? `https://server.workshop-il.com/api/${route}`
       : `http://localhost:8000/api/${route}`,
     requestOptions
   );
@@ -34,7 +34,7 @@ export const deleteReq = async route => {
   };
   const req = await fetch(
     process.env.NODE_ENV === 'production'
-      ? `https://workshop-s.herokuapp.com/api/${route}`
+      ? `https://server.workshop-il.com/api/${route}`
       : `http://localhost:8000/api/${route}`,
     requestOptions
   );
@@ -58,7 +58,7 @@ export const postReq = async (route, data) => {
 
   const req = await fetch(
     process.env.NODE_ENV === 'production'
-      ? `https://workshop-s.herokuapp.com/api/${route}`
+      ? `https://server.workshop-il.com/api/${route}`
       : `http://localhost:8000/api/${route}`,
     requestOptions
   );
@@ -73,7 +73,7 @@ export const postReq = async (route, data) => {
 export const getReq = async route => {
   const req = await fetch(
     process.env.NODE_ENV === 'production'
-      ? `https://workshop-s.herokuapp.com/api/${route}`
+      ? `https://server.workshop-il.com/api/${route}`
       : `http://localhost:8000/api/${route}`,
     {
       credentials: 'include',
@@ -91,7 +91,6 @@ export const getReq = async route => {
 export const getUserIdFromCookie = async () => {
   console.log(Cookies.get());
   console.log('in cookie function');
-  console.log(Cookies.get('user_id', { domain: 'workshop-s.herokuapp.com' }));
   console.log(Cookies.get('user_id'));
   if (Cookies.get('user_id')) {
     console.log('in cookie if');
