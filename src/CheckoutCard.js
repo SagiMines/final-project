@@ -110,21 +110,9 @@ function CheckoutCard(props) {
           } while (!newUserId);
           const userDetails = newUserId;
           newUserId = newUserId.id;
-          Cookies.set(
-            'new-user-id',
-            JSON.stringify(newUserId),
-            process.env.NODE_ENV === 'production'
-              ? {
-                  domain: '.workshop-il.com',
-                  secure: true,
-                  expires: 1,
-                  httpOnly: false,
-                  sameSite: 'none',
-                }
-              : {
-                  expires: 1,
-                }
-          );
+          Cookies.set('new-user-id', JSON.stringify(newUserId), {
+            expires: 1,
+          });
           reqBody.id = newUserId;
           const isNewUserOrder = await addOrderToDb(reqBody);
           if (isNewUserOrder) {
@@ -210,21 +198,9 @@ function CheckoutCard(props) {
       } while (!userOrders);
     }
     const lastOrder = Math.max(...userOrders.map(order => order.id));
-    Cookies.set(
-      'new-user-order-id',
-      JSON.stringify(lastOrder),
-      process.env.NODE_ENV === 'production'
-        ? {
-            domain: '.workshop-il.com',
-            secure: true,
-            expires: 1,
-            httpOnly: false,
-            sameSite: 'none',
-          }
-        : {
-            expires: 1,
-          }
-    );
+    Cookies.set('new-user-order-id', JSON.stringify(lastOrder), {
+      expires: 1,
+    });
     return lastOrder;
   };
 
