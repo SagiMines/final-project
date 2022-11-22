@@ -4,9 +4,9 @@ Link to the "Work Shop" site: [https://www.workshop-il.com](https://www.workshop
 
 ## About The Project
 
-`"Work Shop"` is my final thesis of Experis's "Talent.Code" bootcamp which is an intense full stack bootcamp that I took part of.
+**"Work Shop"** is my final thesis of Experis's "Talent.Code" bootcamp which is an intense full stack bootcamp that I took part of.
 
-`"Work Shop"` is a power/work tools online shopping web app that features the option for user data managment such as user orders, personal data, etc.
+**"Work Shop"** is a power/work tools online shopping web app that features the option for user data managment such as user orders, personal data, etc.
 
 ## Technologies Used
 
