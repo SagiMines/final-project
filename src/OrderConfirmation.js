@@ -26,9 +26,7 @@ function OrderConfirmation() {
       userOrder.orderDetails = await getReq(
         `order-details/${Cookies.get('new-user-order-id')}`
       );
-      process.env.NODE_ENV === 'production'
-        ? Cookies.remove('new-user-order-id', { domain: '.workshop-il.com' })
-        : Cookies.remove('new-user-order-id');
+      Cookies.remove('new-user-order-id');
     }
 
     for (const order of userOrder.orderDetails) {

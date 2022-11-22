@@ -23,6 +23,7 @@ function ShippingDetailsCard(props) {
       orderData.userDetails = await getReq(
         `users/${Cookies.get('new-user-id')}`
       );
+      console.log(Cookies.get('new-user-id'));
       Cookies.remove('new-user-id');
     }
     setOrderData({ ...orderData });
