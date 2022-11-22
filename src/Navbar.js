@@ -29,7 +29,6 @@ function Navbar() {
   };
 
   const setTheCart = async () => {
-    console.log(user);
     //User
     if (user) {
       cartData.cart = await getReq(`cart/${user.userId}`);
