@@ -27,8 +27,13 @@ function NavSlider(props) {
       if (!localStorage.getItem('guestWishlist')) {
         localStorage.setItem('guestWishlist', JSON.stringify([]));
       }
-      Cookies.remove('user_id');
-      Cookies.remove('connect.sid');
+      if (process.env.NODE_ENV === 'production') {
+        Cookies.remove('user_id', { domain: '.workshop-il.com' });
+        Cookies.remove('connect.sid', { domain: '.workshop-il.com' });
+      } else {
+        Cookies.remove('user_id');
+        Cookies.remove('connect.sid');
+      }
       setUser(null);
       navigate('/');
     }
