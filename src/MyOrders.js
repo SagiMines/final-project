@@ -4,6 +4,7 @@ import { UserContext } from './UserContext';
 import { useState, useEffect, useContext } from 'react';
 import { getReq } from './DAL/serverData';
 import { Card, Container } from 'react-bootstrap';
+import LoadingGif from './LoadingGif';
 
 function MyOrders() {
   const { user } = useContext(UserContext);
@@ -36,11 +37,7 @@ function MyOrders() {
   return (
     <div className="container my-orders-container">
       <h1 className="my-orders-title">Your Orders</h1>
-      {!orders && (
-        <Container className="loading-icon">
-          <img src="/icons/loading.gif"></img>
-        </Container>
-      )}
+      {!orders && <LoadingGif />}
       {orders && !orders.length && (
         <Container>
           <Card>

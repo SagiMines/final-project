@@ -6,6 +6,8 @@ import Cookies from 'js-cookie';
 import { UserContext } from './UserContext';
 import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
+import _ from 'lodash';
+import LoadingGif from './LoadingGif';
 
 function OrderConfirmation() {
   const { user } = useContext(UserContext);
@@ -46,6 +48,7 @@ function OrderConfirmation() {
 
   return (
     <div className="container order-confirmation-container">
+      {_.isEmpty(userOrder) && <LoadingGif />}
       {userOrder.order && userOrder.orderDetails && (
         <>
           <h1 className="order-confirmation-title">

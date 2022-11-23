@@ -7,6 +7,8 @@ import { UserContext } from './UserContext';
 import './styles/ReviewOrder.css';
 import { getReq, patchReq, postReq } from './DAL/serverData';
 import { useLocation } from 'react-router-dom';
+import LoadingGif from './LoadingGif';
+import _ from 'lodash';
 
 function ReviewOrder() {
   const { state } = useLocation();
@@ -145,69 +147,76 @@ function ReviewOrder() {
   }, []);
   return (
     <div className="container review-container">
-      <h1 className="review-title">Review Your Order</h1>
-      {!user && (
-        <ShippingDetailsCard
-          guestShippingDetailsState={{
-            guestShippingDetails,
-            setGuestShippingDetails,
-          }}
-          page="review"
-        />
-      )}
-      {user && <ShippingDetailsCard page="review" />}
-      <Row className="review-data">
-        <Col md>
-          {!buyNow.buyNowData &&
-            cartReview.finalCart &&
-            cartReview.finalCart.map((cart, idx) => (
-              <ProductCard
-                page="review"
-                key={idx.toString()}
-                currentProduct={cart}
-                // onAmountChange={handleAmountChange}
-              />
-            ))}
-          {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
-            <ProductCard page="review" currentProduct={buyNow.buyNowProduct} />
-          )}
-        </Col>
-        <Col md>
+      {_.isEmpty(cartReview) && !buyNow.buyNowData && <LoadingGif />}
+      {(!_.isEmpty(cartReview) || buyNow.buyNowData) && (
+        <>
+          <h1 className="review-title">Review Your Order</h1>
           {!user && (
-            <CheckoutCard
-              page="review"
-              guestShippingDetailsState={
-                areGuestDetailsCompleted ? guestShippingDetails : undefined
-              }
-              cartSummary={{
-                totalAmount: buyNow.buyNowProduct
-                  ? buyNow.buyNowProduct.amount
-                  : cartReview.totalCartItems,
-                totalPrice: buyNow.buyNowProduct
-                  ? getPriceForBuyNow()
-                  : cartReview.totalCartPrice,
-                cart: cartReview.finalCart,
+            <ShippingDetailsCard
+              guestShippingDetailsState={{
+                guestShippingDetails,
+                setGuestShippingDetails,
               }}
-              buyNowProduct={buyNow.buyNowProduct}
+              page="review"
             />
           )}
-          {user && (
-            <CheckoutCard
-              page="review"
-              cartSummary={{
-                totalAmount: buyNow.buyNowProduct
-                  ? buyNow.buyNowProduct.amount
-                  : cartReview.totalCartItems,
-                totalPrice: buyNow.buyNowProduct
-                  ? getPriceForBuyNow()
-                  : cartReview.totalCartPrice,
-                cart: cartReview.finalCart,
-              }}
-              buyNowProduct={buyNow.buyNowProduct}
-            />
-          )}
-        </Col>
-      </Row>
+          {user && <ShippingDetailsCard page="review" />}
+          <Row className="review-data">
+            <Col md>
+              {!buyNow.buyNowData &&
+                cartReview.finalCart &&
+                cartReview.finalCart.map((cart, idx) => (
+                  <ProductCard
+                    page="review"
+                    key={idx.toString()}
+                    currentProduct={cart}
+                  />
+                ))}
+              {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
+                <ProductCard
+                  page="review"
+                  currentProduct={buyNow.buyNowProduct}
+                />
+              )}
+            </Col>
+            <Col md>
+              {!user && (
+                <CheckoutCard
+                  page="review"
+                  guestShippingDetailsState={
+                    areGuestDetailsCompleted ? guestShippingDetails : undefined
+                  }
+                  cartSummary={{
+                    totalAmount: buyNow.buyNowProduct
+                      ? buyNow.buyNowProduct.amount
+                      : cartReview.totalCartItems,
+                    totalPrice: buyNow.buyNowProduct
+                      ? getPriceForBuyNow()
+                      : cartReview.totalCartPrice,
+                    cart: cartReview.finalCart,
+                  }}
+                  buyNowProduct={buyNow.buyNowProduct}
+                />
+              )}
+              {user && (
+                <CheckoutCard
+                  page="review"
+                  cartSummary={{
+                    totalAmount: buyNow.buyNowProduct
+                      ? buyNow.buyNowProduct.amount
+                      : cartReview.totalCartItems,
+                    totalPrice: buyNow.buyNowProduct
+                      ? getPriceForBuyNow()
+                      : cartReview.totalCartPrice,
+                    cart: cartReview.finalCart,
+                  }}
+                  buyNowProduct={buyNow.buyNowProduct}
+                />
+              )}
+            </Col>
+          </Row>
+        </>
+      )}
     </div>
   );
 }

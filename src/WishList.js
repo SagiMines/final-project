@@ -3,6 +3,7 @@ import './styles/WishList.css';
 import { UserContext } from './UserContext';
 import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
+import LoadingGif from './LoadingGif';
 
 function WishList() {
   const { user } = useContext(UserContext);
@@ -50,6 +51,7 @@ function WishList() {
 
   return (
     <>
+      {!wishList && <LoadingGif />}
       {wishList && (
         <div className="container wishlist-container">
           <h1 className="wishlist-title">Your Wish List</h1>
