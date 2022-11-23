@@ -53,7 +53,8 @@
 }
 
 .react-numeric-input {
-  width: 3rem;
+  max-width: 6rem;
+  min-width: 5rem;
 }
 
 .price {
