@@ -217,7 +217,7 @@ function ProductCard(props) {
 
       props.wishListRender.setWishList([...wishlistProducts]);
     }
-    //Delete from products page
+    //Delete from products page with user
     else if (user) {
       const isDeletedFromWishlist = await deleteReq(
         `wishlist?user-id=${user.userId}&product-id=${productId}`
@@ -244,7 +244,7 @@ function ProductCard(props) {
         console.log('Could not fetch productData from the server');
       }
       //Delete from the wishlist page with a guest
-    } else {
+    } else if (props.wishListItem && !user) {
       const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
       const filteredWishlist = guestWishlist.filter(
         wishlistProduct => wishlistProduct.productId !== productId
@@ -264,6 +264,18 @@ function ProductCard(props) {
         state.isInWishList = false;
         setState({ ...state });
       }
+      // Delete from products page with guest
+    } else {
+      const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+      const filteredWishlist = guestWishlist.filter(
+        wishlistProduct => wishlistProduct.productId !== productId
+      );
+      localStorage.setItem('guestWishlist', JSON.stringify(filteredWishlist));
+      if (props.page === 'category') {
+        props.productsState.state.userWishlist = filteredWishlist;
+      }
+      state.isInWishList = false;
+      setState({ ...state });
     }
   };
 
