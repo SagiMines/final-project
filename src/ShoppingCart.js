@@ -5,6 +5,7 @@ import './styles/ShoppingCart.css';
 import { UserContext } from './UserContext';
 import { getReq, deleteReq, patchReq, postReq } from './DAL/serverData';
 import { useContext, useEffect, useState } from 'react';
+import LoadingGif from './LoadingGif';
 
 function ShoppingCart() {
   const { user, setUser } = useContext(UserContext);
@@ -209,6 +210,7 @@ function ShoppingCart() {
 
   return (
     <>
+      {!cartData && <LoadingGif />}
       {cartData && (
         <div className="container shopping-cart-container">
           <h1 className="shopping-cart-title">Shopping Cart</h1>

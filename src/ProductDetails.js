@@ -1,4 +1,3 @@
-import CategoryAside from './CategoryAside';
 import ProductPage from './ProductPage';
 import { useParams } from 'react-router-dom';
 function ProductDetails() {
@@ -6,7 +5,6 @@ function ProductDetails() {
 
   return (
     <div className="main-content">
-      <CategoryAside />
       <ProductPage productId={id} />
     </div>
   );

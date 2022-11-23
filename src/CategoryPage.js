@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { getReq } from './DAL/serverData';
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
+import LoadingGif from './LoadingGif';
 
 function CategoryPage() {
   const { user } = useContext(UserContext);
@@ -62,6 +63,7 @@ function CategoryPage() {
 
   return (
     <div className="main-content">
+      {!state && <LoadingGif />}
       {state && state.userWishlist && (
         <>
           <CategoryAside />

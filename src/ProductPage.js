@@ -1,8 +1,11 @@
 import ProductCarousel from './ProductCarousel';
 import './styles/ProductPage.css';
 import { useState, useEffect } from 'react';
+import { Container } from 'react-bootstrap';
 import { getReq } from './DAL/serverData';
 import ProductCard from './ProductCard';
+import CategoryAside from './CategoryAside';
+import LoadingGif from './LoadingGif';
 
 function ProductPage(props) {
   const [product, setProduct] = useState();
@@ -16,18 +19,24 @@ function ProductPage(props) {
     getProductData();
   }, [props.productId]);
   return (
-    <div className="container-fluid product">
+    <>
+      {!product && <LoadingGif />}
       {product && (
-        <div className="row">
-          <ProductCarousel
-            images={product.productImages}
-            name={product.productName}
-          />
+        <>
+          <CategoryAside />
+          <div className="container-fluid product">
+            <div className="row">
+              <ProductCarousel
+                images={product.productImages}
+                name={product.productName}
+              />
 
-          <ProductCard page="product-page" productData={product} />
-        </div>
+              <ProductCard page="product-page" productData={product} />
+            </div>
+          </div>
+        </>
       )}
-    </div>
+    </>
   );
 }
 

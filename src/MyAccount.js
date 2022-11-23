@@ -6,6 +6,8 @@ import { UserContext } from './UserContext';
 import { getReq, patchReq } from './DAL/serverData';
 import XRegExp from 'xregexp';
 import MyAccountDetailsColumns from './MyAccountDetailsColumns';
+import _ from 'lodash';
+import LoadingGif from './LoadingGif';
 
 function MyAccount() {
   const { user } = useContext(UserContext);
@@ -181,6 +183,7 @@ function MyAccount() {
   return (
     <div className="container my-account-container">
       <h1 className="my-account-title">Your Details</h1>
+      {_.isEmpty(userInfo) && <LoadingGif />}
       {userInfo.user && (
         <Card>
           <Card.Body>
