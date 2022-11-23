@@ -1,4 +1,9 @@
+<p align="center">
+    <img src="./public/icons/workshop-logo.png">
+
 # Final Project - "Work Shop"
+
+</p>
 
 Link to the "Work Shop" site: [https://www.workshop-il.com](https://www.workshop-il.com)
 
