@@ -1,11 +1,12 @@
+<h1 align="center">Final Project - "Work Shop"</h1>
+
 <p align="center">
     <img src="./public/icons/workshop-logo.png">
-
-# Final Project - "Work Shop"
-
 </p>
 
 Link to the "Work Shop" site: [https://www.workshop-il.com](https://www.workshop-il.com)
+
+Link to the final-project-nest-server repository: [https://github.com/SagiMines/final-project-nest-server](https://github.com/SagiMines/final-project-nest-server)
 
 ## About The Project
 
