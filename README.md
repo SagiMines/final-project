@@ -9,7 +9,7 @@ Link to the "Work Shop" site: <a href="https://www.workshop-il.com"> https://www
 </p>
 
 <p align="center">
-final-project-nest-server repository: <a href="https://github.com/SagiMines/final-project-nest-server"> https://github.com/SagiMines/final-project-nest-server</a> 
+Link to the final-project-nest-server repository: <a href="https://github.com/SagiMines/final-project-nest-server"> https://github.com/SagiMines/final-project-nest-server</a> 
 </p>
 
 ## About The Project
