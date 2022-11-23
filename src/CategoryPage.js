@@ -62,36 +62,40 @@ function CategoryPage() {
 
   return (
     <div className="main-content">
-      <CategoryAside />
-
       {state && state.userWishlist && (
-        <Row className="categories-container">
-          <section className="category-name-and-sort">
-            <h1 className="categories-title">{state.category.categoryName}</h1>
-            <SortBy
-              key={sortByKey}
-              onChange={onSortByChange}
-              options={sortByOptions()}
-            />
-          </section>
+        <>
+          <CategoryAside />
 
-          {state.products.map((product, ind) => (
-            <Col
-              key={ind.toString()}
-              className="card-container"
-              xxl={3}
-              lg={4}
-              md={6}
-              sm={6}
-            >
-              <ProductCard
-                productsState={{ state, setState }}
-                product={product}
-                page="category"
+          <Row className="categories-container">
+            <section className="category-name-and-sort">
+              <h1 className="categories-title">
+                {state.category.categoryName}
+              </h1>
+              <SortBy
+                key={sortByKey}
+                onChange={onSortByChange}
+                options={sortByOptions()}
               />
-            </Col>
-          ))}
-        </Row>
+            </section>
+
+            {state.products.map((product, ind) => (
+              <Col
+                key={ind.toString()}
+                className="card-container"
+                xxl={3}
+                lg={4}
+                md={6}
+                sm={6}
+              >
+                <ProductCard
+                  productsState={{ state, setState }}
+                  product={product}
+                  page="category"
+                />
+              </Col>
+            ))}
+          </Row>
+        </>
       )}
     </div>
   );
