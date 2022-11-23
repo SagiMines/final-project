@@ -4,9 +4,13 @@
     <img src="./public/icons/workshop-logo.png">
 </p>
 
-Link to the "Work Shop" site: [https://www.workshop-il.com](https://www.workshop-il.com)
+<p align="center">
+Link to the "Work Shop" site: <a href="https://www.workshop-il.com"> https://www.workshop-il.com</a> 
+</p>
 
-Link to the final-project-nest-server repository: [https://github.com/SagiMines/final-project-nest-server](https://github.com/SagiMines/final-project-nest-server)
+<p align="center">
+final-project-nest-server repository: <a href="https://github.com/SagiMines/final-project-nest-server"> https://github.com/SagiMines/final-project-nest-server</a> 
+</p>
 
 ## About The Project
 
