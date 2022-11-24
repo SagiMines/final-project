@@ -13,3 +13,29 @@ body {
   display: flex;
   justify-content: center;
 }
+
+.pages {
+  font-size: 15px;
+  margin: 3rem 0 1rem 0;
+  text-align: center;
+}
+
+.pages > .row {
+  justify-content: center;
+}
+
+.pages > .row > .col > * {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.pages > .row > .col {
+  max-width: 67px;
+  padding: 0;
+}
+.chosen-page {
+  font-weight: bold;
+  text-decoration: underline !important;
+  text-decoration-style: solid;
+}
