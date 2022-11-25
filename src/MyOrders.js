@@ -29,11 +29,9 @@ function MyOrders() {
     const pageAttributes = getThePages();
     const userOrders = await getReq(
       `orders/${user.userId}?offset=${
-        pageAttributes.from
-          ? pageAttributes.from * 5 - 5 < userOrdersCount.current
-            ? pageAttributes.from * 5 - 5
-            : userOrdersCount.current
-          : 0
+        pageAttributes.from * 5 - 5 < userOrdersCount.current
+          ? pageAttributes.from * 5 - 5
+          : userOrdersCount.current
       }&jump=${
         pageAttributes.from * 5 < userOrdersCount.current
           ? 5
@@ -99,6 +97,7 @@ function MyOrders() {
   };
 
   useEffect(() => {
+    setOrders(undefined);
     getUserOrders();
   }, [searchParams.get('page')]);
 
