@@ -181,34 +181,36 @@ function MyAccount() {
   }, []);
 
   return (
-    <div className="container my-account-container">
-      <h1 className="my-account-title">Your Details</h1>
-      {_.isEmpty(userInfo) && <LoadingGif />}
-      {userInfo.user && (
-        <Card>
-          <Card.Body>
-            <Row className="my-account-row">
-              {Object.keys(userInfo.user).map(
-                (key, idx) =>
-                  key !== 'password' && (
-                    <MyAccountDetailsColumns
-                      key={idx.toString()}
-                      userInfo={userInfo}
-                      columnInfo={{ title: deCamelizeKey(key), key }}
-                      onInputChangeClick={onInputChangeClick}
-                      onChangeInfo={onChangeInfo}
-                      onChangeClick={onChangeClick}
-                    />
-                  )
-              )}
-            </Row>
+    <div className="container-center">
+      <div className="container my-account-container">
+        <h1 className="my-account-title">Your Details</h1>
+        {_.isEmpty(userInfo) && <LoadingGif />}
+        {userInfo.user && (
+          <Card>
+            <Card.Body>
+              <Row className="my-account-row">
+                {Object.keys(userInfo.user).map(
+                  (key, idx) =>
+                    key !== 'password' && (
+                      <MyAccountDetailsColumns
+                        key={idx.toString()}
+                        userInfo={userInfo}
+                        columnInfo={{ title: deCamelizeKey(key), key }}
+                        onInputChangeClick={onInputChangeClick}
+                        onChangeInfo={onChangeInfo}
+                        onChangeClick={onChangeClick}
+                      />
+                    )
+                )}
+              </Row>
 
-            <Link to="/change-password">
-              <Button className="my-account-btn">Update password</Button>
-            </Link>
-          </Card.Body>
-        </Card>
-      )}
+              <Link to="/change-password">
+                <Button className="my-account-btn">Update password</Button>
+              </Link>
+            </Card.Body>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

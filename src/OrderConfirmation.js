@@ -47,45 +47,47 @@ function OrderConfirmation() {
   }, []);
 
   return (
-    <div className="container order-confirmation-container">
-      {_.isEmpty(userOrder) && <LoadingGif />}
-      {userOrder.order && userOrder.orderDetails && (
-        <>
-          <h1 className="order-confirmation-title">
-            Order #{user ? userOrder.order.id : userOrder.order} Confirmation
-          </h1>
-          <ShippingDetailsCard page="order-confirmation" />
-          <Row className="review-data">
-            <Col md>
-              {userOrder.orderDetails.map((product, idx) => (
-                <ProductCard
-                  key={idx.toString()}
-                  page="order-confirmation"
-                  purchasedProduct={product}
-                />
-              ))}
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    Purchase Total: $
-                    {userOrder.orderDetails.length > 1 &&
-                      userOrder.orderDetails.reduce(
-                        (previousOrderItem, currentOrderItem) =>
-                          previousOrderItem + currentOrderItem.finalPrice,
-                        0
-                      )}
-                    {userOrder.orderDetails.length === 1 &&
-                      userOrder.orderDetails[0].finalPrice}
-                  </Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md>
-              <img className="thank-you-logo" src="thank-you.png"></img>
-            </Col>
-          </Row>
-        </>
-      )}
+    <div className="container-center">
+      <div className="container order-confirmation-container">
+        {_.isEmpty(userOrder) && <LoadingGif />}
+        {userOrder.order && userOrder.orderDetails && (
+          <>
+            <h1 className="order-confirmation-title">
+              Order #{user ? userOrder.order.id : userOrder.order} Confirmation
+            </h1>
+            <ShippingDetailsCard page="order-confirmation" />
+            <Row className="review-data">
+              <Col md>
+                {userOrder.orderDetails.map((product, idx) => (
+                  <ProductCard
+                    key={idx.toString()}
+                    page="order-confirmation"
+                    purchasedProduct={product}
+                  />
+                ))}
+                <Card>
+                  <Card.Body>
+                    <Card.Title>
+                      Purchase Total: $
+                      {userOrder.orderDetails.length > 1 &&
+                        userOrder.orderDetails.reduce(
+                          (previousOrderItem, currentOrderItem) =>
+                            previousOrderItem + currentOrderItem.finalPrice,
+                          0
+                        )}
+                      {userOrder.orderDetails.length === 1 &&
+                        userOrder.orderDetails[0].finalPrice}
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md>
+                <img className="thank-you-logo" src="thank-you.png"></img>
+              </Col>
+            </Row>
+          </>
+        )}
+      </div>
     </div>
   );
 }

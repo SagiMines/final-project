@@ -132,54 +132,56 @@ function ChangePassword(props) {
   };
 
   return (
-    <div className="container update-password-container">
-      <h1 className="update-password-title">
-        {props.page === 'update' ? 'Update Password' : 'Set A New Password'}
-      </h1>
-      <Form>
-        {props.page === 'update' && (
+    <div className="container-center">
+      <div className="container update-password-container">
+        <h1 className="update-password-title">
+          {props.page === 'update' ? 'Update Password' : 'Set A New Password'}
+        </h1>
+        <Form>
+          {props.page === 'update' && (
+            <FormInput
+              name="old password"
+              label="Old password"
+              type="password"
+              placeholder="Enter your old password"
+              onBlur={checkIfPasswordIsCorrect}
+            />
+          )}
+          {props.page === 'update' && values.oldPassword.error && (
+            <p className="input-error">{values.oldPassword.error}</p>
+          )}
+
           <FormInput
-            name="old password"
-            label="Old password"
+            name="new password"
+            label="New password"
             type="password"
-            placeholder="Enter your old password"
-            onBlur={checkIfPasswordIsCorrect}
+            placeholder="Enter a new password"
+            onChange={handleChange}
           />
-        )}
-        {props.page === 'update' && values.oldPassword.error && (
-          <p className="input-error">{values.oldPassword.error}</p>
-        )}
+          {values.newPassword.error && (
+            <p className="input-error">{values.newPassword.error}</p>
+          )}
 
-        <FormInput
-          name="new password"
-          label="New password"
-          type="password"
-          placeholder="Enter a new password"
-          onChange={handleChange}
-        />
-        {values.newPassword.error && (
-          <p className="input-error">{values.newPassword.error}</p>
-        )}
+          <FormInput
+            name="verify password"
+            label="Verify password"
+            type="password"
+            placeholder="Re-enter the password"
+            onChange={handleChange}
+          />
+          {values.verifyPassword.error && (
+            <p className="input-error">{values.verifyPassword.error}</p>
+          )}
 
-        <FormInput
-          name="verify password"
-          label="Verify password"
-          type="password"
-          placeholder="Re-enter the password"
-          onChange={handleChange}
-        />
-        {values.verifyPassword.error && (
-          <p className="input-error">{values.verifyPassword.error}</p>
-        )}
-
-        <Button
-          className="update-password-btn"
-          type="submit"
-          onClick={handleClick}
-        >
-          Apply changes
-        </Button>
-      </Form>
+          <Button
+            className="update-password-btn"
+            type="submit"
+            onClick={handleClick}
+          >
+            Apply changes
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }

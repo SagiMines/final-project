@@ -143,91 +143,97 @@ function Register() {
   }, []);
 
   return (
-    <div className="container register-container">
-      <Form>
-        <h1 className="register-title">Register</h1>
-        <Row>
-          <Col md={6}>
-            <FormInput
-              onChange={handleChange}
-              label="First name"
-              type="text"
-              name="firstname"
-              placeholder="Enter first name"
-            />
-            {state.alerts.firstname && (
-              <p className="alerts">{state.alerts.firstname}</p>
-            )}
-          </Col>
+    <div className="container-center">
+      <div className="container register-container">
+        <Form>
+          <h1 className="register-title">Register</h1>
+          <Row>
+            <Col md={6}>
+              <FormInput
+                onChange={handleChange}
+                label="First name"
+                type="text"
+                name="firstname"
+                placeholder="Enter first name"
+              />
+              {state.alerts.firstname && (
+                <p className="alerts">{state.alerts.firstname}</p>
+              )}
+            </Col>
 
-          <Col md={6}>
-            <FormInput
-              onChange={handleChange}
-              label="Last name"
-              type="text"
-              name="lastname"
-              placeholder="Enter last name"
-            />
-            {state.alerts.lastname && (
-              <p className="alerts">{state.alerts.lastname}</p>
-            )}
-          </Col>
-          <Col md={6}>
-            <FormInput
-              onChange={handleChange}
-              label="Email address"
-              type="email"
-              name="email"
-              placeholder="Enter email"
-            />
-            {state.alerts.email && (
-              <p className="alerts">{state.alerts.email}</p>
-            )}
-          </Col>
-          <Col md={6}>
-            <SelectForm
-              label="Country"
-              name="country"
-              title="Choose Country"
-              options={countryList.getNames()}
-              onBlur={handleChange}
-            />
-            {state.alerts.country && (
-              <p className="alerts">{state.alerts.country}</p>
-            )}
-          </Col>
-          <Col md={6}>
-            <FormInput
-              onChange={handleChange}
-              label="Password"
-              type="password"
-              name="password"
-              placeholder="Enter password"
-            />
-            {state.alerts.password && (
-              <p className="alerts">{state.alerts.password}</p>
-            )}
-          </Col>
+            <Col md={6}>
+              <FormInput
+                onChange={handleChange}
+                label="Last name"
+                type="text"
+                name="lastname"
+                placeholder="Enter last name"
+              />
+              {state.alerts.lastname && (
+                <p className="alerts">{state.alerts.lastname}</p>
+              )}
+            </Col>
+            <Col md={6}>
+              <FormInput
+                onChange={handleChange}
+                label="Email address"
+                type="email"
+                name="email"
+                placeholder="Enter email"
+              />
+              {state.alerts.email && (
+                <p className="alerts">{state.alerts.email}</p>
+              )}
+            </Col>
+            <Col md={6}>
+              <SelectForm
+                label="Country"
+                name="country"
+                title="Choose Country"
+                options={countryList.getNames()}
+                onBlur={handleChange}
+              />
+              {state.alerts.country && (
+                <p className="alerts">{state.alerts.country}</p>
+              )}
+            </Col>
+            <Col md={6}>
+              <FormInput
+                onChange={handleChange}
+                label="Password"
+                type="password"
+                name="password"
+                placeholder="Enter password"
+              />
+              {state.alerts.password && (
+                <p className="alerts">{state.alerts.password}</p>
+              )}
+            </Col>
 
-          <Col md={6}>
-            <FormInput
-              onChange={handleChange}
-              label="Verify password"
-              type="password"
-              name="repassword"
-              placeholder="Re-enter password"
-            />
-            {state.alerts.repassword && (
-              <p className="alerts">{state.alerts.repassword}</p>
-            )}
-          </Col>
-        </Row>
-        <Link to="/register-success">
-          <Button className="register-btn" type="submit" onClick={handleClick}>
-            Register
-          </Button>
-        </Link>
-      </Form>
+            <Col md={6}>
+              <FormInput
+                onChange={handleChange}
+                label="Verify password"
+                type="password"
+                name="repassword"
+                placeholder="Re-enter password"
+              />
+              {state.alerts.repassword && (
+                <p className="alerts">{state.alerts.repassword}</p>
+              )}
+            </Col>
+          </Row>
+          <Link to="/register-success">
+            <Button
+              className="register-btn"
+              type="submit"
+              onClick={handleClick}
+            >
+              Register
+            </Button>
+          </Link>
+        </Form>
+      </div>
     </div>
   );
 }
