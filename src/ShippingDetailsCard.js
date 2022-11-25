@@ -325,7 +325,7 @@ function ShippingDetailsCard(props) {
         <Card>
           <Card.Body>
             <Card.Title>Login to WorkShop:</Card.Title>
-            <LogIn guestOrder={true} />
+            <LogIn guestOrder={true} page="shipping-details" />
             <h4 className="user-guest-option-border">
               <span>Or</span>
             </h4>

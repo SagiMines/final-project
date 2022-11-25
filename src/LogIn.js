@@ -1,4 +1,4 @@
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container } from 'react-bootstrap';
 import FormInput from './FormInput';
 import { Link } from 'react-router-dom';
 import './styles/LogIn.css';
@@ -63,77 +63,161 @@ function LogIn(props) {
 
   return (
     <>
-      {!props.guestOrder && (
-        <div className="container login-container">
-          <Form>
-            <h1 className="login-title">Log In</h1>
-            <FormInput
-              onChange={handleChange}
-              label="Email address"
-              type="email"
-              name="email"
-              placeholder="Enter email"
-            />
-            <FormInput
-              onChange={handleChange}
-              label="Password"
-              type="password"
-              name="password"
-              placeholder="Enter password"
-            />
+      {props.page !== 'shipping-details' && (
+        <div className="container-center">
+          {!props.guestOrder && (
+            <div className="container login-container">
+              <Form>
+                <h1 className="login-title">Log In</h1>
+                <FormInput
+                  onChange={handleChange}
+                  label="Email address"
+                  type="email"
+                  name="email"
+                  placeholder="Enter email"
+                />
+                <FormInput
+                  onChange={handleChange}
+                  label="Password"
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                />
 
-            {!state.passed && (
-              <p className="login-error">Wrong Email/Password</p>
-            )}
-            <Button
-              onClick={handleClick}
-              className="login-btn"
-              variant="primary"
-              type="submit"
-            >
-              Log In
-            </Button>
-            <section className="login-options">
-              <Link to="/forgot-password">Forgot password</Link>
-              <Link to="/register">Register</Link>
-            </section>
-          </Form>
+                {!state.passed && (
+                  <p className="login-error">Wrong Email/Password</p>
+                )}
+                <Button
+                  onClick={handleClick}
+                  className="login-btn"
+                  variant="primary"
+                  type="submit"
+                >
+                  Log In
+                </Button>
+                <section className="login-options">
+                  <Link to="/forgot-password">Forgot password</Link>
+                  <Link to="/register">Register</Link>
+                </section>
+              </Form>
+            </div>
+          )}
+          {props.guestOrder && (
+            <Form>
+              {/* <h1 className="login-title">Log In</h1> */}
+              <FormInput
+                onChange={handleChange}
+                label="Email:"
+                type="email"
+                name="email"
+                placeholder="Email"
+                guestOrder={true}
+              />
+              <FormInput
+                onChange={handleChange}
+                label="Password:"
+                type="password"
+                name="password"
+                placeholder="Password"
+                guestOrder={true}
+              />
+
+              {!state.passed && (
+                <p className="login-error">Wrong Email/Password</p>
+              )}
+              <Button
+                onClick={handleClick}
+                className="login-btn"
+                variant="primary"
+                type="submit"
+              >
+                Log In
+              </Button>
+              <section className="login-options">
+                <Link to="/forgot-password">Forgot password</Link>
+                <Link to="/register">Register</Link>
+              </section>
+            </Form>
+          )}
         </div>
       )}
-      {props.guestOrder && (
-        <Form>
-          {/* <h1 className="login-title">Log In</h1> */}
-          <FormInput
-            onChange={handleChange}
-            label="Email:"
-            type="email"
-            name="email"
-            placeholder="Email"
-            guestOrder={true}
-          />
-          <FormInput
-            onChange={handleChange}
-            label="Password:"
-            type="password"
-            name="password"
-            placeholder="Password"
-            guestOrder={true}
-          />
+      {props.page === 'shipping-details' && (
+        <>
+          {!props.guestOrder && (
+            <div className="container login-container">
+              <Form>
+                <h1 className="login-title">Log In</h1>
+                <FormInput
+                  onChange={handleChange}
+                  label="Email address"
+                  type="email"
+                  name="email"
+                  placeholder="Enter email"
+                />
+                <FormInput
+                  onChange={handleChange}
+                  label="Password"
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                />
 
-          {!state.passed && <p className="login-error">Wrong Email/Password</p>}
-          <Button
-            onClick={handleClick}
-            className="login-btn"
-            variant="primary"
-            type="submit"
-          >
-            Log In
-          </Button>
-          <section className="login-options">
-            <Link to="/forgot-password">Forgot password</Link>
-            <Link to="/register">Register</Link>
-          </section>
-        </Form>
+                {!state.passed && (
+                  <p className="login-error">Wrong Email/Password</p>
+                )}
+                <Button
+                  onClick={handleClick}
+                  className="login-btn"
+                  variant="primary"
+                  type="submit"
+                >
+                  Log In
+                </Button>
+                <section className="login-options">
+                  <Link to="/forgot-password">Forgot password</Link>
+                  <Link to="/register">Register</Link>
+                </section>
+              </Form>
+            </div>
+          )}
+          {props.guestOrder && (
+            <Form>
+              {/* <h1 className="login-title">Log In</h1> */}
+              <FormInput
+                onChange={handleChange}
+                label="Email:"
+                type="email"
+                name="email"
+                placeholder="Email"
+                guestOrder={true}
+              />
+              <FormInput
+                onChange={handleChange}
+                label="Password:"
+                type="password"
+                name="password"
+                placeholder="Password"
+                guestOrder={true}
+              />
+
+              {!state.passed && (
+                <p className="login-error">Wrong Email/Password</p>
+              )}
+              <Button
+                onClick={handleClick}
+                className="login-btn"
+                variant="primary"
+                type="submit"
+              >
+                Log In
+              </Button>
+              <section className="login-options">
+                <Link to="/forgot-password">Forgot password</Link>
+                <Link to="/register">Register</Link>
+              </section>
+            </Form>
+          )}
+        </>
       )}
     </>
   );

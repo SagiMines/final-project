@@ -209,7 +209,7 @@ function ShoppingCart() {
   }, []);
 
   return (
-    <>
+    <div className="container-center">
       {!cartData && <LoadingGif />}
       {cartData && (
         <div className="container shopping-cart-container">
@@ -243,7 +243,7 @@ function ShoppingCart() {
           </Row>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

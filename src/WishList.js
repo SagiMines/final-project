@@ -50,7 +50,7 @@ function WishList() {
   }, []);
 
   return (
-    <>
+    <div className="container-center">
       {!wishList && <LoadingGif />}
       {wishList && (
         <div className="container wishlist-container">
@@ -73,7 +73,7 @@ function WishList() {
             ))}
         </div>
       )}
-    </>
+    </div>
   );
 }
 

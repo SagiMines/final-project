@@ -102,83 +102,85 @@ function MyOrders() {
   }, [searchParams.get('page')]);
 
   return (
-    <div className="container my-orders-container">
-      <h1 className="my-orders-title">Your Orders</h1>
-      {!orders && <LoadingGif />}
-      {orders && !orders.length && (
-        <Container>
-          <Card>
-            <Card.Body>
-              <Card.Title>You haven't made any orders yet</Card.Title>
-            </Card.Body>
-          </Card>
-        </Container>
-      )}
-      {orders &&
-        orders.map(
-          (order, idx) =>
-            order.orderDetails.length > 0 && (
-              <Order key={idx.toString()} order={order} />
-            )
+    <div className="container-center">
+      <div className="container my-orders-container">
+        <h1 className="my-orders-title">Your Orders</h1>
+        {!orders && <LoadingGif />}
+        {orders && !orders.length && (
+          <Container>
+            <Card>
+              <Card.Body>
+                <Card.Title>You haven't made any orders yet</Card.Title>
+              </Card.Body>
+            </Card>
+          </Container>
         )}
-      {pages && pages.pagesArr.length > 1 && (
-        <Container className="pages">
-          <Row>
-            {pages.from > 1 && (
-              <>
-                <Col>
-                  <Link to="/my-orders?page=1">
-                    <FontAwesomeIcon width={20} icon={faAngleDoubleLeft} />
-                  </Link>
-                </Col>
-                <Col>
+        {orders &&
+          orders.map(
+            (order, idx) =>
+              order.orderDetails.length > 0 && (
+                <Order key={idx.toString()} order={order} />
+              )
+          )}
+        {pages && pages.pagesArr.length > 1 && (
+          <Container className="pages">
+            <Row>
+              {pages.from > 1 && (
+                <>
+                  <Col>
+                    <Link to="/my-orders?page=1">
+                      <FontAwesomeIcon width={20} icon={faAngleDoubleLeft} />
+                    </Link>
+                  </Col>
+                  <Col>
+                    <Link
+                      to={`/my-orders?page=${
+                        pages.chosenPage > 1
+                          ? pages.chosenPage - 1
+                          : pages.chosenPage
+                      }`}
+                    >
+                      <FontAwesomeIcon width={12} icon={faChevronLeft} />
+                    </Link>
+                  </Col>
+                </>
+              )}
+              {getTheRightPages().map((pageNum, idx) => (
+                <Col key={idx.toString()}>
                   <Link
-                    to={`/my-orders?page=${
-                      pages.chosenPage > 1
-                        ? pages.chosenPage - 1
-                        : pages.chosenPage
-                    }`}
+                    to={`/my-orders?page=${pageNum}`}
+                    className={
+                      pageNum === pages.chosenPage ? 'chosen-page' : undefined
+                    }
                   >
-                    <FontAwesomeIcon width={12} icon={faChevronLeft} />
+                    {pageNum}
                   </Link>
                 </Col>
-              </>
-            )}
-            {getTheRightPages().map((pageNum, idx) => (
-              <Col key={idx.toString()}>
-                <Link
-                  to={`/my-orders?page=${pageNum}`}
-                  className={
-                    pageNum === pages.chosenPage ? 'chosen-page' : undefined
-                  }
-                >
-                  {pageNum}
-                </Link>
-              </Col>
-            ))}
-            {pages.to !== pages.pagesArr.length && (
-              <>
-                <Col>
-                  <Link
-                    to={`/my-orders?page=${
-                      pages.chosenPage < pages.pagesArr.length
-                        ? pages.chosenPage + 1
-                        : pages.chosenPage
-                    }`}
-                  >
-                    <FontAwesomeIcon width={12} icon={faChevronRight} />
-                  </Link>
-                </Col>
-                <Col>
-                  <Link to={`/my-orders?page=${pages.pagesArr.length}`}>
-                    <FontAwesomeIcon width={20} icon={faAngleDoubleRight} />
-                  </Link>
-                </Col>
-              </>
-            )}
-          </Row>
-        </Container>
-      )}
+              ))}
+              {pages.to !== pages.pagesArr.length && (
+                <>
+                  <Col>
+                    <Link
+                      to={`/my-orders?page=${
+                        pages.chosenPage < pages.pagesArr.length
+                          ? pages.chosenPage + 1
+                          : pages.chosenPage
+                      }`}
+                    >
+                      <FontAwesomeIcon width={12} icon={faChevronRight} />
+                    </Link>
+                  </Col>
+                  <Col>
+                    <Link to={`/my-orders?page=${pages.pagesArr.length}`}>
+                      <FontAwesomeIcon width={20} icon={faAngleDoubleRight} />
+                    </Link>
+                  </Col>
+                </>
+              )}
+            </Row>
+          </Container>
+        )}
+      </div>
     </div>
   );
 }
