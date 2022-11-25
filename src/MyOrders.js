@@ -1,7 +1,7 @@
 import './styles/MyOrders.css';
 import Order from './Order';
 import { UserContext } from './UserContext';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { getReq } from './DAL/serverData';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -18,10 +18,39 @@ function MyOrders() {
   const { user } = useContext(UserContext);
   const [orders, setOrders] = useState();
   const [pages, setPages] = useState();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const getUserOrders = async () => {
-    const userOrders = await getReq(`orders/${user.userId}`);
+  const [searchParams] = useSearchParams();
+  const userOrdersCount = useRef();
 
+  // Retrieve the relevant orders for each page
+  const getUserOrders = async () => {
+    if (!orders) {
+      await countTheOrders();
+    }
+    const pageAttributes = getThePages();
+    const userOrders = await getReq(
+      `orders/${user.userId}?offset=${
+        pageAttributes.from
+          ? pageAttributes.from * 5 - 5 < userOrdersCount.current
+            ? pageAttributes.from * 5 - 5
+            : userOrdersCount.current
+          : 0
+      }&jump=${
+        pageAttributes.from * 5 < userOrdersCount.current
+          ? 5
+          : userOrdersCount.current - (pageAttributes.from * 5 - 5)
+      }`
+    );
+    await createDetailedOrdersArr(userOrders);
+    window.scrollTo(0, 0);
+  };
+
+  // A one time function that retrieves the number of orders that the user has from the database
+  const countTheOrders = async () => {
+    userOrdersCount.current = await getReq(`orders/${user.userId}?count=true`);
+  };
+
+  // Creates the state orders array that contains all the necessary data relevant to the user
+  const createDetailedOrdersArr = async userOrders => {
     const ordersArr = [];
     if (userOrders) {
       for (const order of userOrders) {
@@ -36,20 +65,19 @@ function MyOrders() {
         }
         ordersArr.push(orderData);
       }
-      getThePages(Math.ceil(ordersArr.length / 5));
     }
-    const reversedOrdersArr = ordersArr.reverse();
-    setOrders([...reversedOrdersArr]);
+    setOrders([...ordersArr]);
   };
 
-  const getThePages = numberOfPages => {
+  // Creates a state that show what page are we on and what other pages numbers to show based on that
+  const getThePages = () => {
+    const numberOfPages = Math.ceil(userOrdersCount.current / 5);
     const chosenPage = Number(searchParams.get('page'));
     const pagesArr = [];
     for (let i = 1; i <= numberOfPages; i++) {
       pagesArr.push(i);
     }
-    window.scrollTo(0, 0);
-    setPages({
+    const pagesBody = {
       pagesArr: pagesArr,
       from: chosenPage ? chosenPage : 1,
       to: chosenPage
@@ -60,30 +88,18 @@ function MyOrders() {
         ? 5
         : numberOfPages,
       chosenPage: chosenPage ? chosenPage : 1,
-    });
+    };
+    setPages({ ...pagesBody });
+    return pagesBody;
   };
 
+  // Returns an array of the relevant pages numbers to display on the browser
   const getTheRightPages = () => {
     return pages.pagesArr.slice(pages.from - 1, pages.to);
   };
 
-  const getRelevantOrdersForPage = () => {
-    const fromIndex = pages.chosenPage * 5 - 5;
-    if (orders.length >= fromIndex + 5) {
-      return orders.slice(fromIndex, fromIndex + 5);
-    } else {
-      return orders.slice(fromIndex, orders.length);
-    }
-  };
-
   useEffect(() => {
     getUserOrders();
-  }, []);
-
-  useEffect(() => {
-    if (orders) {
-      getThePages(Math.ceil(orders.length / 5));
-    }
   }, [searchParams.get('page')]);
 
   return (
@@ -100,7 +116,7 @@ function MyOrders() {
         </Container>
       )}
       {orders &&
-        getRelevantOrdersForPage().map(
+        orders.map(
           (order, idx) =>
             order.orderDetails.length > 0 && (
               <Order key={idx.toString()} order={order} />
