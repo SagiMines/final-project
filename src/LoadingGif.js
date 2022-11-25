@@ -2,9 +2,11 @@ import { Container } from 'react-bootstrap';
 
 function LoadingGif() {
   return (
-    <Container className="loading-gif">
-      <img src="/icons/loading.gif"></img>
-    </Container>
+    <div className="container-center">
+      <Container className="loading-gif">
+        <img src="/icons/loading.gif"></img>
+      </Container>
+    </div>
   );
 }
 
