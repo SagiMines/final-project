@@ -1,7 +1,7 @@
 .card {
   flex-direction: row;
 
-  margin-bottom: 7px;
+  margin-bottom: 1rem;
 }
 
 .card-title {
