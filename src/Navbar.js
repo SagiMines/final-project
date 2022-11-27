@@ -11,10 +11,10 @@ import useComponentVisible from './custom-hooks/useComponentVisible';
 
 function Navbar() {
   const [sliders, setSliders] = useState(null);
+  const [cartData, setCartData] = useState({});
   const { user, setUser } = useContext(UserContext);
   const { guestTotalCartItems, setGuestTotalCartItems } =
     useContext(UserContext);
-  const [cartData, setCartData] = useState({});
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -168,6 +168,7 @@ function Navbar() {
                     <NavSlider
                       isCategories={sliders.categories.collapseState}
                       isUser={sliders.user.collapseState}
+                      slidersState={{ sliders, setSliders }}
                       onMouseEnter={() => {
                         sliders.hamburger.collapseState = true;
                         setSliders({ ...sliders });
@@ -192,6 +193,7 @@ function Navbar() {
                         sliders.categories.collapseState = false;
                         setSliders({ ...sliders });
                       }}
+                      collapse={true}
                       name={sliders.hamburger.collapseName}
                       categoryName={sliders.categories.collapseName}
                       userName={sliders.user.collapseName}
@@ -299,6 +301,7 @@ function Navbar() {
                     <NavSlider
                       isCategories={sliders.categories.state}
                       isUser={sliders.user.hamburgerState}
+                      slidersState={{ sliders, setSliders }}
                       onMouseEnter={() => {
                         sliders.hamburger.state = true;
                         setSliders({ ...sliders });
