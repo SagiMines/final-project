@@ -39,6 +39,20 @@ function NavSlider(props) {
     }
   };
 
+  const removeSliderFromScreen = () => {
+    if (props.collapse) {
+      props.slidersState.sliders.user.collapseState = false;
+      props.slidersState.sliders.categories.collapseState = false;
+      props.slidersState.sliders.hamburger.collapseState = false;
+    } else {
+      props.slidersState.sliders.user.state = false;
+      props.slidersState.sliders.categories.state = false;
+      props.slidersState.sliders.hamburger.state = false;
+      props.slidersState.sliders.user.hamburgerState = false;
+    }
+    props.slidersState.setSliders({ ...props.slidersState.sliders });
+  };
+
   return (
     <>
       <div
@@ -80,7 +94,12 @@ function NavSlider(props) {
             </label>
           ) : (
             <Link key={idx.toString()} to={section.route}>
-              <label className="nav-slider-name">{section.name}</label>
+              <label
+                onClick={removeSliderFromScreen}
+                className="nav-slider-name"
+              >
+                {section.name}
+              </label>
             </Link>
           )
         )}
@@ -99,7 +118,12 @@ function NavSlider(props) {
         >
           {props.categoriesSections.map((category, idx) => (
             <Link key={idx.toString()} to={`/categories/${category.id}`}>
-              <label className="nav-slider-name">{category.categoryName}</label>
+              <label
+                onClick={removeSliderFromScreen}
+                className="nav-slider-name"
+              >
+                {category.categoryName}
+              </label>
             </Link>
           ))}
         </div>
@@ -127,7 +151,12 @@ function NavSlider(props) {
               </label>
             ) : (
               <Link key={idx.toString()} to={`/${section.route}`}>
-                <label className="nav-slider-name">{section.name}</label>
+                <label
+                  onClick={removeSliderFromScreen}
+                  className="nav-slider-name"
+                >
+                  {section.name}
+                </label>
               </Link>
             )
           )}
