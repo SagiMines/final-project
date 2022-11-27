@@ -275,6 +275,7 @@ function Navbar() {
                         sliders.user.state = false;
                         setSliders({ ...sliders });
                       }}
+                      slidersState={{ sliders, setSliders }}
                       name={sliders.user.name}
                       sections={
                         user
