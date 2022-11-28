@@ -77,6 +77,8 @@ footer {
   mask: var(--mask);
   background: #8dbdc873;
   padding: 2.5rem;
-  max-width: 1000px;
+  max-width: 100%;
   margin: 1rem auto;
+  display: flex;
+  justify-content: center;
 }

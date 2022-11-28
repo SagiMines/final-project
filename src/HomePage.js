@@ -5,6 +5,7 @@ import LoadingGif from './LoadingGif';
 import { useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 import WhoAreWe from './WhoAreWe';
+import CompaniesWeWorkWith from './CompaniesWeWorkWith';
 function HomePage() {
   const [topProducts, setTopProducts] = useState();
 
@@ -35,7 +36,7 @@ function HomePage() {
             <div className="main-content-container">
               <TopProducts topProducts={topProducts} />
               <WhoAreWe />
-              {/* <CompaniesWeWorkWith /> */}
+              <CompaniesWeWorkWith />
             </div>
           </div>
         </>
