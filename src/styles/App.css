@@ -58,3 +58,25 @@ footer {
   align-items: center;
   justify-content: center;
 }
+
+.main-content-container {
+  width: 100%;
+}
+
+.zigzag-content {
+  --mask: conic-gradient(
+        from 135deg at top,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      top/40.00px 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+      bottom/40.00px 51% repeat-x;
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
+  background: #8dbdc873;
+  padding: 2.5rem;
+  max-width: 1000px;
+  margin: 1rem auto;
+}
