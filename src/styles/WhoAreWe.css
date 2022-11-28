@@ -10,3 +10,7 @@
   padding: 5px 0;
   margin-bottom: 1rem;
 }
+
+.zigzag-content > div {
+  max-width: 1000px;
+}
