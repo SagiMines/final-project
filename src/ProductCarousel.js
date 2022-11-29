@@ -24,7 +24,7 @@ function ProductCarousel(props) {
               to={`/product/${topProduct.id}`}
             >
               <img
-                className="d-block w-100 "
+                className="top-product-img d-block w-100 "
                 src={topProduct.productImages[0].imageSrc}
                 title={topProduct.productName}
                 alt={`${topProduct.productName} - Top product`}

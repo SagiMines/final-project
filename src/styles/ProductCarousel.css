@@ -16,9 +16,15 @@
   position: relative;
   color: #ffffff;
   font-size: min(3.5vw, 30px);
+  letter-spacing: 0.6px;
   margin-left: 15px;
   font-weight: 500;
   padding-right: 10px;
+}
+
+.top-product-img {
+  max-width: 400px;
+  max-height: 400px;
 }
 
 .top-product-title::before {
@@ -35,6 +41,7 @@
 }
 
 .top-product-title-container {
+  margin: 1rem 0 2rem 0;
   text-align: center;
 }
 
