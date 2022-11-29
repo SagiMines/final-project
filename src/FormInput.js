@@ -20,6 +20,7 @@ function FormInput(props) {
       {props.textArea && (
         <Form.Control
           as="textarea"
+          maxLength={150}
           rows={3}
           onChange={props.onChange}
           name={props.name}
