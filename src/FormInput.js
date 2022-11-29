@@ -8,13 +8,24 @@ function FormInput(props) {
           {props.label}
         </Form.Label>
       )}
-      <Form.Control
-        onChange={props.onChange}
-        name={props.name}
-        type={props.type}
-        placeholder={props.placeholder}
-        onBlur={props.onBlur ? props.onBlur : undefined}
-      />
+      {!props.textArea && (
+        <Form.Control
+          onChange={props.onChange}
+          name={props.name}
+          type={props.type}
+          placeholder={props.placeholder}
+          onBlur={props.onBlur ? props.onBlur : undefined}
+        />
+      )}
+      {props.textArea && (
+        <Form.Control
+          as="textarea"
+          rows={3}
+          onChange={props.onChange}
+          name={props.name}
+          placeholder={props.placeholder}
+        />
+      )}
     </Form.Group>
   );
 }

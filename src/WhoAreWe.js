@@ -5,7 +5,7 @@ function WhoAreWe() {
   return (
     <>
       <div className="who-are-we zigzag-content">
-        <div>
+        <div className="who-are-we-container">
           <h1 className="who-are-we-title">About Us</h1>
           <div className="who-are-we-text">
             <p>
