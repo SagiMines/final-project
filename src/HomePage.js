@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 import WhoAreWe from './WhoAreWe';
 import CompaniesWeWorkWith from './CompaniesWeWorkWith';
+import ContactUs from './ContactUs';
 function HomePage() {
   const [topProducts, setTopProducts] = useState();
 
@@ -37,6 +38,7 @@ function HomePage() {
               <TopProducts topProducts={topProducts} />
               <WhoAreWe />
               <CompaniesWeWorkWith />
+              <ContactUs />
             </div>
           </div>
         </>
