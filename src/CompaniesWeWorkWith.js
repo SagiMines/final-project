@@ -2,6 +2,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './styles/CompaniesWeWorkWith.css';
+import { companiesLogosNames } from './data/data';
 
 function CompaniesWeWorkWith() {
   const settings = {
@@ -13,7 +14,6 @@ function CompaniesWeWorkWith() {
     infinite: true,
     autoplay: true,
     autoplaySpeed: 2000,
-    // initialSlide: 0,
     responsive: [
       {
         breakpoint: 1300,
@@ -38,24 +38,11 @@ function CompaniesWeWorkWith() {
     <div className="companies-logos-slider-container">
       <h1>Who We Work With</h1>
       <Slider {...settings}>
-        <div>
-          <img src="./companies-logos/bosch.png" />
-        </div>
-        <div>
-          <img src="./companies-logos/bosch.png" />
-        </div>
-        <div>
-          <img src="./companies-logos/bosch.png" />
-        </div>
-        <div>
-          <img src="./companies-logos/bosch.png" />
-        </div>
-        <div>
-          <img src="./companies-logos/bosch.png" />
-        </div>
-        <div>
-          <img src="./companies-logos/bosch.png" />
-        </div>
+        {companiesLogosNames().map((companyName, idx) => (
+          <div key={idx.toString()}>
+            <img src={`./companies-logos/${companyName}.png`} />
+          </div>
+        ))}
       </Slider>
     </div>
   );
