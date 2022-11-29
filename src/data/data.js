@@ -62,3 +62,15 @@ export const sortByOptions = () => {
     { title: 'Newest products', value: 'newest-products' },
   ];
 };
+
+export const companiesLogosNames = () => {
+  return [
+    'bosch',
+    'dewalt',
+    'greenworks',
+    'hunter',
+    'makita',
+    'milwaukee',
+    'ryobi',
+  ];
+};
