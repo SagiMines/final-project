@@ -5,9 +5,7 @@ import './styles/TopProducts.css';
 function TopProducts(props) {
   return (
     <div className="top-products container-fluid">
-      <Row>
-        <label className="top-products-text">Top Products</label>
-      </Row>
+      <h1 className="top-products-text">Top Products</h1>
 
       <Row>
         <ProductCarousel topProducts={props.topProducts} />
