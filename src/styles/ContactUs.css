@@ -21,3 +21,10 @@
 .contact-us {
   margin-bottom: 3rem !important;
 }
+
+.contact-us > .contact-us-container > .contact-us-button {
+  background-color: rgb(0 0 0 / 73%) !important;
+  color: white !important;
+  margin: 1rem auto;
+  max-width: 300px;
+}

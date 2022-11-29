@@ -78,15 +78,15 @@ export const companiesLogosNames = () => {
 export const contactUsFormDetails = () => [
   {
     label: 'Full Name',
-    name: 'Full Name',
+    name: 'fullName',
     type: 'text',
     placeholder: 'Full name',
   },
-  { label: 'Email', name: 'Email', type: 'email', placeholder: 'Email' },
-  { label: 'Subject', name: 'Subject', type: 'text', placeholder: 'Subject' },
+  { label: 'Email', name: 'email', type: 'email', placeholder: 'Email' },
+  { label: 'Subject', name: 'subject', type: 'text', placeholder: 'Subject' },
   {
     label: 'Message',
-    name: 'Message',
+    name: 'message',
     placeholder: 'Message',
     textArea: true,
   },
