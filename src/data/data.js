@@ -72,6 +72,7 @@ export const companiesLogosNames = () => {
     'makita',
     'milwaukee',
     'ryobi',
+    'metabo',
   ];
 };
 
