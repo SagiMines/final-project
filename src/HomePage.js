@@ -7,6 +7,7 @@ import { getReq } from './DAL/serverData';
 import WhoAreWe from './WhoAreWe';
 import CompaniesWeWorkWith from './CompaniesWeWorkWith';
 import ContactUs from './ContactUs';
+import Quote from './Quote';
 function HomePage() {
   const [topProducts, setTopProducts] = useState();
 
@@ -39,6 +40,7 @@ function HomePage() {
               <WhoAreWe />
               <CompaniesWeWorkWith />
               <ContactUs />
+              <Quote />
             </div>
           </div>
         </>

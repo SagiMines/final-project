@@ -1,6 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@300&display=swap');
+
 .banner {
+  display: flex;
+  justify-content: center;
   text-align: center;
   background-color: #f8f9fa;
-  padding: 1rem 0;
+  background-image: url('./../../public/banner.jpg');
+  background-repeat: repeat-y;
+  background-position: center;
+  background-size: cover;
+
   border-bottom: 1px solid #80808057;
+}
+
+.text-container {
+  background-color: #16181a;
+  width: fit-content;
+  margin: 4rem 0;
+  padding: 3rem;
+  opacity: 0.8;
+  border-radius: 10px;
+}
+.text-container > div > h1 {
+  font-family: 'Bebas Neue', cursive;
+  color: white;
+  font-size: clamp(70px, 3vw, 90px);
+  margin-bottom: 1rem;
+}
+
+.text-container > div > h5 {
+  font-family: 'Anek Devanagari', sans-serif;
+  color: white;
+  font-size: clamp(13px, 2vw, 15px);
+  opacity: 0.8;
 }
