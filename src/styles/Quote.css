@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.quote-container {
+  display: flex;
+  letter-spacing: 1px;
+  word-spacing: 1px;
+  margin: 4rem 0;
+  color: #373d3e;
+  justify-content: center;
+}
+
+.quote-container > div > h1 {
+  font-family: 'Anton', sans-serif;
+  text-align: center;
+  font-size: min(max(5vw, 30px), 80px);
+}
+
+.quote-container > div > h5 {
+  margin: 1rem 0;
+  text-align: end;
+  font-size: clamp(13px, 2vw, 20px);
+}
