@@ -2,13 +2,33 @@
   width: fit-content;
 }
 
+.fab-container > .row {
+  flex-direction: column;
+  background-color: #212529bf;
+  border-radius: 8px 0px 0px 8px;
+  padding: 0.5rem 0;
+  /* box-shadow: -1px 0px 19px black; */
+}
+
 .fab-link {
   text-decoration: none;
+  margin: 0.3rem 0;
+}
+
+.tab {
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  font-size: 22px;
+}
+
+.close-tab {
+  margin-bottom: 0.7rem;
 }
 
 .fab-container {
   position: fixed !important;
-  right: 15px;
+  right: 13px;
   top: 50%;
   z-index: 100;
 }
