@@ -25,6 +25,7 @@
 .top-product-img {
   max-width: 400px;
   max-height: 400px;
+  margin-bottom: 1rem;
 }
 
 .top-product-title::before {
@@ -41,7 +42,7 @@
 }
 
 .top-product-title-container {
-  margin: 1rem 0 2rem 0;
+  margin: 0 0 2rem 0;
   text-align: center;
 }
 

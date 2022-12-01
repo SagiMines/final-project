@@ -46,12 +46,13 @@ function App() {
         {(user || guestTotalCartItems >= 0) && (
           <>
             <Navbar key={user ? 1 : 0} />
-            {user &&
+            {/* {user &&
               user.totalCartItems !== 0 &&
               user.totalCartItems !== undefined && <FabContainer user={true} />}
             {!user &&
               guestTotalCartItems !== 0 &&
-              guestTotalCartItems !== undefined && <FabContainer />}
+              guestTotalCartItems !== undefined && <FabContainer />} */}
+            <FabContainer user={user ? true : false} />
             <RoutesManager />
             <Footer />
           </>
