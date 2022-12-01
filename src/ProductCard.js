@@ -144,11 +144,13 @@ function ProductCard(props) {
         const isProductInCart = userCart.find(
           cartProduct => cartProduct.productId === productId
         );
+
         if (isProductInCart) {
           await deleteReq(
             `cart?user-id=${user.userId}&product-id=${productId}`
           );
-          user.totalCartItems = await updateCartDetails(reqBody);
+          user.totalCartItems = await updateCartDetails(reqBody, 'wishlist');
+
           setUser({ ...user });
         }
         console.log(
@@ -279,17 +281,25 @@ function ProductCard(props) {
     }
   };
 
-  const updateCartDetails = async reqBody => {
-    // await getReq(`cart/${user.userId}`);
+  const updateCartDetails = async (reqBody, element) => {
     let userCart;
-    do {
-      userCart = await getReq(`cart/${user.userId}`);
-    } while (
-      !userCart.find(cartItem => cartItem.productId === reqBody.productId)
-    );
+    if (element !== 'wishlist') {
+      do {
+        userCart = await getReq(`cart/${user.userId}`);
+      } while (
+        !userCart.find(cartItem => cartItem.productId === reqBody.productId)
+      );
+    }
+
+    if (element === 'wishlist') {
+      do {
+        userCart = await getReq(`cart/${user.userId}`);
+      } while (
+        userCart.find(cartItem => cartItem.productId === reqBody.productId)
+      );
+    }
     const filteredCart = userCart.filter(cartItem => cartItem.checked);
     const cartItemsAmount = filteredCart.reduce((a, b) => a + b.amount, 0);
-
     return cartItemsAmount;
   };
 
