@@ -65,7 +65,9 @@ export const postReq = async (route, data) => {
   const ans = await req.json();
   const status = ans.statusCode;
   if (status === 200) val = true;
-  else val = false;
+  else if (ans.message === 'This user has not been approved yet') {
+    val = status;
+  } else val = false;
 
   return val;
 };

@@ -86,7 +86,6 @@ function Register() {
 
       //If the email is already in use
       if (checkEmail) {
-        console.log(checkEmail);
         state.alerts.email = `* Email is already in use`;
       }
 

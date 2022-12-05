@@ -106,6 +106,7 @@ function MyAccount() {
   const getUserInfo = async () => {
     userInfo.user = await getReq(`users/${user.userId}`);
     delete userInfo.user.id;
+    delete userInfo.user.approved;
     setUserInfo({ ...userInfo });
   };
 
