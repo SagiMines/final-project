@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom';
 import './styles/LogIn.css';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { postReq, isConnected, getUserIdFromCookie } from './DAL/serverData';
+import {
+  getReq,
+  postReq,
+  isConnected,
+  getUserIdFromCookie,
+} from './DAL/serverData';
 import { UserContext } from './UserContext';
 
 function LogIn(props) {
@@ -20,12 +25,14 @@ function LogIn(props) {
   const [state, setState] = useState({
     user: { email: '', password: '' },
     passed: true,
+    approved: true,
   });
 
   const handleClick = async e => {
     e.preventDefault();
     const isOkay = await postReq('login', state.user);
-    if (isOkay) {
+
+    if (isOkay && isOkay !== 502) {
       setUser({ userId: await getUserIdFromCookie() });
       let savedGuestOrder;
       if (localStorage.getItem('guestCart')) {
@@ -46,6 +53,10 @@ function LogIn(props) {
       } else {
         navigate('/');
       }
+    } else if (isOkay === 502) {
+      state.approved = false;
+      console.log('here');
+      setState({ ...state });
     } else {
       state.passed = false;
       setState({ ...state });
@@ -55,6 +66,15 @@ function LogIn(props) {
   const handleChange = e => {
     state.user[e.target.name] = e.target.value;
     setState({ ...state });
+  };
+
+  const sendVerificationLink = async () => {
+    const sendVerificationLink = await getReq(
+      `users/send-verification-link?email=${state.user.email}`
+    );
+    if (sendVerificationLink) {
+      console.log('Mail sent');
+    }
   };
 
   useEffect(() => {
@@ -86,6 +106,22 @@ function LogIn(props) {
 
                 {!state.passed && (
                   <p className="login-error">Wrong Email/Password</p>
+                )}
+                {!state.approved && (
+                  <>
+                    <p className="login-error">
+                      This user has not been verified yet.
+                    </p>
+                    <p className="login-error">
+                      <a
+                        className="verification-link"
+                        onClick={sendVerificationLink}
+                      >
+                        Click here
+                      </a>{' '}
+                      to recieve a new verification mail to this user
+                    </p>
+                  </>
                 )}
                 <Button
                   onClick={handleClick}
@@ -124,6 +160,22 @@ function LogIn(props) {
 
               {!state.passed && (
                 <p className="login-error">Wrong Email/Password</p>
+              )}
+              {!state.approved && (
+                <>
+                  <p className="login-error">
+                    This user has not been verified yet.
+                  </p>
+                  <p className="login-error">
+                    <a
+                      className="verification-link"
+                      onClick={sendVerificationLink}
+                    >
+                      Click here
+                    </a>{' '}
+                    to recieve a new verification mail to this user
+                  </p>
+                </>
               )}
               <Button
                 onClick={handleClick}
@@ -165,6 +217,22 @@ function LogIn(props) {
                 {!state.passed && (
                   <p className="login-error">Wrong Email/Password</p>
                 )}
+                {!state.approved && (
+                  <>
+                    <p className="login-error">
+                      This user has not been verified yet.
+                    </p>
+                    <p className="login-error">
+                      <a
+                        className="verification-link"
+                        onClick={sendVerificationLink}
+                      >
+                        Click here
+                      </a>{' '}
+                      to recieve a new verification mail to this user
+                    </p>
+                  </>
+                )}
                 <Button
                   onClick={handleClick}
                   className="login-btn"
@@ -202,6 +270,22 @@ function LogIn(props) {
 
               {!state.passed && (
                 <p className="login-error">Wrong Email/Password</p>
+              )}
+              {!state.approved && (
+                <>
+                  <p className="login-error">
+                    This user has not been verified yet.
+                  </p>
+                  <p className="login-error">
+                    <a
+                      className="verification-link"
+                      onClick={sendVerificationLink}
+                    >
+                      Click here
+                    </a>{' '}
+                    to recieve a new verification mail to this user
+                  </p>
+                </>
               )}
               <Button
                 onClick={handleClick}
