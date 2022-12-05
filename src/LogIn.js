@@ -74,6 +74,7 @@ function LogIn(props) {
     );
     if (sendVerificationLink) {
       console.log('Mail sent');
+      navigate('/email-confirmation-register');
     }
   };
 
