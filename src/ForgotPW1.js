@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
-import { getReq } from './DAL/serverData';
+import { getReq, patchReq, postReq } from './DAL/serverData';
 import FormInput from './FormInput';
 import './styles/ForgotPW1.css';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function ForgotPW1() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [input, setInput] = useState({
     value: null,
@@ -31,10 +32,34 @@ function ForgotPW1() {
     e.preventDefault();
     if (emailCheck(input.value)) {
       try {
-        await getReq(`users?email=${input.value}`);
-        const isEmailSent = await getReq(
-          `users/forgot-password?email=${input.value}`
-        );
+        const userData = await getReq(`users?email=${input.value}`);
+
+        let isEmailSent;
+        if (location.state && location.state.from === 'guest-cart') {
+          const userCart = await getReq(`cart/${userData.id}`);
+          //Unchecking everything in the user cart
+          if (userCart.length) {
+            for (const cartItem of userCart) {
+              cartItem.checked = false;
+              await patchReq('cart', cartItem);
+            }
+          }
+          const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+          const filteredGuestCart = guestCart.filter(
+            cartItem => cartItem.checked
+          );
+          for (const cartItem of filteredGuestCart) {
+            cartItem.userId = userData.id;
+            await postReq(`cart`, cartItem);
+          }
+          isEmailSent = await getReq(
+            `users/forgot-password?email=${input.value}&from=${location.state.from}`
+          );
+        } else {
+          isEmailSent = await getReq(
+            `users/forgot-password?email=${input.value}`
+          );
+        }
         if (isEmailSent) {
           navigate('/email-confirmation-password');
         }

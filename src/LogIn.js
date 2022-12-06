@@ -297,8 +297,22 @@ function LogIn(props) {
                 Log In
               </Button>
               <section className="login-options">
-                <Link to="/forgot-password">Forgot password</Link>
-                <Link to="/register">Register</Link>
+                <Link
+                  to="/forgot-password"
+                  state={{
+                    from: 'guest-cart',
+                  }}
+                >
+                  Forgot password
+                </Link>
+                <Link
+                  to="/register"
+                  state={{
+                    from: 'guest-cart',
+                  }}
+                >
+                  Register
+                </Link>
               </section>
             </Form>
           )}

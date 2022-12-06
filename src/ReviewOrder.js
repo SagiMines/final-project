@@ -13,21 +13,21 @@ import _ from 'lodash';
 function ReviewOrder() {
   const { state } = useLocation();
   const { user } = useContext(UserContext);
-  const [buyNow, setBuyNow] = useState({
-    buyNowData: JSON.parse(localStorage.getItem('buy-now')),
-  });
+  // const [buyNow, setBuyNow] = useState({
+  //   buyNowData: JSON.parse(localStorage.getItem('buy-now')),
+  // });
   const [cartReview, setCartReview] = useState({});
   const [guestShippingDetails, setGuestShippingDetails] = useState();
   const [areGuestDetailsCompleted, setAreGuestDetailsCompleted] =
     useState(false);
 
-  const getPriceForBuyNow = () => {
-    let totalPrice = buyNow.buyNowProduct.discount
-      ? buyNow.buyNowProduct.unitPrice -
-        buyNow.buyNowProduct.unitPrice * (0.01 * buyNow.buyNowProduct.discount)
-      : buyNow.buyNowProduct.unitPrice;
-    return +(totalPrice * buyNow.buyNowProduct.amount).toFixed(2);
-  };
+  // const getPriceForBuyNow = () => {
+  //   let totalPrice = buyNow.buyNowProduct.discount
+  //     ? buyNow.buyNowProduct.unitPrice -
+  //       buyNow.buyNowProduct.unitPrice * (0.01 * buyNow.buyNowProduct.discount)
+  //     : buyNow.buyNowProduct.unitPrice;
+  //   return +(totalPrice * buyNow.buyNowProduct.amount).toFixed(2);
+  // };
 
   const setReviewCart = async () => {
     let cart;
@@ -70,6 +70,7 @@ function ReviewOrder() {
             (0.01 * cartProduct.discount)
         : cartProduct.unitPrice * cartProduct.amount;
     }
+    cartReview.totalCartPrice = +cartReview.totalCartPrice.toFixed(2);
     setCartReview({ ...cartReview });
   };
 
@@ -96,24 +97,24 @@ function ReviewOrder() {
   };
 
   const setReview = async () => {
-    if (buyNow.buyNowData) {
-      localStorage.removeItem('buy-now');
-      buyNow.buyNowProduct = await getReq(
-        `products/${buyNow.buyNowData.productId}`
-      );
-      buyNow.buyNowProduct.image = (
-        await getReq(`product-images/${buyNow.buyNowData.productId}`)
-      )[0].imageSrc;
-      buyNow.buyNowProduct.amount = buyNow.buyNowData.amount;
-      buyNow.buyNowProduct.checked = true;
-      setBuyNow({ ...buyNow });
-    } else {
-      if (state) {
-        await handleGuestSavedOrder();
-      }
-      await setReviewCart();
-      getTheCartDetails();
+    // if (buyNow.buyNowData) {
+    //   localStorage.removeItem('buy-now');
+    //   buyNow.buyNowProduct = await getReq(
+    //     `products/${buyNow.buyNowData.productId}`
+    //   );
+    //   buyNow.buyNowProduct.image = (
+    //     await getReq(`product-images/${buyNow.buyNowData.productId}`)
+    //   )[0].imageSrc;
+    //   buyNow.buyNowProduct.amount = buyNow.buyNowData.amount;
+    //   buyNow.buyNowProduct.checked = true;
+    //   setBuyNow({ ...buyNow });
+    // }
+
+    if (state) {
+      await handleGuestSavedOrder();
     }
+    await setReviewCart();
+    getTheCartDetails();
   };
 
   const areDetailsOkay = () => {
@@ -148,8 +149,8 @@ function ReviewOrder() {
   return (
     <div className="container-center">
       <div className="container review-container">
-        {_.isEmpty(cartReview) && !buyNow.buyNowData && <LoadingGif />}
-        {(!_.isEmpty(cartReview) || buyNow.buyNowData) && (
+        {_.isEmpty(cartReview) && <LoadingGif />}
+        {!_.isEmpty(cartReview) && (
           <>
             <h1 className="review-title">Review Your Order</h1>
             {!user && (
@@ -159,13 +160,15 @@ function ReviewOrder() {
                   setGuestShippingDetails,
                 }}
                 page="review"
+                // buyNowProduct={
+                //   buyNow.buyNowData ? buyNow.buyNowData : undefined
+                // }
               />
             )}
             {user && <ShippingDetailsCard page="review" />}
             <Row className="review-data">
               <Col md>
-                {!buyNow.buyNowData &&
-                  cartReview.finalCart &&
+                {cartReview.finalCart &&
                   cartReview.finalCart.map((cart, idx) => (
                     <ProductCard
                       page="review"
@@ -173,12 +176,12 @@ function ReviewOrder() {
                       currentProduct={cart}
                     />
                   ))}
-                {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
+                {/* {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
                   <ProductCard
                     page="review"
                     currentProduct={buyNow.buyNowProduct}
                   />
-                )}
+                )} */}
               </Col>
               <Col md>
                 {!user && (
@@ -190,30 +193,20 @@ function ReviewOrder() {
                         : undefined
                     }
                     cartSummary={{
-                      totalAmount: buyNow.buyNowProduct
-                        ? buyNow.buyNowProduct.amount
-                        : cartReview.totalCartItems,
-                      totalPrice: buyNow.buyNowProduct
-                        ? getPriceForBuyNow()
-                        : cartReview.totalCartPrice,
+                      totalAmount: cartReview.totalCartItems,
+                      totalPrice: cartReview.totalCartPrice,
                       cart: cartReview.finalCart,
                     }}
-                    buyNowProduct={buyNow.buyNowProduct}
                   />
                 )}
                 {user && (
                   <CheckoutCard
                     page="review"
                     cartSummary={{
-                      totalAmount: buyNow.buyNowProduct
-                        ? buyNow.buyNowProduct.amount
-                        : cartReview.totalCartItems,
-                      totalPrice: buyNow.buyNowProduct
-                        ? getPriceForBuyNow()
-                        : cartReview.totalCartPrice,
+                      totalAmount: cartReview.totalCartItems,
+                      totalPrice: cartReview.totalCartPrice,
                       cart: cartReview.finalCart,
                     }}
-                    buyNowProduct={buyNow.buyNowProduct}
                   />
                 )}
               </Col>

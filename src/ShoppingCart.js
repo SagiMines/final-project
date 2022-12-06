@@ -108,8 +108,10 @@ function ShoppingCart() {
         .map(product =>
           product.discount
             ? product.checked &&
-              product.unitPrice * product.amount -
+              +(
+                product.unitPrice * product.amount -
                 product.unitPrice * product.amount * (0.01 * product.discount)
+              ).toFixed(2)
             : product.checked && product.unitPrice * product.amount
         )
         .reduce((a, b) => a + b, 0);
@@ -183,6 +185,7 @@ function ShoppingCart() {
               (0.01 * checkedCartProducts[0].discount)
           : checkedCartProducts[0].unitPrice * checkedCartProducts[0].amount;
       }
+      cartData.totalPrice = +cartData.totalPrice.toFixed(2);
       //User
       if (user) {
         user.totalCartItems = cartData.totalAmount;
@@ -201,6 +204,7 @@ function ShoppingCart() {
         setGuestTotalCartItems(0);
       }
     }
+
     setCartData({ ...cartData });
   };
 

@@ -313,7 +313,11 @@ function ShippingDetailsCard(props) {
                 <Card.Text className="missing-shipping-details">
                   Please fill shipping details before proceeding
                 </Card.Text>
-                <Link className="change-address" to="/my-account">
+                <Link
+                  className="change-address"
+                  to="/my-account"
+                  state={{ from: 'review' }}
+                >
                   Enter Shipping Details
                 </Link>
               </Card.Title>

@@ -1,6 +1,6 @@
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormInput from './FormInput';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './styles/Register.css';
 import { useEffect, useState } from 'react';
 import countryList from 'country-list';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getReq, postReq, isConnected } from './DAL/serverData';
 
 function Register() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [state, setState] = useState({
     alerts: {
@@ -65,7 +66,27 @@ function Register() {
       delete Object.assign(state.values, {
         ['lastName']: state.values['lastname'],
       })['lastname'];
-      await postReq('register', state.values);
+
+      // Handle guest register in cart order
+      if (location.state && location.state.from) {
+        await postReq(`register?from=${location.state.from}`, state.values);
+
+        let newUser;
+        do {
+          newUser = await getReq(`users?email=${state.values['email']}`);
+        } while (!newUser);
+
+        const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+        const filteredGuestCart = guestCart.filter(
+          cartItem => cartItem.checked
+        );
+        for (const cartItem of filteredGuestCart) {
+          cartItem.userId = newUser.id;
+          await postReq(`cart`, cartItem);
+        }
+      } else {
+        await postReq(`register`, state.values);
+      }
       navigate('/email-confirmation-register');
     } else {
       // if some of the inputs are not filled

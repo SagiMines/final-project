@@ -1,8 +1,17 @@
-import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Card } from 'react-bootstrap';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './styles/RegisterSuccess.css';
 import { useEffect } from 'react';
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
+import { getReq } from './DAL/serverData';
+import { useState } from 'react';
 function RegisterSuccess() {
+  const [searchParams] = useSearchParams();
+  const { user } = useContext(UserContext);
+  const [userName, setUserName] = useState();
+  const navigate = useNavigate();
+
   const removeGuest = () => {
     if (localStorage.getItem('guestCart')) {
       localStorage.removeItem('guestCart');
@@ -11,8 +20,19 @@ function RegisterSuccess() {
       localStorage.removeItem('guestWishlist');
     }
   };
+
+  const getNewUserName = async () => {
+    const userData = await getReq(`users/${user.userId}`);
+    setUserName(userData.firstName);
+  };
+
   useEffect(() => {
+    getNewUserName();
     removeGuest();
+
+    setTimeout(() => {
+      navigate(searchParams.get('from') ? '/review-order' : '/');
+    }, 5000);
   }, []);
 
   return (
@@ -20,16 +40,20 @@ function RegisterSuccess() {
       <div className="container register-success-container">
         <h1 className="register-success-title">Success!</h1>
         <Card>
-          <Card.Body>
-            <Card.Title>Dear User,</Card.Title>
-            <Card.Text>You have successfully registered to our site.</Card.Text>
-            <Card.Text>Welcome, and have fun!</Card.Text>
-            <Link to="/">
-              <Button className="register-success-button">
-                Go to the main page
-              </Button>
-            </Link>
-          </Card.Body>
+          {userName && (
+            <Card.Body>
+              <Card.Title>Dear {userName},</Card.Title>
+              <Card.Text>
+                You have successfully registered to our site.
+              </Card.Text>
+              <Card.Text>
+                You will be redirected to{' '}
+                {searchParams.get('from')
+                  ? 'your order shortly.'
+                  : 'the main page shortly.'}
+              </Card.Text>
+            </Card.Body>
+          )}
         </Card>
       </div>
     </div>
