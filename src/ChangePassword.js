@@ -4,9 +4,11 @@ import './styles/ChangePassword.css';
 import { useContext, useState } from 'react';
 import { UserContext } from './UserContext';
 import { getReq, patchReq, postReq } from './DAL/serverData';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function ChangePassword(props) {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [values, setValues] = useState({
@@ -93,17 +95,40 @@ function ChangePassword(props) {
     do {
       userDetails =
         props.page !== 'update'
-          ? await getReq(`users/forgotten-password-user`)
+          ? await getReq(
+              `users/forgotten-password-user?email=${encodeURIComponent(
+                Cookies.get('forgot-password')
+              )}`
+            )
           : await getReq(`users/${user.userId}`);
     } while (!userDetails);
-
     userDetails.password = values.newPassword.value;
     const isUserPasswordUpdated = await patchReq(
       `users/${userDetails.id}`,
       userDetails
     );
+
     if (isUserPasswordUpdated) {
-      navigate('/change-password-success');
+      if (searchParams.get('from')) {
+        await getReq(
+          `users/forgotten-password-user-redirect?email=${encodeURIComponent(
+            Cookies.get('forgot-password')
+          )}&from=${searchParams.get('from')}`
+        );
+
+        navigate(
+          `/change-password-success?from=${searchParams.get(
+            'from'
+          )}&token=${encodeURIComponent(Cookies.get('forgot-password'))}`
+        );
+        if (Cookies.get('forgot-password')) {
+          process.env.NODE_ENV === 'production'
+            ? Cookies.remove('forgot-password', { domain: '.workshop-il.com' })
+            : Cookies.remove('forgot-password');
+        }
+      } else {
+        navigate('/change-password-success');
+      }
     }
   };
 

@@ -1,5 +1,5 @@
 import { Button, Card, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './styles/MyAccount.css';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
@@ -10,6 +10,7 @@ import _ from 'lodash';
 import LoadingGif from './LoadingGif';
 
 function MyAccount() {
+  const location = useLocation();
   const { user } = useContext(UserContext);
   const [userInfo, setUserInfo] = useState({});
 
@@ -206,7 +207,16 @@ function MyAccount() {
               </Row>
 
               <Link to="/change-password">
-                <Button className="my-account-btn">Update password</Button>
+                {!location.state && (
+                  <Button className="my-account-btn">Update password</Button>
+                )}
+                {location.state && location.state.from === 'review' && (
+                  <Link to="/review-order">
+                    <Button className="my-account-btn">
+                      Go back to order review
+                    </Button>
+                  </Link>
+                )}
               </Link>
             </Card.Body>
           </Card>

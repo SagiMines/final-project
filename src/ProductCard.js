@@ -23,28 +23,30 @@ function ProductCard(props) {
     if (!checkClick.isChecked) {
       props.currentProduct.checked = true;
       //calculate the price with or without the discount
-      props.cartState.cartData.totalPrice =
+      props.cartState.cartData.totalPrice = +(
         props.cartState.cartData.totalPrice +
         (props.currentProduct.discount
           ? props.currentProduct.amount * props.currentProduct.unitPrice -
             props.currentProduct.amount *
               props.currentProduct.unitPrice *
               (props.currentProduct.discount * 0.01)
-          : props.currentProduct.amount * props.currentProduct.unitPrice);
+          : props.currentProduct.amount * props.currentProduct.unitPrice)
+      ).toFixed(2);
 
       props.cartState.cartData.totalAmount =
         props.cartState.cartData.totalAmount + props.currentProduct.amount;
     } else {
       props.currentProduct.checked = false;
 
-      props.cartState.cartData.totalPrice =
+      props.cartState.cartData.totalPrice = +(
         props.cartState.cartData.totalPrice -
         (props.currentProduct.discount
           ? props.currentProduct.amount * props.currentProduct.unitPrice -
             props.currentProduct.amount *
               props.currentProduct.unitPrice *
               (props.currentProduct.discount * 0.01)
-          : props.currentProduct.amount * props.currentProduct.unitPrice);
+          : props.currentProduct.amount * props.currentProduct.unitPrice)
+      ).toFixed(2);
 
       props.cartState.cartData.totalAmount =
         props.cartState.cartData.totalAmount - props.currentProduct.amount;
@@ -94,26 +96,48 @@ function ProductCard(props) {
     }
   };
 
-  const handleBuyNow = e => {
+  const handleBuyNow = async e => {
     // local storage to a specific item and redirect to order-review
     productsAmount[e.target.value] = productsAmount[e.target.value]
       ? productsAmount[e.target.value]
       : 1;
-    let reqBody;
+    let buyNowItem;
     if (user) {
-      reqBody = {
+      buyNowItem = {
         userId: user.userId,
         productId: e.target.value,
         amount: productsAmount[e.target.value],
+        checked: true,
       };
+      const userCart = await getReq(`cart/${user.userId}`);
+      for (const cartItem of userCart) {
+        cartItem.checked = false;
+        await patchReq('cart', cartItem);
+      }
+      await postReq('cart', buyNowItem);
+      user.totalCartItems = 1;
+      setUser({ ...user });
       //Guest
     } else {
-      reqBody = {
-        productId: e.target.value,
+      buyNowItem = {
+        productId: Number(e.target.value),
         amount: productsAmount[e.target.value],
+        checked: true,
       };
+      const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      let isInCart = false;
+      for (const cartItem of guestCart) {
+        if (buyNowItem.productId === cartItem.productId) {
+          cartItem.checked = true;
+          isInCart = true;
+        } else cartItem.checked = false;
+      }
+      if (!isInCart) {
+        guestCart.unshift(buyNowItem);
+      }
+      localStorage.setItem('guestCart', JSON.stringify(guestCart));
+      setGuestTotalCartItems(1);
     }
-    localStorage.setItem('buy-now', JSON.stringify(reqBody));
     navigate('/review-order');
   };
 
@@ -400,32 +424,13 @@ function ProductCard(props) {
   };
 
   const setCartCheckBox = async () => {
-    let cart;
-    //User
-    if (user) {
-      cart = await getReq(`cart/${user.userId}`);
-      //Guest
-    } else {
-      cart = JSON.parse(localStorage.getItem('guestCart'));
-    }
-
-    const currentProduct = cart.find(
-      cartItem => cartItem.productId === props.currentProduct.id
-    );
-    if (currentProduct) {
-      checkClick.isChecked = currentProduct.checked;
-    }
-
+    checkClick.isChecked = props.currentProduct.checked;
     setCheckClick({ ...checkClick });
   };
 
   useEffect(() => {
     if (props.page === 'cart') {
       setCartCheckBox();
-      if (props.currentProduct && props.currentProduct.checked === undefined) {
-        props.currentProduct.checked = true;
-        setCheckClick(props.currentProduct.checked);
-      }
     }
   }, [props.currentProduct]);
 
@@ -449,6 +454,7 @@ function ProductCard(props) {
       >
         {props.page === 'cart' && (
           <Form.Check
+            key={Math.random()}
             name={props.currentProduct.id}
             className="choose-button"
             type="checkbox"
@@ -611,13 +617,13 @@ function ProductCard(props) {
                       <Card.Text className="price-section-category">
                         {props.currentProduct.discount ? (
                           <span className="discount-price">
-                            {`$${
+                            {`$${+(
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount -
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount *
                                 (0.01 * props.currentProduct.discount)
-                            } `}
+                            ).toFixed(2)} `}
                             <span className="old-price">
                               {`$${
                                 props.currentProduct.unitPrice *
@@ -635,9 +641,11 @@ function ProductCard(props) {
                         )}
                         <span className="price-per-unit">{` ($${
                           props.currentProduct.discount
-                            ? props.currentProduct.unitPrice -
-                              props.currentProduct.unitPrice *
-                                (0.01 * props.currentProduct.discount)
+                            ? +(
+                                props.currentProduct.unitPrice -
+                                props.currentProduct.unitPrice *
+                                  (0.01 * props.currentProduct.discount)
+                              ).toFixed(2)
                             : props.currentProduct.unitPrice
                         } for 1 unit)`}</span>
                       </Card.Text>
@@ -697,13 +705,13 @@ function ProductCard(props) {
                       <Card.Text className="price-section-review">
                         {props.currentProduct.discount ? (
                           <span className="discount-price">
-                            {`$${
+                            {`$${+(
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount -
                               props.currentProduct.unitPrice *
                                 props.currentProduct.amount *
                                 (0.01 * props.currentProduct.discount)
-                            } `}
+                            ).toFixed(2)} `}
                             <span className="old-price">
                               {`$${
                                 props.currentProduct.unitPrice *
@@ -721,9 +729,11 @@ function ProductCard(props) {
                         )}
                         <span className="price-per-unit">{` ($${
                           props.currentProduct.discount
-                            ? props.currentProduct.unitPrice -
-                              props.currentProduct.unitPrice *
-                                (0.01 * props.currentProduct.discount)
+                            ? +(
+                                props.currentProduct.unitPrice -
+                                props.currentProduct.unitPrice *
+                                  (0.01 * props.currentProduct.discount)
+                              ).toFixed(2)
                             : props.currentProduct.unitPrice
                         } for 1 unit)`}</span>
                       </Card.Text>

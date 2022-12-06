@@ -36,10 +36,8 @@ function CheckoutCard(props) {
           );
 
           if (isOrderDetailsUpdated) {
-            const areOrderedCartItemsDeleted = props.buyNowProduct
-              ? true
-              : await deleteOrderedCartItems();
-            user.totalCartItems = props.buyNowProduct ? user.totalCartItems : 0;
+            const areOrderedCartItemsDeleted = await deleteOrderedCartItems();
+            user.totalCartItems = 0;
             setUser({ ...user });
 
             if (areOrderedCartItemsDeleted) {
@@ -55,19 +53,12 @@ function CheckoutCard(props) {
                   (a, b) => a + b.finalPrice,
                   0
                 );
-              } else if (props.buyNowProduct) {
-                cartTotalWithoutDiscount =
-                  props.buyNowProduct.priceWithoutDiscount;
-
-                cartTotalWithDiscount = props.buyNowProduct.finalPrice;
               }
 
               const saving = cartTotalWithoutDiscount - cartTotalWithDiscount;
               const confirmationEmailBody = {
                 user: userDetails,
-                cartProducts: props.cartSummary.cart
-                  ? props.cartSummary.cart
-                  : [props.buyNowProduct],
+                cartProducts: props.cartSummary.cart,
                 orderDate: new Date().toLocaleDateString(),
                 orderId: userLastOrderId,
                 cartTotalWithoutDiscount,
@@ -133,19 +124,12 @@ function CheckoutCard(props) {
                   (a, b) => a + b.finalPrice,
                   0
                 );
-              } else if (props.buyNowProduct) {
-                cartTotalWithoutDiscount =
-                  props.buyNowProduct.priceWithoutDiscount;
-
-                cartTotalWithDiscount = props.buyNowProduct.finalPrice;
               }
 
               const saving = cartTotalWithoutDiscount - cartTotalWithDiscount;
               const confirmationEmailBody = {
                 user: userDetails,
-                cartProducts: props.cartSummary.cart
-                  ? props.cartSummary.cart
-                  : [props.buyNowProduct],
+                cartProducts: props.cartSummary.cart,
                 orderDate: new Date().toLocaleDateString(),
                 orderId: userLastOrderId,
                 cartTotalWithoutDiscount,
@@ -157,9 +141,9 @@ function CheckoutCard(props) {
                 confirmationEmailBody
               );
               localStorage.setItem('guestCart', JSON.stringify([]));
-              if (!props.buyNowProduct) {
-                setGuestTotalCartItems(0);
-              }
+
+              setGuestTotalCartItems(0);
+
               if (isConfirmationMailSent) {
                 navigate('/order-confirmation');
               }
@@ -205,46 +189,21 @@ function CheckoutCard(props) {
   };
 
   const addOrderDetailsToDb = async orderId => {
-    if (!props.buyNowProduct) {
-      for (const cartItem of props.cartSummary.cart) {
-        const productId = cartItem.id;
-        const unitPrice = cartItem.unitPrice;
-        const amount = cartItem.amount;
-        const finalPrice = cartItem.discount
-          ? unitPrice * amount - unitPrice * amount * (cartItem.discount * 0.01)
-          : unitPrice * amount;
-
-        cartItem.finalPrice = finalPrice;
-        cartItem.priceWithoutDiscount = unitPrice * amount;
-        const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
-        const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
-        const isProductUnitsInStockUpdated = await patchReq(
-          `products?product-id=${cartItem.id}&amount=${
-            cartItem.unitsInStock - cartItem.amount
-          }`
-        );
-        if (!isOrderDetailsAddedToDb || !isProductUnitsInStockUpdated) {
-          console.log(
-            'Something went wrong with the data sent to the database.'
-          );
-          return false;
-        }
-      }
-    } else {
-      const productId = props.buyNowProduct.id;
-      const unitPrice = props.buyNowProduct.unitPrice;
-      const amount = props.buyNowProduct.amount;
-      const finalPrice = props.buyNowProduct.discount
-        ? unitPrice * amount -
-          unitPrice * amount * (props.buyNowProduct.discount * 0.01)
+    for (const cartItem of props.cartSummary.cart) {
+      const productId = cartItem.id;
+      const unitPrice = cartItem.unitPrice;
+      const amount = cartItem.amount;
+      const finalPrice = cartItem.discount
+        ? unitPrice * amount - unitPrice * amount * (cartItem.discount * 0.01)
         : unitPrice * amount;
-      props.buyNowProduct.finalPrice = finalPrice;
-      props.buyNowProduct.priceWithoutDiscount = finalPrice * amount;
+
+      cartItem.finalPrice = finalPrice;
+      cartItem.priceWithoutDiscount = unitPrice * amount;
       const reqBody = { orderId, productId, unitPrice, amount, finalPrice };
       const isOrderDetailsAddedToDb = await postReq('order-details', reqBody);
       const isProductUnitsInStockUpdated = await patchReq(
-        `products?product-id=${props.buyNowProduct.id}&amount=${
-          props.buyNowProduct.unitsInStock - props.buyNowProduct.amount
+        `products?product-id=${cartItem.id}&amount=${
+          cartItem.unitsInStock - cartItem.amount
         }`
       );
       if (!isOrderDetailsAddedToDb || !isProductUnitsInStockUpdated) {
@@ -311,7 +270,8 @@ function CheckoutCard(props) {
                 JSON.parse(localStorage.getItem('guestCart')) &&
                 !JSON.parse(localStorage.getItem('guestCart')).find(
                   item => item.checked
-                ))
+                ) &&
+                props.page === 'cart')
                 ? true
                 : false
             }
