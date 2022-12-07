@@ -119,15 +119,15 @@ function ChangePassword(props) {
         navigate(
           `/change-password-success?from=${searchParams.get(
             'from'
-          )}&token=${encodeURIComponent(Cookies.get('forgot-password'))}`
+          )}&token=${Cookies.get('forgot-password')}`
         );
-        if (Cookies.get('forgot-password')) {
-          process.env.NODE_ENV === 'production'
-            ? Cookies.remove('forgot-password', { domain: '.workshop-il.com' })
-            : Cookies.remove('forgot-password');
-        }
       } else {
         navigate('/change-password-success');
+      }
+      if (Cookies.get('forgot-password')) {
+        process.env.NODE_ENV === 'production'
+          ? Cookies.remove('forgot-password', { domain: '.workshop-il.com' })
+          : Cookies.remove('forgot-password');
       }
     }
   };
