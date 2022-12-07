@@ -61,7 +61,10 @@ function ForgotPW1() {
           );
         }
         if (isEmailSent) {
-          navigate('/email-confirmation-password');
+          const userData = await getReq(`users?email=${input.value}`);
+          navigate('/email-confirmation-password', {
+            state: { userName: userData.firstName },
+          });
         }
       } catch {
         input.error =
