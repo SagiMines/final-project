@@ -13,21 +13,10 @@ import _ from 'lodash';
 function ReviewOrder() {
   const { state } = useLocation();
   const { user } = useContext(UserContext);
-  // const [buyNow, setBuyNow] = useState({
-  //   buyNowData: JSON.parse(localStorage.getItem('buy-now')),
-  // });
   const [cartReview, setCartReview] = useState({});
   const [guestShippingDetails, setGuestShippingDetails] = useState();
   const [areGuestDetailsCompleted, setAreGuestDetailsCompleted] =
     useState(false);
-
-  // const getPriceForBuyNow = () => {
-  //   let totalPrice = buyNow.buyNowProduct.discount
-  //     ? buyNow.buyNowProduct.unitPrice -
-  //       buyNow.buyNowProduct.unitPrice * (0.01 * buyNow.buyNowProduct.discount)
-  //     : buyNow.buyNowProduct.unitPrice;
-  //   return +(totalPrice * buyNow.buyNowProduct.amount).toFixed(2);
-  // };
 
   const setReviewCart = async () => {
     let cart;
@@ -93,23 +82,9 @@ function ReviewOrder() {
         console.log('Successfully updated the cart.');
       }
     }
-    // localStorage.removeItem('savedGuestOrder');
   };
 
   const setReview = async () => {
-    // if (buyNow.buyNowData) {
-    //   localStorage.removeItem('buy-now');
-    //   buyNow.buyNowProduct = await getReq(
-    //     `products/${buyNow.buyNowData.productId}`
-    //   );
-    //   buyNow.buyNowProduct.image = (
-    //     await getReq(`product-images/${buyNow.buyNowData.productId}`)
-    //   )[0].imageSrc;
-    //   buyNow.buyNowProduct.amount = buyNow.buyNowData.amount;
-    //   buyNow.buyNowProduct.checked = true;
-    //   setBuyNow({ ...buyNow });
-    // }
-
     if (state) {
       await handleGuestSavedOrder();
     }
@@ -160,9 +135,6 @@ function ReviewOrder() {
                   setGuestShippingDetails,
                 }}
                 page="review"
-                // buyNowProduct={
-                //   buyNow.buyNowData ? buyNow.buyNowData : undefined
-                // }
               />
             )}
             {user && <ShippingDetailsCard page="review" />}
@@ -176,12 +148,6 @@ function ReviewOrder() {
                       currentProduct={cart}
                     />
                   ))}
-                {/* {buyNow.buyNowProduct && buyNow.buyNowProduct.checked && (
-                  <ProductCard
-                    page="review"
-                    currentProduct={buyNow.buyNowProduct}
-                  />
-                )} */}
               </Col>
               <Col md>
                 {!user && (
