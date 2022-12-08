@@ -9,7 +9,7 @@ function ProductCarousel(props) {
       indicators={props.images && props.images.length === 1 ? false : true}
       fade
       variant="dark"
-      className="col-sm"
+      className={props.images ? 'product-page-carousel col-sm' : 'col-sm'}
     >
       {props.images &&
         props.images.map((image, idx) => (

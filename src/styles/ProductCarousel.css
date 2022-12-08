@@ -1,5 +1,12 @@
 .carousel-inner {
   width: 100%;
+}
+.product-page-carousel {
+  display: flex;
+  align-items: center;
+}
+
+.product-page-carousel .carousel-inner {
   padding: 3rem;
 }
 
@@ -55,4 +62,12 @@
 
 .carousel-link-to-product {
   text-decoration: none;
+}
+
+.product-page-carousel > .carousel-inner {
+  height: fit-content;
+}
+
+.product-page-carousel > .carousel-inner > .active {
+  display: flex;
 }
