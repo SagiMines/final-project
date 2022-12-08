@@ -1,11 +1,18 @@
 .carousel-inner {
   width: 100%;
+  padding: 3rem;
 }
 
 .carousel {
   max-width: 700px !important;
   min-width: 200px;
   padding: 1rem;
+}
+
+.carousel .carousel-control-prev-icon,
+.carousel .carousel-control-next-icon {
+  width: 25px;
+  height: 25px;
 }
 
 .d-block {
