@@ -874,7 +874,7 @@ function ProductCard(props) {
                 )}
               </Card.Title>
               <Row className="buttons">
-                <Col xl={3}>
+                <Col xxl={3}>
                   <Button
                     onClick={handleBuyNow}
                     value={props.productData.id}
@@ -884,7 +884,7 @@ function ProductCard(props) {
                     Buy now!
                   </Button>
                 </Col>
-                <Col xl={3}>
+                <Col xxl={3}>
                   <Button
                     onClick={handleAddToCart}
                     value={props.productData.id}
@@ -894,7 +894,7 @@ function ProductCard(props) {
                     Add to cart
                   </Button>
                 </Col>
-                <Col xl={3} className="product-wishlist">
+                <Col xxl={3} className="product-wishlist">
                   {state.isInWishList && (
                     <i
                       onClick={handleDeleteFromWishList}
