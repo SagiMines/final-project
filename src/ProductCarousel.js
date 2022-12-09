@@ -52,14 +52,14 @@ function ProductCarousel(props) {
                     <filter id="marker-shape">
                       <feTurbulence
                         type="fractalNoise"
-                        baseFrequency="0.1 0.2"
+                        baseFrequency="0.9 2"
                         numOctaves="1"
                         result="warp"
                       />
                       <feDisplacementMap
                         xChannelSelector="R"
                         yChannelSelector="G"
-                        scale="15"
+                        scale="10"
                         in="SourceGraphic"
                         in2="warp"
                       />
