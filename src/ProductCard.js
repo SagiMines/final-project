@@ -468,6 +468,15 @@ function ProductCard(props) {
             <>
               <Card.Img src={props.wishListItem.image} />
               <Card.Title>{props.wishListItem.productName}</Card.Title>
+              <Card.Text
+                className={
+                  props.wishListItem.unitsInStock
+                    ? 'on-stock center-text'
+                    : 'out-of-stock'
+                }
+              >
+                {props.wishListItem.unitsInStock ? 'On Stock!' : 'Out of Stock'}
+              </Card.Text>
               <Row className="card-buttons">
                 <Col lg={3}>
                   <Button
