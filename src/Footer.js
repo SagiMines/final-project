@@ -10,7 +10,7 @@ function Footer() {
           <i className="fab fa-twitter"></i>
         </section>
 
-        <span>Copyright Work Shop &copy;2022</span>
+        <span>Copyright Work Shop &copy;{new Date().getFullYear()}</span>
       </div>
     </footer>
   );

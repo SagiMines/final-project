@@ -51,7 +51,7 @@
   z-index: -1;
   filter: url(#marker-shape);
   left: -0.1em;
-  top: -4px;
+  top: -0.2em;
   padding: 0 0.3em;
 }
 
