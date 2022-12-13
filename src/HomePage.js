@@ -34,7 +34,6 @@ function HomePage() {
         <>
           <Banner />
           <div className="main-content">
-            <CategoryAside />
             <div className="main-content-container">
               <TopProducts topProducts={topProducts} />
               <WhoAreWe />
