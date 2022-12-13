@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans&display=swap');
+.menu-bars {
+  /* margin-left: 2rem; */
+  font-size: 2rem;
+  background: none;
+  color: rgba(0, 0, 0, 0.431);
+}
+
+.menu-bars:hover {
+  color: rgba(0, 0, 0, 0.843);
+}
+
+.nav-menu {
+  font-family: 'Merriweather Sans', sans-serif;
+  letter-spacing: 0.6px;
+  background-color: #72a1a9;
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  transition: 850ms;
+}
+
+.nav-menu.active {
+  right: 0;
+  transition: 350ms;
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav-text {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 8px 0px 8px 10px;
+  list-style: none;
+  height: 60px;
+  flex-direction: column;
+}
+
+.nav-text .sidebar-title {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.918);
+  font-size: 18px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  /* padding: 0 16px; */
+  border-radius: 4px;
+}
+
+.nav-text > .sidebar-title > span,
+.nav-text div > span {
+  margin-left: 0.5rem;
+}
+
+.nav-text > .sidebar-title > svg,
+.nav-text div > svg {
+  margin-left: 0.5rem;
+}
+
+.nav-text .sidebar-title:hover {
+  background-color: rgba(0, 0, 0, 0.431);
+}
+
+.nav-menu-items {
+  width: 100%;
+  padding: 0;
+}
+
+.navbar-toggle {
+  background-color: #72a1a9;
+  width: 100%;
+  height: 50px;
+  margin-left: 1rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.arrow-sidebar {
+  margin-right: 0.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.sub-titles {
+  animation-duration: 700ms;
+  animation-name: slidein, fadeOut;
+}
+
+@keyframes slidein {
+  from {
+    margin-top: -20%;
+  }
+
+  to {
+    margin-right: 10%;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.sub-titles > li {
+  margin: 1rem 0;
+  list-style: none;
+}
+
+.sub-titles > li > a {
+  text-decoration: none;
+}
+
+.sub-titles > li .sub-title {
+  margin-left: 3rem;
+
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.918);
+  font-size: 14px;
+}
+
+.sub-title {
+  transition-duration: 350ms;
+}
+
+.sub-titles > li .sub-title:hover {
+  color: rgba(0, 0, 0, 0.843);
+}
+
+.sub-titles > li:first-child {
+  margin-top: 0;
+}
+
+.guest-login-register-sidebar,
+.sidebar-greetings {
+  display: flex;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.843);
+  font-size: 18px;
+}
+.sidebar-greetings > svg {
+  margin-left: 10px;
+  font-size: 25px;
+}
+
+.guest-login-register-sidebar > a:nth-child(odd) {
+  cursor: pointer;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.843);
+}
+
+.guest-login-register-sidebar > a:nth-child(odd):hover {
+  color: rgba(255, 255, 255, 0.918);
+}
+
+.guest-login-register-sidebar > span:nth-child(even) {
+  margin: 0 0.5rem;
+}
+
+.nav-menu hr {
+  border: 0;
+  height: 1px;
+  background: #333;
+  background-image: linear-gradient(
+    to right,
+    rgba(204, 204, 204, 0.334),
+    #333,
+    rgba(204, 204, 204, 0.334)
+  );
+}
+
+.sidebar-heading {
+  background-color: #72a1a9;
+}

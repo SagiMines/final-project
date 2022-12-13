@@ -1,4 +1,3 @@
-import NavSlider from './NavSlider';
 import { navSlidersData } from './data/data';
 import { Link } from 'react-router-dom';
 import { Row } from 'react-bootstrap';
@@ -8,23 +7,29 @@ import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 import SearchSlider from './SearchSlider';
 import useComponentVisible from './custom-hooks/useComponentVisible';
+import useSidebarVisible from './custom-hooks/useSidebarVisible';
+import NavBarSide from './NavBarSide';
+import _ from 'lodash';
 
 function Navbar() {
   const [sliders, setSliders] = useState(null);
   const [cartData, setCartData] = useState({});
+  const [sidebar, setSidebar] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { guestTotalCartItems, setGuestTotalCartItems } =
     useContext(UserContext);
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
+  const { sidebarRef, isSidebarVisible, setIsSidebarVisible } =
+    useSidebarVisible(false);
 
-  const getCategories = async () => {
-    return await getReq('categories');
-  };
+  // const getCategories = async () => {
+  //   return await getReq('categories');
+  // };
 
-  const setCategoriesSlider = async () => {
+  const setSearchSlider = async () => {
     const navSliders = navSlidersData();
-    navSliders.categories.sections = await getCategories();
+    // navSliders.categories.sections = await getCategories();
     setSliders({ ...navSliders });
   };
 
@@ -106,13 +111,13 @@ function Navbar() {
   };
 
   useEffect(() => {
-    setCategoriesSlider();
+    setSearchSlider();
     setTheCart();
   }, []);
 
   return (
     <header>
-      {sliders && (
+      {!_.isEmpty(cartData) && (
         <nav className="navbar fixed-top navbar-expand-md">
           <div className="container-fluid">
             <Link to="/" className="navbar-brand">
@@ -151,62 +156,22 @@ function Navbar() {
                   </div>
                 )}
               </div>
+
               {!isComponentVisible && (
-                <div className="collapse-hamburger-container">
+                <>
                   <i
-                    onMouseEnter={() => {
-                      sliders.hamburger.collapseState = true;
-                      setSliders({ ...sliders });
-                    }}
-                    onMouseLeave={() => {
-                      sliders.hamburger.collapseState = false;
-                      setSliders({ ...sliders });
+                    onClick={() => {
+                      if (!isSidebarVisible && sidebar) {
+                        setIsSidebarVisible(true);
+                        setSidebar(true);
+                      } else {
+                        setIsSidebarVisible(!sidebar);
+                        setSidebar(!sidebar);
+                      }
                     }}
                     className="navbar-toggler navbar-toggler-icon fa fa-solid fa-bars"
                   ></i>
-                  {sliders.hamburger.collapseState && (
-                    <NavSlider
-                      isCategories={sliders.categories.collapseState}
-                      isUser={sliders.user.collapseState}
-                      slidersState={{ sliders, setSliders }}
-                      onMouseEnter={() => {
-                        sliders.hamburger.collapseState = true;
-                        setSliders({ ...sliders });
-                      }}
-                      showCategories={() => {
-                        sliders.categories.collapseState = true;
-                        setSliders({ ...sliders });
-                      }}
-                      showUser={() => {
-                        sliders.user.collapseState = true;
-                        setSliders({ ...sliders });
-                      }}
-                      onMouseLeave={() => {
-                        sliders.hamburger.collapseState = false;
-                        setSliders({ ...sliders });
-                      }}
-                      removeUser={() => {
-                        sliders.user.collapseState = false;
-                        setSliders({ ...sliders });
-                      }}
-                      removeCategories={() => {
-                        sliders.categories.collapseState = false;
-                        setSliders({ ...sliders });
-                      }}
-                      collapse={true}
-                      name={sliders.hamburger.collapseName}
-                      categoryName={sliders.categories.collapseName}
-                      userName={sliders.user.collapseName}
-                      categoriesSections={sliders.categories.sections}
-                      userSections={sliders.user.sections.connected}
-                      sections={
-                        user
-                          ? sliders.hamburger.sections.connected
-                          : sliders.hamburger.sections.disconnected
-                      }
-                    />
-                  )}
-                </div>
+                </>
               )}
             </div>
 
@@ -252,96 +217,27 @@ function Navbar() {
                     )}
                 </Link>
 
-                <div className="user-container">
-                  <i
-                    onMouseEnter={() => {
-                      sliders.user.state = true;
-                      setSliders({ ...sliders });
-                    }}
-                    onMouseLeave={() => {
-                      sliders.user.state = false;
-                      setSliders({ ...sliders });
-                    }}
-                    className="fa fa-user"
-                  ></i>
-
-                  {sliders.user.state && (
-                    <NavSlider
-                      onMouseEnter={() => {
-                        sliders.user.state = true;
-                        setSliders({ ...sliders });
-                      }}
-                      onMouseLeave={() => {
-                        sliders.user.state = false;
-                        setSliders({ ...sliders });
-                      }}
-                      slidersState={{ sliders, setSliders }}
-                      name={sliders.user.name}
-                      sections={
-                        user
-                          ? sliders.user.sections.connected
-                          : sliders.user.sections.disconnected
-                      }
-                    />
-                  )}
-                </div>
-
-                <div className="hamburger-container">
-                  <i
-                    onMouseEnter={() => {
-                      sliders.hamburger.state = true;
-                      setSliders({ ...sliders });
-                    }}
-                    onMouseLeave={() => {
-                      sliders.hamburger.state = false;
-                      setSliders({ ...sliders });
-                    }}
-                    className="fa fa-solid fa-bars"
-                  ></i>
-                  {sliders.hamburger.state && (
-                    <NavSlider
-                      isCategories={sliders.categories.state}
-                      isUser={sliders.user.hamburgerState}
-                      slidersState={{ sliders, setSliders }}
-                      onMouseEnter={() => {
-                        sliders.hamburger.state = true;
-                        setSliders({ ...sliders });
-                      }}
-                      showCategories={() => {
-                        sliders.categories.state = true;
-                        setSliders({ ...sliders });
-                      }}
-                      showUser={() => {
-                        sliders.user.hamburgerState = true;
-                        setSliders({ ...sliders });
-                      }}
-                      onMouseLeave={() => {
-                        sliders.hamburger.state = false;
-                        setSliders({ ...sliders });
-                      }}
-                      removeCategories={() => {
-                        sliders.categories.state = false;
-                        setSliders({ ...sliders });
-                      }}
-                      removeUser={() => {
-                        sliders.user.hamburgerState = false;
-                        setSliders({ ...sliders });
-                      }}
-                      name={sliders.hamburger.name}
-                      categoryName={sliders.categories.name}
-                      userName={sliders.user.hamburgerName}
-                      categoriesSections={sliders.categories.sections}
-                      userSections={sliders.user.sections.connected}
-                      sections={
-                        user
-                          ? sliders.hamburger.sections.connected
-                          : sliders.hamburger.sections.disconnected
-                      }
-                    />
-                  )}
-                </div>
+                <i
+                  onClick={() => {
+                    if (!isSidebarVisible && sidebar) {
+                      setIsSidebarVisible(true);
+                      setSidebar(true);
+                    } else {
+                      setIsSidebarVisible(!sidebar);
+                      setSidebar(!sidebar);
+                    }
+                  }}
+                  className="fa fa-solid fa-bars"
+                ></i>
               </section>
             </div>
+          </div>
+
+          <div ref={sidebarRef}>
+            <NavBarSide
+              isSidebarVisible={isSidebarVisible}
+              sidebarState={{ sidebar, setSidebar }}
+            />
           </div>
         </nav>
       )}
