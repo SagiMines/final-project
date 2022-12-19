@@ -84,7 +84,7 @@ function ContactUs() {
       const isMessageRecieved = await postReq('contact-us', reqBody);
       contactUsData.messageSent = true;
       if (isMessageRecieved) {
-        contactUsData.title = 'We Got It!';
+        contactUsData.title = `We've Got It!`;
         contactUsData.subTitle = `Dear ${contactUsData.data.fullName.value},\nWe've  received your message and we'll be in touch in the following days. `;
       } else {
         contactUsData.title = 'Oh oh!';
