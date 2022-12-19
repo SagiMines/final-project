@@ -105,7 +105,7 @@ function ProductCard(props) {
     if (user) {
       buyNowItem = {
         userId: user.userId,
-        productId: e.target.value,
+        productId: Number(e.target.value),
         amount: productsAmount[e.target.value],
         checked: true,
       };

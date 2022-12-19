@@ -64,7 +64,6 @@ function ContactUs() {
   };
 
   const handleClick = async () => {
-    console.log('hey');
     const contactUsDataValues = Object.values(contactUsData.data).map(
       input => input.value
     );
@@ -84,7 +83,6 @@ function ContactUs() {
 
       const isMessageRecieved = await postReq('contact-us', reqBody);
       contactUsData.messageSent = true;
-      console.log(isMessageRecieved);
       if (isMessageRecieved) {
         contactUsData.title = 'We Got It!';
         contactUsData.subTitle = `Dear ${contactUsData.data.fullName.value},\nWe've  received your message and we'll be in touch in the following days. `;

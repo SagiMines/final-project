@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta&display=swap');
+
+.category-accordion {
+  font-family: 'Mukta', sans-serif;
+  letter-spacing: 0.6px;
+}
+
+.category-main-content .category-accordion {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.category-accordion-list {
+  list-style: none;
+  padding: 0;
+}
+.category-accordion-list > * {
+  text-decoration: none;
+  color: black;
+}
+.category-main-content .accordion-button {
+  letter-spacing: 0.6px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #f3f3f3;
+}
+
+.product .accordion-button {
+  letter-spacing: 0.6px;
+  font-size: 18px;
+  font-weight: bold;
+  /* font-size: 20px; */
+}
+
+.category-main-content .accordion-item {
+  background-color: #f3f3f3;
+}
+
+.category-accordion-list > * > li {
+  padding: 5px 7px;
+}
+
+.category-accordion-body {
+  padding: 8px 10px;
+}
+
+.category-accordion-list > * > li:hover {
+  background-color: rgba(0, 0, 0, 0.248);
+  border-radius: 5px;
+}
+
+.category-accordion-list > * > li > img {
+  padding-right: 8px;
+}
+
+.category-accordion-list > *:nth-child(3) > li > img {
+  transform: scaleX(-1);
+  padding-left: 8px;
+  padding-right: 0;
+}
+
+@media only screen and (min-width: 1001px) {
+  .category-accordion {
+    display: none;
+  }
+}

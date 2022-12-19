@@ -32,7 +32,6 @@ function NavBarSide(props) {
       element = element.parentElement;
     }
     const elementName = element.nonce;
-    console.log(elementName);
     sidebarState[elementName].pressed = !sidebarState[elementName].pressed;
 
     setSidebarState({ ...sidebarState });
@@ -77,6 +76,15 @@ function NavBarSide(props) {
       getUserName();
     }
   }, []);
+
+  // If the window was press outside the sidebar while it is activated
+  useEffect(() => {
+    if (!props.isSidebarVisible) {
+      sidebarState.user.pressed = false;
+      sidebarState.categories.pressed = false;
+      setSidebarState({ ...sidebarState });
+    }
+  }, [props.isSidebarVisible]);
 
   return (
     <nav
