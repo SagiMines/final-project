@@ -69,7 +69,7 @@ function CategoryPage() {
         <>
           <CategoryAside />
 
-          <CategoryAccordion key={id} />
+          <CategoryAccordion key={id * Math.random()} />
 
           <Row className="categories-container">
             <section className="category-name-and-sort">
