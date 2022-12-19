@@ -24,22 +24,24 @@ function CategoryAside() {
             <Nav.Link disabled>Categories</Nav.Link>
           </Nav.Item>
           {categories.map((category, idx) => (
-            <Nav.Item key={idx.toString()}>
-              <Nav.Item className="category-link-container">
-                <img
-                  src={`/icons/categories-icons/${category.categoryName.replaceAll(
-                    ' ',
-                    '-'
-                  )}.png`}
-                />
-                <Link
-                  className="category-link"
-                  to={`/categories/${category.id}`}
-                >
-                  {category.categoryName}
-                </Link>
+            <Link
+              key={idx.toString()}
+              className="category-link"
+              to={`/categories/${category.id}`}
+            >
+              <Nav.Item className="category-nav-item">
+                <Nav.Item className="category-link-container">
+                  <img
+                    src={`/icons/categories-icons/${category.categoryName.replaceAll(
+                      ' ',
+                      '-'
+                    )}.png`}
+                  />
+
+                  <span>{category.categoryName}</span>
+                </Nav.Item>
               </Nav.Item>
-            </Nav.Item>
+            </Link>
           ))}
         </Nav>
       )}

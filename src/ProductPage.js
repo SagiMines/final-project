@@ -1,11 +1,12 @@
 import ProductCarousel from './ProductCarousel';
 import './styles/ProductPage.css';
 import { useState, useEffect } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import { getReq } from './DAL/serverData';
 import ProductCard from './ProductCard';
 import CategoryAside from './CategoryAside';
 import LoadingGif from './LoadingGif';
+import CategoryAccordion from './CategoryAccordion';
 
 function ProductPage(props) {
   const [product, setProduct] = useState();
@@ -24,7 +25,9 @@ function ProductPage(props) {
       {product && (
         <>
           <CategoryAside />
+          {/* <CategoryAccordion /> */}
           <div className="container-fluid product">
+            <CategoryAccordion />{' '}
             <div className="row">
               <ProductCarousel
                 images={product.productImages}

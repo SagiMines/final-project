@@ -9,6 +9,7 @@ import { getReq } from './DAL/serverData';
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
 import LoadingGif from './LoadingGif';
+import CategoryAccordion from './CategoryAccordion';
 
 function CategoryPage() {
   const { user } = useContext(UserContext);
@@ -62,11 +63,13 @@ function CategoryPage() {
   }, [id]);
 
   return (
-    <div className="main-content">
+    <div className="main-content category-main-content">
       {!state && <LoadingGif />}
       {state && state.userWishlist && (
         <>
           <CategoryAside />
+
+          <CategoryAccordion key={id} />
 
           <Row className="categories-container">
             <section className="category-name-and-sort">

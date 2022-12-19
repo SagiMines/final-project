@@ -50,3 +50,10 @@
 .card-container > * {
   flex: auto;
 }
+
+@media only screen and (max-width: 1000px) {
+  .category-main-content {
+    flex-direction: column;
+    align-items: center;
+  }
+}
