@@ -38,6 +38,7 @@ function NavBarSide(props) {
   };
 
   const logout = async () => {
+    showSidebar();
     const userId = user.userId;
     const isValid = await postReq('logout', { userId });
     if (isValid) {
@@ -137,9 +138,9 @@ function NavBarSide(props) {
                 }
               >
                 {item.subTitles.map((subTitle, index) => (
-                  <li key={index} onClick={showSidebar}>
+                  <li key={index}>
                     {subTitle.path ? (
-                      <Link to={subTitle.path}>
+                      <Link to={subTitle.path} onClick={showSidebar}>
                         <span className="sub-title">{subTitle.title}</span>
                       </Link>
                     ) : (

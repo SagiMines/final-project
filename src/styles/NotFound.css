@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta&display=swap');
+
+.not-found {
+  margin: 0 auto;
+  max-width: 2000px;
+  font-family: 'Mukta', sans-serif;
+  letter-spacing: 0.6px;
+  padding: 2rem;
+}
+
+.not-found-image {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+.not-found-image > img {
+  width: 100%;
+  max-width: 800px;
+}
+
+.not-found-data > .row {
+  flex-direction: column;
+}
+
+.not-found-title {
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: min(max(5vw, 50px), 80px);
+}
+
+.not-found-description {
+  color: rgba(0, 0, 0, 0.741);
+  font-size: clamp(17px, 2vw, 20px);
+}
+
+.not-found-button-col {
+  margin: 1rem 0;
+}
+
+.not-found-button {
+  letter-spacing: 0.5px;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+}
