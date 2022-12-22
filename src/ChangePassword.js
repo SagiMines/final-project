@@ -4,12 +4,13 @@ import './styles/ChangePassword.css';
 import { useContext, useState } from 'react';
 import { UserContext } from './UserContext';
 import { getReq, patchReq, postReq } from './DAL/serverData';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 function ChangePassword(props) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useContext(UserContext);
   const [values, setValues] = useState({
     oldPassword: {
@@ -115,14 +116,16 @@ function ChangePassword(props) {
             Cookies.get('forgot-password')
           )}&from=${searchParams.get('from')}`
         );
-
         navigate(
           `/change-password-success?from=${searchParams.get(
             'from'
           )}&token=${Cookies.get('forgot-password')}`
         );
       } else {
-        navigate('/change-password-success');
+        await getReq(`users/update-authentication${location.pathname}`);
+        navigate(
+          `/change-password-success?token=${Cookies.get('forgot-password')}`
+        );
       }
       if (Cookies.get('forgot-password')) {
         process.env.NODE_ENV === 'production'

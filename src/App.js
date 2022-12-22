@@ -5,7 +5,7 @@ import RoutesManager from './RoutesManager';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './styles/App.css';
-import { getUserIdFromCookie } from './DAL/serverData';
+import { getReq, getUserIdFromCookie } from './DAL/serverData';
 import { UserContext } from './UserContext';
 import FabContainer from './FabContainer';
 
@@ -16,6 +16,8 @@ function App() {
   const getUser = async () => {
     const userId = await getUserIdFromCookie();
     setUser(userId !== false ? { userId } : null);
+    // if user exist, make sure to authenticate his session
+    if (userId) await getReq('users/authenticate-user');
 
     if (!userId) {
       if (!localStorage.getItem('guestCart')) {

@@ -1,5 +1,5 @@
 import { Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './styles/PasswordChangeSuccess.css';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ function PasswordChangeSuccess() {
   const { user } = useContext(UserContext);
   const [userName, setUserName] = useState();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const removeGuest = () => {
     if (localStorage.getItem('guestCart')) {
@@ -25,7 +26,7 @@ function PasswordChangeSuccess() {
   const getUserName = async () => {
     let userData;
     // Get user name when in the process of an order
-    if (searchParams.get('from')) {
+    if (searchParams.get('token')) {
       const encryptedUserEmail = encodeURIComponent(
         searchParams.get('token').split(' ').join('+')
       );
@@ -38,8 +39,11 @@ function PasswordChangeSuccess() {
     }
     setUserName(userData.firstName);
   };
-
+  const removeAuthenticationSession = async () => {
+    await getReq(`users/update-authentication${location.pathname}`);
+  };
   useEffect(() => {
+    removeAuthenticationSession();
     getUserName();
     if (searchParams.get('from')) {
       removeGuest();
