@@ -43,3 +43,14 @@
   margin-right: 1.5rem;
   font-weight: bold;
 }
+
+@media only screen and (max-width: 390px) {
+  .error-page-button-col {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .error-page-button-col > .error-page-button:last-child {
+    margin-top: 1rem;
+  }
+}
