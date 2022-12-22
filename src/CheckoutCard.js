@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 function CheckoutCard(props) {
   const { user, setUser } = useContext(UserContext);
   const { setGuestTotalCartItems } = useContext(UserContext);
-  // const [guestTotalCartItems, setGuestTotalCartItems] = useState();
   const [reviewState, setReviewState] = useState({});
   const navigate = useNavigate();
 
@@ -37,8 +36,6 @@ function CheckoutCard(props) {
 
           if (isOrderDetailsUpdated) {
             const areOrderedCartItemsDeleted = await deleteOrderedCartItems();
-            user.totalCartItems = 0;
-            setUser({ ...user });
 
             if (areOrderedCartItemsDeleted) {
               let cartTotalWithoutDiscount;
@@ -70,6 +67,8 @@ function CheckoutCard(props) {
                 confirmationEmailBody
               );
               if (isConfirmationMailSent) {
+                user.totalCartItems = 0;
+                setUser({ ...user });
                 navigate('/order-confirmation');
               } else {
                 console.log(

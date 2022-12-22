@@ -8,10 +8,12 @@ import { useContext, useEffect, useState } from 'react';
 import { getReq } from './DAL/serverData';
 import _ from 'lodash';
 import LoadingGif from './LoadingGif';
+import { useLocation } from 'react-router-dom';
 
 function OrderConfirmation() {
   const { user } = useContext(UserContext);
   const [userOrder, setUserOrder] = useState({});
+  const location = useLocation();
 
   const getUserOrder = async () => {
     let allUserOrders;
@@ -40,6 +42,10 @@ function OrderConfirmation() {
       ).productName;
     }
     setUserOrder({ ...userOrder });
+    removeAuthenticationSession();
+  };
+  const removeAuthenticationSession = async () => {
+    await getReq(`users/update-authentication${location.pathname}`);
   };
 
   useEffect(() => {

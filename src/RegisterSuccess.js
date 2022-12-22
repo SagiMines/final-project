@@ -1,5 +1,5 @@
 import { Card } from 'react-bootstrap';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import './styles/RegisterSuccess.css';
 import { useEffect } from 'react';
 import { useContext } from 'react';
@@ -10,6 +10,7 @@ function RegisterSuccess() {
   const [searchParams] = useSearchParams();
   const { user } = useContext(UserContext);
   const [userName, setUserName] = useState();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const removeGuest = () => {
@@ -26,7 +27,12 @@ function RegisterSuccess() {
     setUserName(userData.firstName);
   };
 
+  const removeAuthenticationSession = async () => {
+    await getReq(`users/update-authentication${location.pathname}`);
+  };
+
   useEffect(() => {
+    removeAuthenticationSession();
     getNewUserName();
     removeGuest();
 

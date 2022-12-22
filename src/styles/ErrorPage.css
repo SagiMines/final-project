@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Mukta&display=swap');
 
-.not-found {
+.error-page {
   margin: 0 auto;
   max-width: 2000px;
   font-family: 'Mukta', sans-serif;
@@ -8,37 +8,38 @@
   padding: 2rem;
 }
 
-.not-found-image {
+.error-page-image {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
 }
-.not-found-image > img {
+.error-page-image > img {
   width: 100%;
   max-width: 800px;
 }
 
-.not-found-data > .row {
+.error-page-data > .row {
   flex-direction: column;
 }
 
-.not-found-title {
+.error-page-title {
   font-weight: bold;
   letter-spacing: 1px;
   font-size: min(max(5vw, 50px), 80px);
 }
 
-.not-found-description {
+.error-page-description {
   color: rgba(0, 0, 0, 0.741);
   font-size: clamp(17px, 2vw, 20px);
 }
 
-.not-found-button-col {
+.error-page-button-col {
   margin: 1rem 0;
 }
 
-.not-found-button {
+.error-page-button {
   letter-spacing: 0.5px;
   padding: 0.5rem 1rem;
+  margin-right: 1.5rem;
   font-weight: bold;
 }
