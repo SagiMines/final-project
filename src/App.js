@@ -13,11 +13,22 @@ function App() {
   const [user, setUser] = useState();
   const [guestTotalCartItems, setGuestTotalCartItems] = useState();
 
+  const setUserCart = async userId => {
+    const userCart = await getReq(`cart/${userId}`);
+    const filteredCart = userCart.filter(cartItem => cartItem.checked);
+    const totalCartItems = filteredCart.reduce(
+      (accumulator, object) => accumulator + object.amount,
+      0
+    );
+    setUser({ userId, totalCartItems });
+  };
+
   const getUser = async () => {
     const userId = await getUserIdFromCookie();
-    setUser(userId !== false ? { userId } : null);
-    // if user exist, make sure to authenticate his session
-    if (userId) await getReq('users/authenticate-user');
+    if (userId) {
+      await getReq('users/authenticate-user');
+      await setUserCart(userId);
+    }
 
     if (!userId) {
       if (!localStorage.getItem('guestCart')) {

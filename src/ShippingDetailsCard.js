@@ -286,7 +286,11 @@ function ShippingDetailsCard(props) {
                     <Card.Title>
                       {'Shipping Details '}
                       {props.page === 'review' && (
-                        <Link className="change-address" to="/my-account">
+                        <Link
+                          state={{ from: 'review' }}
+                          className="change-address"
+                          to="/my-account"
+                        >
                           Change
                         </Link>
                       )}
