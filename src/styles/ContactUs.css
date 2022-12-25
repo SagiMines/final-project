@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta&display=swap');
+
 .contact-us-container {
   max-width: 500px;
-  font-family: sans-serif;
+  font-family: Mukta, sans-serif;
 }
 
 .contact-us-title {
   text-align: center;
   letter-spacing: 0.6px;
-  font-weight: 500;
+  font-weight: bold;
   text-decoration: none;
   box-shadow: inset 0 -1px 0 #11141638;
   padding: 5px 0;

@@ -104,7 +104,7 @@ function MyOrders() {
   return (
     <div className="container-center">
       <div className="container my-orders-container">
-        <h1 className="my-orders-title">Your Orders</h1>
+        <h1 className="my-orders-title">My Orders</h1>
         {!orders && <LoadingGif />}
         {orders && !orders.length && (
           <Container>

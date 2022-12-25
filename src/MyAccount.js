@@ -185,7 +185,7 @@ function MyAccount() {
   return (
     <div className="container-center">
       <div className="container my-account-container">
-        <h1 className="my-account-title">Your Details</h1>
+        <h1 className="my-account-title">My Details</h1>
         {_.isEmpty(userInfo) && <LoadingGif />}
         {userInfo.user && (
           <Card>
