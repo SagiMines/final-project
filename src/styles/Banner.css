@@ -27,6 +27,7 @@
   color: white;
   font-size: clamp(70px, 3vw, 90px);
   margin-bottom: 1rem;
+  animation: fade 1s ease-in;
 }
 
 .text-container > div > h5 {
@@ -34,4 +35,14 @@
   color: white;
   font-size: clamp(13px, 2vw, 15px);
   opacity: 0.8;
+  animation: fade 1s ease-in;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
