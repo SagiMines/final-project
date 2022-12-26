@@ -8,6 +8,7 @@ function WhoAreWe() {
     <>
       <div
         className="who-are-we zigzag-content"
+        data-aos-easing="ease-in-sine"
         data-aos="flip-left"
         data-aos-duration="1000"
         // data-aos-easing="ease-in-sine"
@@ -15,15 +16,17 @@ function WhoAreWe() {
         <div className="who-are-we-container">
           <h1
             className="who-are-we-title"
+            data-aos-easing="ease-in-sine"
             data-aos="zoom-in"
-            data-aos-duration="2000"
+            data-aos-duration="1500"
           >
             About Us
           </h1>
           <div
             className="who-are-we-text"
+            data-aos-easing="ease-in-sine"
             data-aos="zoom-in"
-            data-aos-duration="2000"
+            data-aos-duration="1500"
           >
             <p>
               "Work Shop" was founded by Sagi Mines in 2022 as a small tool
