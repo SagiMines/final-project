@@ -118,7 +118,7 @@ function Navbar() {
   return (
     <header>
       {!_.isEmpty(cartData) && (
-        <nav className="navbar fixed-top navbar-expand-md">
+        <nav className="navbar fixed-top navbar-expand-md bg-white">
           <div className="container-fluid">
             <Link to="/" className="navbar-brand">
               <img src="/icons/workshop-logo.png" alt="Site Logo" />
