@@ -19,19 +19,7 @@ function SearchSlider(props) {
   return (
     <>
       {values && values.length > 0 && (
-        <Row
-          className={
-            values.length === 1
-              ? `${props.name}-slider length-1`
-              : values.length === 2
-              ? `${props.name}-slider length-2`
-              : values.length === 3
-              ? `${props.name}-slider length-3`
-              : values.length === 4
-              ? `${props.name}-slider length-4`
-              : `${props.name}-slider length-5`
-          }
-        >
+        <Row className={`${props.name}-slider`}>
           {values.map((value, idx) => (
             <Col key={idx.toString()}>
               <Link to={`/product/${value.id}`}>
