@@ -8,12 +8,17 @@ function TopProducts(props) {
       <h1
         className="top-products-text"
         data-aos="zoom-in"
-        data-aos-duration="1500"
+        data-aos-duration="1000"
+        data-aos-easing="ease-in-sine"
       >
         Top Products
       </h1>
 
-      <Row data-aos="fade-up" data-aos-duration="2000">
+      <Row
+        data-aos="fade-up"
+        data-aos-duration="1500"
+        data-aos-easing="ease-in-sine"
+      >
         <ProductCarousel topProducts={props.topProducts} />
       </Row>
     </div>

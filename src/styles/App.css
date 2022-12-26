@@ -88,12 +88,15 @@ footer {
 }
 
 [data-aos] {
+  z-index: 1000 !important;
   pointer-events: none !important;
 }
 .aos-animate {
+  z-index: 1000 !important;
   pointer-events: auto !important;
 }
 .aos-init[data-aos][data-aos].aos-animate {
+  z-index: 1000 !important;
   transform: unset !important;
 }
 
