@@ -36,14 +36,18 @@ function CompaniesWeWorkWith() {
 
   return (
     <div className="companies-logos-slider-container">
-      <h1>Who We Work With</h1>
-      <Slider {...settings}>
-        {companiesLogosNames().map((companyName, idx) => (
-          <div key={idx.toString()}>
-            <img src={`./companies-logos/${companyName}.png`} />
-          </div>
-        ))}
-      </Slider>
+      <h1 data-aos="zoom-in" data-aos-duration="2000">
+        Who We Work With
+      </h1>
+      <div data-aos="fade-up" data-aos-duration="2000">
+        <Slider {...settings}>
+          {companiesLogosNames().map((companyName, idx) => (
+            <div key={idx.toString()}>
+              <img src={`./companies-logos/${companyName}.png`} />
+            </div>
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 }
