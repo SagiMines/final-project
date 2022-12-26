@@ -24,6 +24,10 @@
   margin-bottom: 3rem !important;
 }
 
+.contact-us > .contact-us-container {
+  justify-content: center;
+}
+
 .contact-us > .contact-us-container > .row {
   justify-content: center;
 }
