@@ -1,13 +1,30 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import './styles/WhoAreWe.css';
+import aos from 'aos';
 
 function WhoAreWe() {
+  aos.init();
   return (
     <>
-      <div className="who-are-we zigzag-content">
+      <div
+        className="who-are-we zigzag-content"
+        data-aos="flip-left"
+        data-aos-duration="1000"
+        // data-aos-easing="ease-in-sine"
+      >
         <div className="who-are-we-container">
-          <h1 className="who-are-we-title">About Us</h1>
-          <div className="who-are-we-text">
+          <h1
+            className="who-are-we-title"
+            data-aos="zoom-in"
+            data-aos-duration="2000"
+          >
+            About Us
+          </h1>
+          <div
+            className="who-are-we-text"
+            data-aos="zoom-in"
+            data-aos-duration="2000"
+          >
             <p>
               "Work Shop" was founded by Sagi Mines in 2022 as a small tool
               shop. The business was named "Work Shop" because it was designed

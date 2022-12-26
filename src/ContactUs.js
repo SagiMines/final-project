@@ -95,27 +95,44 @@ function ContactUs() {
   };
 
   return (
-    <div className="contact-us zigzag-content">
+    <div
+      className="contact-us zigzag-content"
+      data-aos="flip-right"
+      data-aos-duration="1000"
+    >
       <Row className="contact-us-container">
-        <h1 className="contact-us-title">{contactUsData.title}</h1>
-        <h4 className="contact-us-subtitle">{contactUsData.subTitle}</h4>
-
-        {!contactUsData.messageSent &&
-          contactUsFormDetails().map((formSection, idx) => (
-            <div key={idx.toString()}>
-              <FormInput {...formSection} onChange={handleChange} />
-              {contactUsData.data[formSection.name].error && (
-                <p className="alerts">
-                  {contactUsData.data[formSection.name].error}
-                </p>
-              )}
-            </div>
-          ))}
-        {!contactUsData.messageSent && (
-          <Button className="contact-us-button" onClick={handleClick}>
-            Send Message
-          </Button>
-        )}
+        <h1
+          className="contact-us-title"
+          data-aos="zoom-in"
+          data-aos-duration="2000"
+        >
+          {contactUsData.title}
+        </h1>
+        <h4
+          className="contact-us-subtitle"
+          data-aos="zoom-in"
+          data-aos-duration="2000"
+        >
+          {contactUsData.subTitle}
+        </h4>
+        <Row data-aos="zoom-in" data-aos-duration="2000">
+          {!contactUsData.messageSent &&
+            contactUsFormDetails().map((formSection, idx) => (
+              <div key={idx.toString()}>
+                <FormInput {...formSection} onChange={handleChange} />
+                {contactUsData.data[formSection.name].error && (
+                  <p className="alerts">
+                    {contactUsData.data[formSection.name].error}
+                  </p>
+                )}
+              </div>
+            ))}
+          {!contactUsData.messageSent && (
+            <Button className="contact-us-button" onClick={handleClick}>
+              Send Message
+            </Button>
+          )}
+        </Row>
       </Row>
     </div>
   );
