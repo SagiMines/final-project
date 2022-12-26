@@ -88,19 +88,19 @@ footer {
 }
 
 [data-aos] {
-  pointer-events: none;
+  pointer-events: none !important;
 }
 .aos-animate {
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 .aos-init[data-aos][data-aos].aos-animate {
-  transform: unset;
+  transform: unset !important;
 }
 
-.aos-fix[data-aos][data-aos].aos-animate {
+/* .aos-fix[data-aos][data-aos].aos-animate {
   transform: unset;
 }
 
 .aos-fix[data-aos][data-aos].aos-animate {
   transform: initial;
-}
+} */

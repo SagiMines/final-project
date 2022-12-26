@@ -6,14 +6,14 @@ function TopProducts(props) {
   return (
     <div className="top-products container-fluid">
       <h1
-        className="top-products-text aos-fix"
+        className="top-products-text"
         data-aos="zoom-in"
         data-aos-duration="1500"
       >
         Top Products
       </h1>
 
-      <Row className="aos-fix" data-aos="fade-up" data-aos-duration="2000">
+      <Row data-aos="fade-up" data-aos-duration="2000">
         <ProductCarousel topProducts={props.topProducts} />
       </Row>
     </div>
