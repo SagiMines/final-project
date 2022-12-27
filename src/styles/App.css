@@ -87,17 +87,15 @@ footer {
   text-align: center;
 }
 
-/* [data-aos] {
+[data-aos] {
   pointer-events: none !important;
-  transform-style: preserve-3d;
 }
 .aos-animate {
   pointer-events: auto !important;
-  transform-style: preserve-3d;
 }
 .aos-init[data-aos][data-aos].aos-animate {
   transform: unset !important;
-} */
+}
 
 /* .aos-fix[data-aos][data-aos].aos-animate {
   transform: unset;
