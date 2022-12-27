@@ -89,12 +89,15 @@ footer {
 
 [data-aos] {
   pointer-events: none !important;
+  transform-style: preserve-3d !important;
 }
 .aos-animate {
   pointer-events: auto !important;
+  transform-style: preserve-3d !important;
 }
 .aos-init[data-aos][data-aos].aos-animate {
   transform: unset !important;
+  transform-style: preserve-3d !important;
 }
 
 /* .aos-fix[data-aos][data-aos].aos-animate {
