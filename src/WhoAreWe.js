@@ -9,7 +9,7 @@ function WhoAreWe() {
       <div
         className="who-are-we zigzag-content"
         data-aos-easing="ease-in-sine"
-        data-aos="flip-left"
+        data-aos="fade-left"
         data-aos-duration="1000"
         // data-aos-easing="ease-in-sine"
       >
