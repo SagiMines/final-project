@@ -97,7 +97,7 @@ function ContactUs() {
   return (
     <div
       className="contact-us zigzag-content"
-      data-aos="flip-right"
+      data-aos="fade-right"
       data-aos-duration="1000"
       data-aos-easing="ease-in-sine"
     >
