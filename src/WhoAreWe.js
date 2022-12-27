@@ -8,15 +8,12 @@ function WhoAreWe() {
     <>
       <div
         className="who-are-we zigzag-content"
-        data-aos-easing="ease-in-sine"
         data-aos="fade-left"
         data-aos-duration="1000"
-        // data-aos-easing="ease-in-sine"
       >
         <div className="who-are-we-container">
           <h1
             className="who-are-we-title"
-            data-aos-easing="ease-in-sine"
             data-aos="zoom-in"
             data-aos-duration="1500"
           >
@@ -24,7 +21,6 @@ function WhoAreWe() {
           </h1>
           <div
             className="who-are-we-text"
-            data-aos-easing="ease-in-sine"
             data-aos="zoom-in"
             data-aos-duration="1500"
           >

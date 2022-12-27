@@ -99,14 +99,12 @@ function ContactUs() {
       className="contact-us zigzag-content"
       data-aos="fade-right"
       data-aos-duration="1000"
-      data-aos-easing="ease-in-sine"
     >
       <Row className="contact-us-container">
         <h1
           className="contact-us-title"
           data-aos="zoom-in"
           data-aos-duration="1500"
-          data-aos-easing="ease-in-sine"
         >
           {contactUsData.title}
         </h1>
@@ -114,15 +112,10 @@ function ContactUs() {
           className="contact-us-subtitle"
           data-aos="zoom-in"
           data-aos-duration="1500"
-          data-aos-easing="ease-in-sine"
         >
           {contactUsData.subTitle}
         </h4>
-        <Row
-          data-aos="zoom-in"
-          data-aos-duration="1500"
-          data-aos-easing="ease-in-sine"
-        >
+        <Row data-aos="zoom-in" data-aos-duration="1500">
           {!contactUsData.messageSent &&
             contactUsFormDetails().map((formSection, idx) => (
               <div key={idx.toString()}>
