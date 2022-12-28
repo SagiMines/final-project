@@ -10,6 +10,7 @@ import ContactUs from './ContactUs';
 import Quote from './Quote';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+
 function HomePage() {
   const [topProducts, setTopProducts] = useState();
   AOS.init();

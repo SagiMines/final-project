@@ -1,9 +1,9 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import './styles/WhoAreWe.css';
-import aos from 'aos';
+import useScrollToHash from './custom-hooks/useScrollToHash';
 
 function WhoAreWe() {
-  aos.init();
+  useScrollToHash();
   return (
     <div id="aboutUs">
       <div
