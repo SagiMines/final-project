@@ -9,7 +9,6 @@ import './styles/NavBarSide.css';
 import { getReq, postReq } from './DAL/serverData';
 import Cookies from 'js-cookie';
 import { HashLink } from 'react-router-hash-link';
-
 function NavBarSide(props) {
   const { user, setUser } = useContext(UserContext);
   const { setGuestTotalCartItems } = useContext(UserContext);
@@ -165,7 +164,12 @@ function NavBarSide(props) {
             </li>
           ) : item.title === 'Contact Us' || item.title === 'About Us' ? (
             <li key={index} className={item.cName} onClick={showSidebar}>
-              <HashLink className="sidebar-title" to={item.path}>
+              <HashLink
+                smooth
+                data-toggle="tab"
+                className="sidebar-title"
+                to={item.path}
+              >
                 {item.icon}
                 <span>{item.title}</span>
               </HashLink>

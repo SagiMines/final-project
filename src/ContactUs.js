@@ -4,7 +4,10 @@ import './styles/ContactUs.css';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import { postReq } from './DAL/serverData';
+import useScrollToHash from './custom-hooks/useScrollToHash';
+
 function ContactUs() {
+  useScrollToHash();
   const [contactUsData, setContactUsData] = useState({
     data: {
       fullName: {
@@ -95,46 +98,47 @@ function ContactUs() {
   };
 
   return (
-    <div
-      id="contactUs"
-      className="contact-us zigzag-content"
-      data-aos="fade-right"
-      data-aos-duration="1000"
-    >
-      <Row className="contact-us-container">
-        <h1
-          className="contact-us-title"
-          data-aos="zoom-in"
-          data-aos-duration="1500"
-        >
-          {contactUsData.title}
-        </h1>
-        <h4
-          className="contact-us-subtitle"
-          data-aos="zoom-in"
-          data-aos-duration="1500"
-        >
-          {contactUsData.subTitle}
-        </h4>
-        <Row data-aos="zoom-in" data-aos-duration="1500">
-          {!contactUsData.messageSent &&
-            contactUsFormDetails().map((formSection, idx) => (
-              <div key={idx.toString()}>
-                <FormInput {...formSection} onChange={handleChange} />
-                {contactUsData.data[formSection.name].error && (
-                  <p className="alerts">
-                    {contactUsData.data[formSection.name].error}
-                  </p>
-                )}
-              </div>
-            ))}
-          {!contactUsData.messageSent && (
-            <Button className="contact-us-button" onClick={handleClick}>
-              Send Message
-            </Button>
-          )}
+    <div id="contactUs">
+      <div
+        className="contact-us zigzag-content"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+      >
+        <Row className="contact-us-container">
+          <h1
+            className="contact-us-title"
+            data-aos="zoom-in"
+            data-aos-duration="1500"
+          >
+            {contactUsData.title}
+          </h1>
+          <h4
+            className="contact-us-subtitle"
+            data-aos="zoom-in"
+            data-aos-duration="1500"
+          >
+            {contactUsData.subTitle}
+          </h4>
+          <Row data-aos="zoom-in" data-aos-duration="1500">
+            {!contactUsData.messageSent &&
+              contactUsFormDetails().map((formSection, idx) => (
+                <div key={idx.toString()}>
+                  <FormInput {...formSection} onChange={handleChange} />
+                  {contactUsData.data[formSection.name].error && (
+                    <p className="alerts">
+                      {contactUsData.data[formSection.name].error}
+                    </p>
+                  )}
+                </div>
+              ))}
+            {!contactUsData.messageSent && (
+              <Button className="contact-us-button" onClick={handleClick}>
+                Send Message
+              </Button>
+            )}
+          </Row>
         </Row>
-      </Row>
+      </div>
     </div>
   );
 }
