@@ -11,6 +11,6 @@ export default function useScrollToHash() {
           element.scrollIntoView({ block: 'start', behavior: 'instant' });
         }
       }
-    }, 50);
+    }, 100);
   }, []);
 }
