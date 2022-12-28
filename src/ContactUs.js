@@ -96,6 +96,7 @@ function ContactUs() {
 
   return (
     <div
+      id="contactUs"
       className="contact-us zigzag-content"
       data-aos="fade-right"
       data-aos-duration="1000"

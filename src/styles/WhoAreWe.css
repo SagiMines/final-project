@@ -16,3 +16,7 @@
 .zigzag-content > .who-are-we-container {
   max-width: 1000px;
 }
+
+#aboutUs {
+  scroll-margin-top: 70px;
+}
