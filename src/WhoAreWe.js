@@ -5,7 +5,7 @@ import aos from 'aos';
 function WhoAreWe() {
   aos.init();
   return (
-    <>
+    <div id="aboutUs">
       <div
         className="who-are-we zigzag-content"
         data-aos="fade-left"
@@ -47,7 +47,7 @@ function WhoAreWe() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

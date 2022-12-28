@@ -1,12 +1,14 @@
 import { useState, useContext, useEffect } from 'react';
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
+import * as MdIcons from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
 import { UserContext } from './UserContext';
 import './styles/NavBarSide.css';
 import { getReq, postReq } from './DAL/serverData';
 import Cookies from 'js-cookie';
+import { HashLink } from 'react-router-hash-link';
 
 function NavBarSide(props) {
   const { user, setUser } = useContext(UserContext);
@@ -152,12 +154,21 @@ function NavBarSide(props) {
                 ))}
               </section>
             </div>
-          ) : item.title !== 'User' ? (
+          ) : item.title !== 'User' &&
+            item.title !== 'Contact Us' &&
+            item.title !== 'About Us' ? (
             <li key={index} className={item.cName} onClick={showSidebar}>
               <Link className="sidebar-title" to={item.path}>
                 {item.icon}
                 <span>{item.title}</span>
               </Link>
+            </li>
+          ) : item.title === 'Contact Us' || item.title === 'About Us' ? (
+            <li key={index} className={item.cName} onClick={showSidebar}>
+              <HashLink className="sidebar-title" to={item.path}>
+                {item.icon}
+                <span>{item.title}</span>
+              </HashLink>
             </li>
           ) : (
             <div key={index}>

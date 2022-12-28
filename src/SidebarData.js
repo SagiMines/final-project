@@ -1,6 +1,9 @@
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
+import * as MdIcons from 'react-icons/md';
+import * as RiIcons from 'react-icons/ri';
+import { MdImportContacts } from 'react-icons/md';
 
 export const SidebarData = [
   {
@@ -39,6 +42,19 @@ export const SidebarData = [
     title: 'Wishlist',
     path: '/wishlist',
     icon: <FaIcons.FaHeart />,
+    cName: 'nav-text',
+  },
+  {
+    title: 'About Us',
+    path: '/#aboutUs',
+    icon: <RiIcons.RiTeamFill />,
+    cName: 'nav-text',
+  },
+
+  {
+    title: 'Contact Us',
+    path: '/#contactUs',
+    icon: <MdIcons.MdMessage />,
     cName: 'nav-text',
   },
 ];
