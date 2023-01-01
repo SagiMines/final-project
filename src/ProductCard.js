@@ -1,4 +1,4 @@
-import { Form, Card, Button, Row, Col } from 'react-bootstrap';
+import { Form, Card, Button, Row, Col, Container } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import { useContext, useEffect, useState } from 'react';
 import './styles/ProductCard.css';
@@ -110,6 +110,15 @@ function ProductCard(props) {
         checked: true,
       };
       const userCart = await getReq(`cart/${user.userId}`);
+      const userWishlist = await getReq(`wishlist?user-id=${user.userId}`);
+      const isProductInWishlist = userWishlist.find(
+        product => product.productId === buyNowItem.productId
+      );
+      if (isProductInWishlist) {
+        await deleteReq(
+          `wishlist?user-id=${isProductInWishlist.userId}&product-id=${isProductInWishlist.productId}`
+        );
+      }
       for (const cartItem of userCart) {
         cartItem.checked = false;
         await patchReq('cart', cartItem);
@@ -125,6 +134,16 @@ function ProductCard(props) {
         checked: true,
       };
       const guestCart = JSON.parse(localStorage.getItem('guestCart'));
+      const guestWishlist = JSON.parse(localStorage.getItem('guestWishlist'));
+      const isProductInWishlist = guestWishlist.find(
+        product => product.productId === buyNowItem.productId
+      );
+      if (isProductInWishlist) {
+        const filteredWishlist = guestWishlist.filter(
+          product => product.productId !== buyNowItem.productId
+        );
+        localStorage.setItem('guestWishlist', JSON.stringify(filteredWishlist));
+      }
       let isInCart = false;
       for (const cartItem of guestCart) {
         if (buyNowItem.productId === cartItem.productId) {
@@ -466,7 +485,12 @@ function ProductCard(props) {
         <Card.Body>
           {props.page === 'wishlist' && props.wishListItem && (
             <>
-              <Card.Img src={props.wishListItem.image} />
+              <Link
+                to={`/product/${props.wishListItem.id}`}
+                className="wishlist-product-link"
+              >
+                <Card.Img src={props.wishListItem.image} />
+              </Link>
               <Card.Title>{props.wishListItem.productName}</Card.Title>
               <Card.Text
                 className={
