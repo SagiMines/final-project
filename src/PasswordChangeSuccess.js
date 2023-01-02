@@ -43,9 +43,9 @@ function PasswordChangeSuccess() {
     await getReq(`users/update-authentication${location.pathname}`);
   };
   useEffect(() => {
-    removeAuthenticationSession();
     getUserName();
     if (searchParams.get('from')) {
+      removeAuthenticationSession();
       removeGuest();
       setTimeout(() => {
         navigate('/review-order');
@@ -53,6 +53,7 @@ function PasswordChangeSuccess() {
       }, 5000);
     } else {
       setTimeout(() => {
+        removeAuthenticationSession();
         navigate('/');
       }, 5000);
     }

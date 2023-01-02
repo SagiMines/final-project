@@ -122,10 +122,18 @@ function ChangePassword(props) {
           )}&token=${Cookies.get('forgot-password')}`
         );
       } else {
-        await getReq(`users/update-authentication${location.pathname}`);
-        navigate(
-          `/change-password-success?token=${Cookies.get('forgot-password')}`
+        const isUpdated = await getReq(
+          `users/update-authentication${location.pathname}`
         );
+        if (isUpdated) {
+          navigate(
+            user
+              ? `/change-password-success`
+              : `/change-password-success?token=${Cookies.get(
+                  'forgot-password'
+                )}`
+          );
+        }
       }
       if (Cookies.get('forgot-password')) {
         process.env.NODE_ENV === 'production'
