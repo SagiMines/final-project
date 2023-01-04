@@ -15,6 +15,7 @@ function ProductCarousel(props) {
         props.images.map((image, idx) => (
           <Carousel.Item key={idx.toString()}>
             <img
+              referrerPolicy="no-referrer"
               className="d-block w-100"
               src={image.imageSrc}
               title={props.name}
@@ -31,6 +32,7 @@ function ProductCarousel(props) {
             >
               <img
                 className="top-product-img d-block w-100 "
+                referrerPolicy="no-referrer"
                 src={topProduct.productImages[0].imageSrc}
                 title={topProduct.productName}
                 alt={`${topProduct.productName} - Top product`}
