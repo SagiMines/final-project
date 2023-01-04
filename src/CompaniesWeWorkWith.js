@@ -2,7 +2,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './styles/CompaniesWeWorkWith.css';
-import { companiesLogosNames } from './data/data';
+import { companiesLogosLinks } from './data/data';
 
 function CompaniesWeWorkWith() {
   const settings = {
@@ -41,9 +41,9 @@ function CompaniesWeWorkWith() {
       </h1>
       <div data-aos="fade-up" data-aos-duration="2000">
         <Slider {...settings}>
-          {companiesLogosNames().map((companyName, idx) => (
+          {companiesLogosLinks().map((logoLink, idx) => (
             <div key={idx.toString()}>
-              <img src={`./companies-logos/${companyName}.png`} />
+              <img referrerPolicy="no-referrer" src={logoLink} />
             </div>
           ))}
         </Slider>
