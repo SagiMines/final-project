@@ -489,7 +489,10 @@ function ProductCard(props) {
                 to={`/product/${props.wishListItem.id}`}
                 className="wishlist-product-link"
               >
-                <Card.Img src={props.wishListItem.image} />
+                <Card.Img
+                  referrerPolicy="no-referrer"
+                  src={props.wishListItem.image}
+                />
               </Link>
               <Card.Title>{props.wishListItem.productName}</Card.Title>
               <Card.Text
@@ -543,7 +546,10 @@ function ProductCard(props) {
                 className="center-product-image"
                 to={`/product/${props.product.id}`}
               >
-                <Card.Img src={props.product.image} />
+                <Card.Img
+                  referrerPolicy="no-referrer"
+                  src={props.product.image}
+                />
               </Link>
               <Row>
                 <Card.Title>{props.product.productName}</Card.Title>
@@ -640,7 +646,10 @@ function ProductCard(props) {
                 className="center-product-image"
                 to={`/product/${props.currentProduct.id}`}
               >
-                <Card.Img src={props.currentProduct.image} />
+                <Card.Img
+                  referrerPolicy="no-referrer"
+                  src={props.currentProduct.image}
+                />
               </Link>
               <Card.Title>{props.currentProduct.productName}</Card.Title>
               <section className="card-buttons row">
@@ -784,6 +793,7 @@ function ProductCard(props) {
                 to={`/product/${props.purchasedProduct.productId}`}
               >
                 <Card.Img
+                  referrerPolicy="no-referrer"
                   src={
                     props.purchasedProduct &&
                     props.purchasedProduct.productImage
@@ -820,7 +830,10 @@ function ProductCard(props) {
                 className="order-product-image-column"
               >
                 <Link to={`/product/${props.orderDetails.productId}`}>
-                  <Card.Img src={props.orderDetails.productImage} />
+                  <Card.Img
+                    referrerPolicy="no-referrer"
+                    src={props.orderDetails.productImage}
+                  />
                 </Link>
               </Col>
               <Col className="order-product-details-column">
@@ -890,12 +903,12 @@ function ProductCard(props) {
                 {props.productData.discount ? (
                   <>
                     <span className="discount-price-product-page">
-                      {` $${
+                      {` $${+(
                         props.productData.unitPrice -
                         props.productData.unitPrice *
                           props.productData.discount *
                           0.01
-                      } `}
+                      ).toFixed(2)} `}
                     </span>
                     <span className="old-price-product-page">
                       ${props.productData.unitPrice}
