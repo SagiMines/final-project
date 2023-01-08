@@ -56,7 +56,16 @@ function ErrorPage(props) {
         className="error-page-image"
       >
         <img
-          src={`/${props.page === 'not-found' ? 'not-found' : 'forbidden'}.jpg`}
+          alt={
+            props.page === 'not-found' ? '404 error image' : '403 error image'
+          }
+          title={props.page === 'not-found' ? '404 error' : '403 error'}
+          referrerPolicy="no-referrer"
+          src={
+            props.page === 'not-found'
+              ? 'https://lh3.googleusercontent.com/pw/AL9nZEUWo4Vc429gZWRUgm33ethsdwAGrSxlSXTSAoA3fK1AsTS3tofMoMDOTe9gwTsSBFEfgtG6W6-ohV7NackE3uPqVFNKwEnhENDyxmR_frdqZ49uVMP6qqpaf-8SAUC71rNiGNOKRJ2u7WBaZ6yHjIWq=w1134-h927-no?authuser=1'
+              : 'https://lh3.googleusercontent.com/pw/AL9nZEUZpkpSvU-TCYUJyg-pkuR29XPSqtiy1rJqdJtISpK1Kg7e4zzepkB66170r5jcDeYHg5AOO4zIyZl2t3n2YaQXfOlQ26XscgHzcPiQvkpPLsKRrRjAPulB67hWcy-7iDGCMb20nFDa58OprHQpY9Ww=s927-no?authuser=1'
+          }
         />
       </Col>
     </Row>

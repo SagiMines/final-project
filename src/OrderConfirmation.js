@@ -88,7 +88,13 @@ function OrderConfirmation() {
                 </Card>
               </Col>
               <Col md>
-                <img className="thank-you-logo" src="thank-you.png"></img>
+                <img
+                  referrerPolicy="no-referrer"
+                  className="thank-you-logo"
+                  src="https://lh3.googleusercontent.com/pw/AL9nZEXIeP9l9FB-rBv7_SR9HGXgL4Ym4U-KZfqQYBln8AQbWCqX0ljDGm97FZyviSwOQnZpPLhfGfw3jJVuGw7z6dv0K8sndFfQutIPUqfxjwNCi94XEeto6mmi9WSO3HcD31X1LTR_U7UuS58-KujLGy9U=s937-no?authuser=1"
+                  alt="Thank you image"
+                  title="Thank you"
+                ></img>
               </Col>
             </Row>
           </>
