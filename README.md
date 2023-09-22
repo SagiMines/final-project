@@ -47,7 +47,7 @@ npm install
 npm run start
 ```
 
-4. View the application on [localhost:3000](localhost:3000)
+4. View the application on [localhost:3000](http://localhost:3000)
 
 ## Usage
 
