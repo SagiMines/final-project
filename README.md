@@ -1,10 +1,10 @@
 # Work Shop - Client-Side Repository
 
-<center>
+<div align=center>
 <a href='https://www.workshop-il.com/'>
 <img src="./public/icons/workshop-logo.png">
 </a>
-</center>
+</div>
 
 Welcome to the E-Commerce Work Tools Shop, a secure and efficient platform for purchasing workshop tools and equipment. This project combines React for the front-end, Node.js and NestJS for the back-end, and establishes a RESTful API to connect the client and server. The data is stored in a MySQL database, and robust security features have been implemented to ensure the safety of user data and transactions. The front-end is hosted on Netlify, while the back-end is hosted on Heroku.
 
